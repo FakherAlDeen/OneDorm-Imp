@@ -8,7 +8,8 @@ var corsOptions = {
   origin: '*',
   optionsSuccessStatus: 200 // For legacy browser support
 }
-
+var wtv = require('./Modules/DataBase');
+const silence = new wtv({ name: 'Silence', starttime:"sdsd" });
 app.get('/tezk', (req, res) => {
     res.send(req.body)
 })
