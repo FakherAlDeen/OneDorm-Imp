@@ -6,10 +6,13 @@ app.use(express.json());
 app.use(cors(corsOptions));
 var corsOptions = {
   origin: '*',
-  optionsSuccessStatus: 200 // For legacy browser support
+  optionsSuccessStatus: 200
 }
-var wtv = require('./Modules/DataBase');
-const silence = new wtv({ name: 'Silence', starttime:"sdsd" });
+const {CreateUser, EditUser, DeleteUser, FindOneUserRecord} = require ("./Controllers/UserController");
+async function brr3 (){
+  console.log (await FindOneUserRecord({Id: "dsdsds"}, ""));
+}
+brr3();
 app.get('/tezk', (req, res) => {
     res.send(req.body)
 })
