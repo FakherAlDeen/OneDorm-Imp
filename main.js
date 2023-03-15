@@ -8,9 +8,11 @@ var corsOptions = {
   origin: '*',
   optionsSuccessStatus: 200
 }
-const {CreateUser, EditUser, DeleteUser, FindOneUserRecord} = require ("./Controllers/UserController");
+const {CreateUser, EditUser, DeleteUser, FindOneUserRecord} = require("./Controllers/UserController");
+const {CreatePost , EditPost , DeletePost , FindOnePostRecord} = require("./Controllers/PostController");
 async function brr3 (){
-  console.log (await FindOneUserRecord({Id: "dsdsds"}, ""));
+  console.log (await FindOneUserRecord({UserId: "dsdsds"}, ""));
+  CreatePost({PostId:"hi" , CreatedBy:"Me"});
 }
 brr3();
 app.get('/tezk', (req, res) => {
