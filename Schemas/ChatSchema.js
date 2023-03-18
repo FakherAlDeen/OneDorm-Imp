@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const ChatSchema = new mongoose.Schema({
-    ChatId: {type:String, default:null, unique:true},
+    ChatId: {type:String, default:null, unique:true, index: true},
     ChatArr: [{
         Message:String // check later
     }],

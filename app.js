@@ -1,5 +1,9 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const { createServer } = require("http"); // you can use https as well
+const socketIo = require("socket.io");
+const app = express();
+const server = createServer(app);
+const io = socketIo(server, { cors: { origin: "*" } });
 const port = 3000
 var cors = require('cors');
 const bodyParser = require('body-parser');
@@ -9,31 +13,19 @@ var corsOptions = {
   origin: '*',
   optionsSuccessStatus: 200
 }
-const {CreateUser, EditUser, DeleteUser, FindOneUserRecord} = require("./DatabaseMethods/UserMethods");
-const {CreatePost , EditPost , DeletePost , FindOnePostRecord} = require("./DatabaseMethods/PostMethods");
-const {CreateCategory , EditCategory , DeleteCategory , FindOneCategoryRecord} = require("./DatabaseMethods/CategoryMethods");
-const {CreateBlog , EditBlog , DeleteBlog , FindOneBlogRecord} = require("./DatabaseMethods/BlogMethods");
-const {CreateNotification , EditNotification , DeleteNotification , FindOneNotificationRecord} = require("./DatabaseMethods/NotificationMethods");
-const {CreateChat , EditChat , DeleteChat , FindOneChatRecord} = require("./DatabaseMethods/ChatMethods");
-async function brr3 (){
-  console.log (await FindOneUserRecord({UserId: "231321"}, ""));
-  CreatePost({PostId:"hi" , CreatedBy:"Me"});
-  CreateCategory({CategoryId:"lol" , CreatedBy:"mesh_ana"});
-  CreateBlog({BlogId:"ma3gool" , CreatedBy:"ghost"});
-  CreateNotification({NotificationId:"shooo" , NotificationDetails:"fee 7ad ba3atlak"});
-  CreateChat({ChatId:"shooo"});
-}
-
-
- 
-
-
-brr3();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.get('/tezk', (req, res) => {
-    res.send(req.body)
-})
+
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+});
+
+app.use((req, res, next) => {
+  req.io = io;
+  return next();
+});
+
 app.use(require('./Routers'));
 
 app.listen(port, () => {
