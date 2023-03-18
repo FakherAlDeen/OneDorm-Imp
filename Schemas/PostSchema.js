@@ -1,6 +1,6 @@
 const mongoose = require('mongoose') ; 
 const PostSchema = new mongoose.Schema({
-    PostId: {type:String, default:null, unique:true},
+    PostId: {type:String, default:null, unique:true, index: true},
     CreatedBy: {type:String, default:null},
     PostTitle: {type:String, default:null},
     PostType: {type:String, default:null},

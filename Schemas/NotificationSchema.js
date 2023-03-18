@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const NotificationSchema = new mongoose.Schema({
-    NotificationId: {type:String, default:null, unique:true},
+    NotificationId: {type:String, default:null, unique:true, index: true} ,
     NotificationCreater: {type:String , default:null},
     NotificationTitle: {type:String , default:null},
     NotificationDetails: {type:String , default:null},

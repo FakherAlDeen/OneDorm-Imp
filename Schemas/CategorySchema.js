@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const CategorySchema = new mongoose.Schema({
-    CategoryId: {type:String, default:null, unique:true},
+    CategoryId: {type:String, default:null, unique:true, index: true},
     CategoryTitle: {type:String , default:null},
     UserCount: {type:Number, default:0},
     PostIds: {Id: String},
