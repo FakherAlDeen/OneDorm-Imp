@@ -2,12 +2,15 @@
 module.exports = {
   content: [ "./index.html",
   "./src/**/*.{vue,js,ts,jsx,tsx}",],
+  daisyui: {
+    themes: false,
+  },
   theme: {
     extend: {
       backgroundImage: {
-        'Signup-Image': "url('/img/hero-pattern.svg')",
+        'Signup-Image': "url('./src/assets/Rectangle_5.svg')",
       }
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 }

@@ -42,7 +42,7 @@ class AuthController {
             );
             // save user token
             user.token = token;
-        
+            console.log (user);
             // return new user
             res.status(201).send(user);
           } catch (err) {

@@ -17,7 +17,8 @@ const Pclass="text-[1.05rem] text-black font-normal px-4 font-[450]";
       <Button_Basic class="w-fit h-fit">
         <template #Content>
             <p class="text-white">
-                LOG IN
+                <slot name="BtnName">  
+                </slot>
             </p>
         </template>
       </Button_Basic>
