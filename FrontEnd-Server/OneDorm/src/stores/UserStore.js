@@ -18,9 +18,7 @@ export const UserStore = defineStore('User',{
         }
     },
     getters: {
-        Page: (state) => state.PageIamIn,
         GetUserData : (state) => {state.UserID,state.Fname,state.Lname,state.Username,state.UserToken}
-
     },
     actions:{
         async SignUp (data) {
@@ -34,7 +32,7 @@ export const UserStore = defineStore('User',{
                 this.Email = Data.Email;
                 this.UserToken = Data.token;
                 console.log (res);
-            }else {
+            }else if (res.status == '409'){
                 console.log ("res from store ",res);
                 this.error = res.data;
             }

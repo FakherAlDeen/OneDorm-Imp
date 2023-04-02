@@ -1,11 +1,11 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import HeaderSignLog from '../components/HeaderSignLog.vue'
 import {PageStore} from '../stores/PageStore'
 import Google_Icon from '../components/icons/Google_Icon.vue'
 import Alert from '../components/Alert.vue'
 import { ValidateEmpty } from '../Helpers/Validate'
-import {UserStore} from '../stores/UserStore'
+import { UserStore } from '../stores/UserStore'
 
 
 
@@ -22,27 +22,23 @@ const Email = ref('');
 const Password = ref('');
 const Password2 = ref('');
 
-const error = ref('');
+const error = ref([]);
 async function CreatAccHandler(){
   userStore.error=null;
-  error.value='';
-  error.value+=ValidateEmpty(Fname.value,'First Name');
-  error.value+=ValidateEmpty(Lname.value,'Last Name');
-  error.value+=ValidateEmpty(Email.value,'Email');
-  error.value+=ValidateEmpty(Password.value,'Password');
-  error.value+=ValidateEmpty(Password2.value,'Password');
-  if (Password.value != Password2.value) {error.value="Passwords Does not match!"; }
-  if (error.value.length>70){
-    error.value ="Please Fill all the fields!"
-  }
-  if (error.value != '') return;
+  error.value=[];
+  ValidateEmpty(Fname.value,'First Name') && error.value.push(ValidateEmpty(Fname.value,'First Name'));
+  ValidateEmpty(Lname.value,'Last Name') && error.value.push(ValidateEmpty(Lname.value,'Last Name'));
+  ValidateEmpty(Email.value,'Email') && error.value.push(ValidateEmpty(Email.value,'Email'));
+  ValidateEmpty(Password.value,'Password') && error.value.push(ValidateEmpty(Password.value,'Password'));
+  ValidateEmpty(Password2.value,'Password') && error.value.push(ValidateEmpty(Password2.value,'Password'));
+  if (Password.value != Password2.value) {error.value.push("Passwords Does not match!"); }
+  if (error.value.length != 0) return;
   const data ={
     Fname:Fname.value,
     Lname:Lname.value,
     Email:Email.value,
     Password:Password.value
   }
-  console.log (data)
   userStore.SignUp(data);
   console.log(userStore.GetUserData)
 }
@@ -61,9 +57,9 @@ async function CreatAccHandler(){
         <input type="text" :class="[input_styling, transitionClass]" placeholder="First Name" v-model="Fname"/>
         <input type="text" :class="[input_styling, transitionClass]" placeholder="Last Name" v-model="Lname"/>
         <input type="text" :class="[input_styling, transitionClass]" placeholder="Email" v-model="Email"/>
-        <input type="text" :class="[input_styling, transitionClass]" placeholder="Password" v-model="Password"/>
-        <input type="text" :class="[input_styling, transitionClass]" placeholder="Repeat it." v-model="Password2"/>
-        <Alert classProp="alert-error"  v-if="error!=''"><template #Error_Message>{{ error }}</template></Alert>
+        <input type="password" :class="[input_styling, transitionClass]" placeholder="Password" v-model="Password"/>
+        <input type="password" :class="[input_styling, transitionClass]" placeholder="Repeat it." v-model="Password2"/>
+        <Alert classProp="alert-error"  v-if="error.length !=0"><template #Error_Message>{{ error[0] }}</template></Alert>
         <Alert classProp="alert-warning"  v-if="userStore.error!=null"><template #Error_Message>{{ userStore.error }}</template></Alert>
         <button class="Button_Primary my-2" :class="transitionClass" @click="CreatAccHandler">CREATE ACCOUNT</button>
         <button class="Button_Primary_White my-2 focus:bg-[]" :class="transitionClass"><Google_Icon/>SIGN UP WITH GOOGLE</button>
