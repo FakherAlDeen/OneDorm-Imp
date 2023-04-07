@@ -38,6 +38,10 @@ h1{
   color:black;
   line-height: 77px;
 }
+.remember{
+  font-family: 'Lato' , sans-serif;
+  color:black
+}
 
 .Input-Primary{
   display: flex;
@@ -95,6 +99,10 @@ h1{
   line-height: 24px;
   letter-spacing: -0.24px;
   color:black;
+}
+.checkbox{
+  border: 1px solid;
+  border-radius: 30%
 }
 
 .Box_Shadow{

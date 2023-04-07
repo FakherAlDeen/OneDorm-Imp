@@ -4,7 +4,7 @@ import HeaderSignLog from '../components/HeaderSignLog.vue'
 import {PageStore} from '../stores/PageStore'
 import Google_Icon from '../components/icons/Google_Icon.vue'
 import Alert from '../components/Alert.vue'
-import { ValidateEmpty } from '../Helpers/Validate'
+import { ValidateEmpty , ValidateEmail , ValidatePassword} from '../Helpers/Validate'
 import { UserStore } from '../stores/UserStore'
 
 
@@ -31,8 +31,11 @@ async function CreatAccHandler(){
   ValidateEmpty(Email.value,'Email') && error.value.push(ValidateEmpty(Email.value,'Email'));
   ValidateEmpty(Password.value,'Password') && error.value.push(ValidateEmpty(Password.value,'Password'));
   ValidateEmpty(Password2.value,'Password') && error.value.push(ValidateEmpty(Password2.value,'Password'));
+  ValidateEmail(Email.value) && error.value.push(ValidateEmail(Email.value))
+  ValidatePassword(Password.value) && error.value.push(ValidatePassword(Password.value))
   if (Password.value != Password2.value) {error.value.push("Passwords Does not match!"); }
   if (error.value.length != 0) return;
+  
   const data ={
     Fname:Fname.value,
     Lname:Lname.value,
