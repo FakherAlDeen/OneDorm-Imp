@@ -1,0 +1,6 @@
+<template>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="9.79099" cy="10.0616" r="7.31101" stroke="white" stroke-width="1.5"/>
+    <path d="M15.4546 15.0656L20.939 20.5494" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+</template>
