@@ -50,7 +50,7 @@ async function CreatAccHandler(){
 
 <template>
   <main class="w-full flex-1 flex-col my-6 box-border">
-    <HeaderSignLog>
+    <HeaderSignLog to_Btn="/Login">
       <template #BtnName>LOG IN</template>
     </HeaderSignLog>
     <nav class="flex flex-1 w-full z-10	">
