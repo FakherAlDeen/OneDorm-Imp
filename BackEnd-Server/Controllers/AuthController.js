@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("../MiddleWare/auth");
-const { uuid } = require('uuidv4');
+const { v4: uuidv4 } = require('uuid');
 const {CreateUser, EditUser, DeleteUser, FindOneUserRecord} = require("../DatabaseMethods/UserMethods");
 
 class AuthController {
@@ -22,13 +22,13 @@ class AuthController {
             if (oldUser.length !=0) {
               return res.status(409).send("User Already Exist. Please Login");
             }
-            console.log (uuid())
+            console.log (uuidv4())
             //Encrypt user password
             const encryptedPassword = await bcrypt.hash(Password, 10);
         
             // Create user in our database
             const user = {
-                UserId: uuid(),
+                UserId: uuidv4(),
                 Fname,
                 Lname,
                 Email: Email.toLowerCase(), // sanitize: convert email to lowercase
@@ -53,10 +53,10 @@ class AuthController {
     static async LogIn(req, res){
         try{
             const { Email, Password } = req.body;
-
+            console.log("reqqqq");
             // Validate user input
             if (!(Email && Password)) {
-            res.status(400).send("All input is required");
+                return res.status(400).send("All input is required");
             }
             const user = await FindOneUserRecord({ Email });
             if (user.length!= 0 && user[0] && (await bcrypt.compare(Password, user[0].Password))) {
@@ -67,7 +67,8 @@ class AuthController {
                 JWT_SECRET,
                 );
                 const UserDataToSend = {"UserData":user[0], "Token":token};
-                res.status(200).send(UserDataToSend);
+                console.log(UserDataToSend);
+                return res.status(200).send(UserDataToSend);
             }
             res.status(400).send("Invalid Credentials");
         } catch (err) {
