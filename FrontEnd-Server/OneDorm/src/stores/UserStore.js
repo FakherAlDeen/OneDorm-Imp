@@ -4,8 +4,8 @@ export const UserStore = defineStore('User',{
     state: ()=>{
         return {
             UserID:null,
-            Fname:null,
-            Lname:null,
+            Fname:'Anton',
+            Lname:'Bahou',
             Username:null,
             Email:null,
             Phonenumber:null,
@@ -15,6 +15,7 @@ export const UserStore = defineStore('User',{
             CategoriesList:null,
             UserToken:null,
             error:null,
+            image:'https://i.pravatar.cc/300',
         }
     },
     getters: {

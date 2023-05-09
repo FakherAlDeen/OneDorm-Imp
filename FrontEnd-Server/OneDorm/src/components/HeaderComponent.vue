@@ -8,6 +8,12 @@ import ChatIcon from './icons/Header_icons/ChatIcon.vue'
 import NotifcationIcon from './icons/Header_icons/NotificationIcon.vue'
 import HappyFace from './icons/Header_icons/HappyFace.vue'
 import Arrow_Bottom_White from './icons/Header_icons/Arrow_BottomWhite.vue'
+import { UserStore } from '../stores/UserStore'
+import router from '../router/index'
+const CreatePost = ()=>{
+    router.push('/CreatePost')
+}
+const userStore = UserStore();
 </script>
 
 <template>
@@ -53,7 +59,7 @@ import Arrow_Bottom_White from './icons/Header_icons/Arrow_BottomWhite.vue'
 
         </div>
         <div class="navbar-end flex gap-3">
-            <div class="btn btn-sm bg-black p-1 px-3 min-h-fit">
+            <div class="btn btn-sm bg-black p-1 px-3 min-h-fit" @click="CreatePost">
                 <PlusIcon/>
             </div>
             <div class="btn btn-ghost px-1 indicator">
@@ -68,7 +74,7 @@ import Arrow_Bottom_White from './icons/Header_icons/Arrow_BottomWhite.vue'
                 <div class="avatar h-16 self-center asbolute right-2 indicator ">
                     <span class="indicator-item indicator-bottom badge badge-secondary bg-main3 border-main3 bottom-2 right-1"></span> 
                     <div class="w-16 h-16">
-                        <img src="https://i.pravatar.cc/300" />
+                        <img :src="userStore.image" />
                     </div>
                 </div>
                 <div class="flex flex-col h-fit self-center justify-center">

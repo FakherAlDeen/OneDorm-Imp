@@ -4,6 +4,7 @@ import { ref, computed } from 'vue'
 import {PageStore} from '../stores/PageStore'
 import { QuestionStore } from '../stores/QuestionStore'
 import { ValidateEmpty } from '../Helpers/Validate'
+import PostCreate from '../components/PostCreate.vue';
 
 const questionStore = QuestionStore();
 // const Store = PageStore();
@@ -32,6 +33,7 @@ async function CreatePostClick(){
 <template>
     <main>
         <HeaderComponent></HeaderComponent>
-        <button class="Button_Primary my-2" :class="transitionClass" @click="CreatePostClick">Share</button>
+        <!-- <button class="Button_Primary my-2" :class="transitionClass" @click="CreatePostClick">Share</button> -->
+        <PostCreate></PostCreate>
     </main>
 </template>

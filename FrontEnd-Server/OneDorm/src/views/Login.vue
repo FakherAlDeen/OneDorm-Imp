@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-// import HeaderSignLog from '../components/HeaderSignLog.vue'
+import HeaderSignLog from '../components/HeaderSignLog.vue'
 import {PageStore} from '../stores/PageStore'
 import Google_Icon from '../components/icons/Google_Icon.vue'
 import { UserStore } from '../stores/UserStore'
@@ -35,7 +35,7 @@ async function LoginClick(){
 
 <template>
   <main class="w-full flex-1 flex-col my-8 box-border">
-    <HeaderSignLog>
+    <HeaderSignLog to_Btn="/Signup">
       <template #BtnName>SIGN UP</template>
     </HeaderSignLog>
     <nav class="flex flex-1 w-full z-10	">
