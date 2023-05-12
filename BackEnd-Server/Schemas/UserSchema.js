@@ -13,9 +13,7 @@ const UserSchema = new mongoose.Schema({
     NotificationList:[{
         Id: {type:String, default: null}
     }],
-    PostList:[{
-        Id: {type:String, default: null}
-    }],
+    PostList:[],
     ChatList:[{
         Id: {type:String, default: null}
     }],

@@ -11,9 +11,9 @@ module.exports = {
             console.log(err);
         });
     },
-    EditUser: async function (Id,Data){
+    EditUser: async function (UserId,Data){
         await User.findOneAndUpdate(
-            {Id},
+            {UserId},
             Data
         ).catch((err) => {
             console.log(err);
