@@ -3,7 +3,8 @@ import { onMounted, ref , watch} from 'vue';
 import Quill from 'quill';
 import { UserStore } from '../stores/UserStore'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
-
+import {CreatePost} from '../Helpers/APIs/PostAPIs'
+import Alert from './Alert.vue'
 const userStore = UserStore();
 const editor = ref(null);
 const postContent = ref('');
@@ -13,6 +14,7 @@ const HashtagsArr = ref([]);
 const delta =ref(null);
 const Attachments = ref (null);
 const AttachmentsArr = ref ([]);
+const error = ref([]);
 let quill;
 onMounted(()=>{
     quill = new Quill(document.querySelector('#editor'), {
@@ -49,11 +51,38 @@ const RemoveHashtag = (e)=>{
     HashtagsArr.value.splice(e,1);
 }
 const Hashtags_Handler = () =>{
+    if (HashtagsArr.value.find(el => el =='#'+HashtagValue.value.trim().replaceAll(' ','_'))) return;
     HashtagsArr.value.push('#'+HashtagValue.value.trim().replaceAll(' ','_'));
     console.log(HashtagsArr.value);
 }
-const UserImg = userStore.image;
-console.log(UserImg)
+const wtv = ref('');
+const PublishHandler=()=>{
+    error.value = [];
+    if (PostTitle.value==""){
+        error.value.push("Title shouldn't be empty!")
+        return;
+    }
+    console.log (quill.getContents())
+    if (quill.getLength() ==1){
+        error.value.push("Post Content shoudn't be empty!")
+        return;
+    }
+    if (HashtagsArr.value.length <3){
+        error.value.push("The should be at least 3 Hashtags!")
+        return;
+    }
+    const data ={
+        QuestionTitle: PostTitle.value,
+        QuestionDetails: quill.getContents(),
+        CreatedBy: userStore.UserID,
+        Hashtags: HashtagsArr.value,
+        QuestionDetailsHTML: quill.root.innerHTML,
+    }
+    console.log (quill.root.innerHTML)
+    wtv.value = quill.root.innerHTML
+    const res =CreatePost(data);
+    // console.log (res);
+}
 
 </script>
 
@@ -62,7 +91,7 @@ console.log(UserImg)
         <div class="absolute left-0 top-0">
             <div class="avatar h-16 absolute">
                 <div class="w-48 h-48 border-2 transition-all duration-150 ease-in-out border-black shadow-BoxBlackSm hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none hover:border-t-0 hover:border-l-0">
-                    <img :src='UserImg' />
+                    <img :src='userStore.image' />
                 </div>
             </div>
         </div>
@@ -77,9 +106,9 @@ console.log(UserImg)
         <div class="card-body items-start text-left self-center w-10/12 px-0">
             <h2 class="text-4xl font-bold font-Inter leading-10	text-black ">Write your post content:</h2>
             <figure class="w-full pt-1 mx-auto">
-                <div class="min-w-[30rem] w-full h-96 card bg-white rounded-2 border border-2 border-black" >
+                <div class="min-w-[30rem] w-full min-h-[24rem] max-h-[24rem] h-fit card bg-white rounded-2 border border-2 border-black" >
     
-                    <div id="editor" class="rounded-2"></div>
+                    <div id="editor" class="rounded-2 h-full overflow-y-auto"></div>
                 </div>
             </figure>
         </div>
@@ -106,6 +135,7 @@ console.log(UserImg)
                 </div>
             </div>
         </div>
+        <Alert class="w-1/2 mx-auto mb-10" classProp="alert-error"  v-if="error.length !=0"><template #Error_Message>{{ error[0] }}</template></Alert>
         <div class="form-control w-10/12 mb-10 self-center">
             <div class="self-center">
                 <button class="btn mx-2 bg-Alert border-none btn-lg hover:shadow-BoxBlackSm" @click="Cancel">Cancel</button>

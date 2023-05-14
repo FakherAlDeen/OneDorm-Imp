@@ -6,7 +6,7 @@ import Google_Icon from '../components/icons/Google_Icon.vue'
 import Alert from '../components/Alert.vue'
 import { ValidateEmpty , ValidateEmail , ValidatePassword} from '../Helpers/Validate'
 import { UserStore } from '../stores/UserStore'
-
+import router from '../router'
 
 
 
@@ -43,6 +43,7 @@ async function CreatAccHandler(){
     Password:Password.value
   }
   userStore.SignUp(data);
+  router.push('/NewsFeed');
   console.log(userStore.GetUserData)
 }
 

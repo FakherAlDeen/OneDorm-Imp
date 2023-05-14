@@ -17,6 +17,7 @@ module.exports = {
         'Alert': '#FD3E3E',
         'postBG':'#FFE9E9',
         'Yellow' : '#FECA38',
+        'Grey'  : '#7E7E7E'
       },
       fontFamily: {
         'inter':'Inter'
