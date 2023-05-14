@@ -15,7 +15,17 @@ module.exports = {
         'main2': '#FECA38',
         'main3': '#39B97E',
         'Alert': '#FD3E3E',
+        'postBG':'#FFE9E9',
+        'Yellow' : '#FECA38',
+        'Grey'  : '#7E7E7E'
       },
+      fontFamily: {
+        'inter':'Inter'
+      },
+      boxShadow:{
+        'BoxDropBlack':'15px 15px #000000',
+        'BoxBlackSm':'0.5rem 0.5rem #000000'
+      }
     },
   },
   plugins: [require("daisyui")],

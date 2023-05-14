@@ -4,8 +4,8 @@ export const UserStore = defineStore('User',{
     state: ()=>{
         return {
             UserID:null,
-            Fname:null,
-            Lname:null,
+            Fname:'Anton',
+            Lname:'Bahou',
             Username:null,
             Email:null,
             Phonenumber:null,
@@ -15,6 +15,7 @@ export const UserStore = defineStore('User',{
             CategoriesList:null,
             UserToken:null,
             error:null,
+            image:'https://i.pravatar.cc/300',
         }
     },
     getters: {
@@ -37,6 +38,49 @@ export const UserStore = defineStore('User',{
                 this.error = res.data;
             }
         },
+        async Login (data){
+            console.log(data)
+            const res = await POST('LogIn' , data);
+            console.log(res)
+            if(res.status=='200'){
+                const Data = res.data;
+                this.Email = Data.Email;
+            }
+            else if(res.status == '400'){
+                console.log("res from store " , res);
+                this.error = res.data ;
+            }
+        },
     }
 
+})
+export const QuestionStore = defineStore('Question' , {
+    state: ()=>{
+        return {
+            QuestionId:null,
+            CreatedBy:null,
+            QuestionTitle:null,
+            QestionType:null,
+            QuestionDetails:null,
+            QuestionUpvoteCount:0,
+            QuestionDownvoteCount:0,
+            ReportedCount:0,
+            IsPinned:false,
+            CreatedAt:null,
+            LastEdit:null,
+            error:null,
+            Hashtags:null,
+            Attachments:null,
+            AnswersList:null
+        }
+    },
+    getters: {
+        GetQuestionData : (state) => {state.QuestionId,state.CreatedBy,state.QuestionTitle,state.QestionType,state.QuestionDetails}
+    },
+    actions:{
+        async CreatePost(data){
+            const res = await POST('CreatePost' , data);
+            
+        }
+    }
 })

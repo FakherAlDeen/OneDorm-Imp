@@ -1,10 +1,14 @@
 <script setup>
 import Button_Basic from '../components/Button_Basic.vue'
 import OneDorm from '../components/icons/OneDorm.vue'
+import router from '../router/index';
 const Pclass="text-[1.05rem] text-black font-normal px-4 font-[450]";
-defineProps({
-    to_Btn:String
-})
+const props = defineProps(['to_Btn'])
+
+const ClickHandler = ()=>{
+  console.log(props.to_Btn)
+  router.push(props.to_Btn)
+}
 </script>
 
 <template>
@@ -17,8 +21,7 @@ defineProps({
       <p><a :class="Pclass">ABOUT US</a></p>
       <p><a :class="Pclass">CONTACT</a></p>
       <div class="grow"></div>
-      <router-link :to=to_Btn>
-      <Button_Basic class="w-fit h-fit">
+      <Button_Basic class="w-fit h-fit" @click="ClickHandler">
         <template #Content>
             <p class="text-white">
                 <slot name="BtnName">  
@@ -26,7 +29,6 @@ defineProps({
             </p>
         </template>
       </Button_Basic>
-      </router-link>
     </header>
   </main>
 </template>

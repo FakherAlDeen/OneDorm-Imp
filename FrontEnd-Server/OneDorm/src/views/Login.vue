@@ -3,21 +3,39 @@ import { ref, computed } from 'vue'
 import HeaderSignLog from '../components/HeaderSignLog.vue'
 import {PageStore} from '../stores/PageStore'
 import Google_Icon from '../components/icons/Google_Icon.vue'
+import { UserStore } from '../stores/UserStore'
+import { ValidateEmpty , ValidateEmail , ValidatePassword} from '../Helpers/Validate'
+
+const userStore = UserStore();
 const Store = PageStore();
 Store.ChangePage('Log In')
 const input_styling ="Input-Primary my-2"
 const transitionClass ="transition ease-in-out delay-150 hover:scale-[1.02]"
-const StringPage= (Store.Page).toUpperCase() ;
+const StringPage = (Store.Page).toUpperCase() ;
 
 const Email = ref('');
 const Password = ref('');
 
+const error = ref([]);
+async function LoginClick(){
+  userStore.error=null;
+  error.value=[];
+  ValidateEmpty(Email.value,'Email') && error.value.push(ValidateEmpty(Email.value,'Email'));
+  ValidateEmpty(Password.value,'Password') && error.value.push(ValidateEmpty(Password.value,'Password'));
+  if (error.value.length != 0) return;
+  const data ={
+    Email:Email.value,
+    Password:Password.value
+  }
+  await userStore.Login(data)
+  console.log(userStore.GetUserData)
+}
 
 </script>
 
 <template>
   <main class="w-full flex-1 flex-col my-8 box-border">
-    <HeaderSignLog>
+    <HeaderSignLog to_Btn="/Signup">
       <template #BtnName>SIGN UP</template>
     </HeaderSignLog>
     <nav class="flex flex-1 w-full z-10	">
@@ -26,14 +44,6 @@ const Password = ref('');
         <h1 class="mb-8"> BACK</h1>
         <input type="text" :class="[input_styling, transitionClass]" placeholder="Email" v-model="Email"/>
         <input type="text" :class="[input_styling, transitionClass]" placeholder="Password" v-model="Password"/>
-        <!-- <input id = "default-checkbox" type="checkbox" />
-        <label for="default-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Default checkbox</label> -->
-        <!-- <div class="form-control">
-            <label class="cursor-pointer label">
-                <input type="checkbox" checked="checked" class="checkbox"/>
-                <span class="label-text">Remember me</span>
-            </label>
-        </div> -->
         <div class="flex items-start my-2">
             <div class="flex items-center h-5">
                 <input id="remember" type="checkbox" class="w-4 h-4 checkbox ml-1" required="">
@@ -44,7 +54,7 @@ const Password = ref('');
             <label class="font-bold remember text-sm ml-auto mr-1" >  Forgot Password? </label>
         </div>
         
-        <button class="Button_Primary my-2" :class="transitionClass">SIGN IN</button>
+        <button class="Button_Primary my-2" :class="transitionClass" @click="LoginClick">SIGN IN</button>
         <button class="Button_Primary_White my-2 focus:bg-[]" :class="transitionClass"><Google_Icon/>SIGN IN WITH GOOGLE</button>
       </div>
       <h2 class="StringPage rotate-[-90deg] w-fit fixed top-[38rem] right-[16.1rem]">{{(StringPage+' - ').repeat(4) }} <span class="font-bold">{{ StringPage }}</span> {{ (' - ' + StringPage) }}</h2>

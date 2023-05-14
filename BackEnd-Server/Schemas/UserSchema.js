@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
     Phonenumber:{type:String, default:null},
     Image: {type:String, default:null}, //Check Later
     DateOfBirth:{type:Date, default:null},
+    TotalVotes:{type:Number, default:0},
     NotificationList:[{
         Id: {type:String, default: null}
     }],
