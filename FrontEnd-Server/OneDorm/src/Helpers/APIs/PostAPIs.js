@@ -14,7 +14,7 @@ export async function CreatePost (data){
 
 export async function GetPost (Id){
         const res = await GET ('GetPost/'+Id);
-        if (res.status=='201'){
+        if (res.status=='200'){
                 console.log (res);
                 return res;
         }else {
