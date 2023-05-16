@@ -29,9 +29,10 @@ async function LoginClick(){
     Email:Email.value,
     Password:Password.value
   }
-  await userStore.Login(data)
+  const res =await userStore.Login(data)
   console.log(userStore.GetUserData)
-  router.push('/NewsFeed');
+  if (res.status == '200')
+    router.push('/NewsFeed');
 }
 
 </script>
@@ -46,7 +47,7 @@ async function LoginClick(){
         <h1 class="font-bold"><span class="font-bold">WELCOME</span></h1>
         <h1 class="mb-8"> BACK</h1>
         <input type="text" :class="[input_styling, transitionClass]" placeholder="Email" v-model="Email"/>
-        <input type="text" :class="[input_styling, transitionClass]" placeholder="Password" v-model="Password"/>
+        <input type="password" :class="[input_styling, transitionClass]" placeholder="Password" v-model="Password"/>
         <div class="flex items-start my-2">
             <div class="flex items-center h-5">
                 <input id="remember" type="checkbox" class="w-4 h-4 checkbox ml-1" required="">

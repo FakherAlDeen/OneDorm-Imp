@@ -32,11 +32,14 @@ export const UserStore = defineStore('User',{
                 this.Lname = Data.Lname;
                 this.Email = Data.Email;
                 this.UserToken = Data.token;
+                document.cookie = ''
                 console.log (this.UserID);
                 console.log (res);
+                return res;
             }else if (res.status == '409'){
                 console.log ("res from store ",res);
                 this.error = res.data;
+                return res;
             }
         },
         async Login (data){
@@ -50,10 +53,12 @@ export const UserStore = defineStore('User',{
                 this.Fname = Data.Fname;
                 this.Lname = Data.Lname;
                 this.Email = Data.Email;
+                return res;
             }
             else if(res.status == '400'){
                 console.log("res from store " , res);
                 this.error = res.data ;
+                return res;
             }
         },
     }
