@@ -3,6 +3,12 @@ import { onMounted, ref , watch} from 'vue';
 import Quill from 'quill';
 import { UserStore } from '../stores/UserStore'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import {CreateAnswer} from '../Helpers/APIs/PostAPIs'
+
+const props = defineProps({
+  AnswerOfAnswerId:String
+})
+
 let quill;
 const editor = ref();
 const delta =ref(null);
@@ -28,10 +34,24 @@ onMounted(()=>{
         delta.value = quill.getContents();
 })
 
+const SendClickHanlder = async () =>{
+  if (quill.getLength() ==1){
+        return;
+    }
+    const data = {
+        CreatedBy:UserStore().UserID,
+        AnswerDetails:JSON.parse(JSON.stringify(quill.getContents())),
+        AnswerDetailsHTML: quill.root.innerHTML,
+        Id:props.AnswerOfAnswerId ,
+        Type:'Answer'
+    }
+    const res = await CreateAnswer(data);
+    console.log(res);
+}
 </script>
 <template>
   <div class="w-full h-full relative">
     <div ref="editor" class="rounded-2 h-[12rem] max-h-[6rem] overflow-y-auto"></div>
-    <button class="btn btn-success bottom-[-2rem] right-[1rem] absolute">Send!</button>
+    <button class="btn btn-success bottom-[-2rem] right-[1rem] absolute" @click="SendClickHanlder">Send!</button>
   </div>
 </template>

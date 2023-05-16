@@ -10,7 +10,7 @@ import AnswerSection from '../components/AnswersSection.vue'
 
 const PostID = useRoute().params.QuestionId;
 const postTitle = ref()
-
+const AnswersId = ref ([]);
 const postcont = ref()
 const Hashtags = ref()
 const up=ref();
@@ -34,7 +34,8 @@ onMounted(async()=>{
     Hashtags.value = PostData.PostData.Hashtags;
     up.value=parseInt(PostData.PostData.QuestionUpvoteCount);
     down.value =parseInt(PostData.PostData.QuestionDownVoteCount);
-    console.log (down.value);
+    AnswersId.value =PostData.PostData.AnswersList;
+    console.log (AnswersId.value);
 })
 </script>
 <template>
@@ -43,11 +44,18 @@ onMounted(async()=>{
         <!-- <button class="Button_Primary my-2" :class="transitionClass" @click="CreatePostClick">Share</button> -->
         <Alert classProp="alert-warning"  v-if="Error!='nth'"><template #Error_Message>{{ Error }}</template></Alert>
         <PostContainer v-if="Error=='nth'" :CreatorName="Cname" :postTitle="postTitle" :AnswerCount="AnsCount" :Hashtags="Hashtags" :PostContent="postcont" :DownVotes="down" :UpVotes="up"/>
-        <CommentComponent class="z-10"/>
+        <CommentComponent :QuestionId="PostID" class="z-10"/>
         <div class="card bg-Grey2 w-9/12 rounded-none border border-t-[3rem] mt-[-4rem] border-[0.2rem]  border-black relative mx-auto my-10 h-full p-5">
             <div class="bg-white w-full h-fit rounded-xl p-5">
-
-                <AnswerSection><template #Content><AnswerSection><template #Content><AnswerSection></AnswerSection><AnswerSection></AnswerSection></template></AnswerSection> <AnswerSection></AnswerSection></template></AnswerSection>
+                <!-- <template v-if="AnswersId.length != 0"> -->
+                    <template  v-for ="(e,i) in AnswersId" :key="i" >
+                        <!-- <template> -->
+                            <AnswerSection :AnswerId="e"/>
+                        <!-- </template> -->
+                    </template>
+                <!-- </template> -->
+                <!-- <AnswerSection></AnswerSection> -->
+                <!-- <p>sdasd</p> -->
             </div>
         </div>
         

@@ -3,6 +3,10 @@ import { onMounted, ref , watch} from 'vue';
 import Quill from 'quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import { UserStore } from '../stores/UserStore'
+import {CreateAnswer} from '../Helpers/APIs/PostAPIs'
+const props = defineProps({
+    QuestionId:String
+})
 
 let quill;
 const delta =ref(null);
@@ -27,6 +31,20 @@ onMounted(()=>{
       )
         delta.value = quill.getContents();
 })
+const CommentClickHandler = async () =>{
+    if (quill.getLength() ==1){
+        return;
+    }
+    const data = {
+        CreatedBy:UserStore().UserID,
+        AnswerDetails:JSON.parse(JSON.stringify(quill.getContents())),
+        AnswerDetailsHTML: quill.root.innerHTML,
+        Id:props.QuestionId ,
+        Type:'Question'
+    }
+    const res = await CreateAnswer(data);
+    console.log(res);
+};
 
 </script>
 <template>
@@ -41,7 +59,7 @@ onMounted(()=>{
             <div class="h-[20rem] z-0">
                 <div id="editor" class="rounded-2 h-[12rem] max-h-[12rem] overflow-y-auto"></div>
             </div>
-            <button class="btn btn-block w-[11.5rem] h-[4rem] absolute btn-success font-black px-10 border-black border-[0.185rem] rounded-[1rem] bg-main3 bottom-[-1.6rem] right-[2rem]"><p class="text-2xl font-[1000] text-white">comment!</p></button>
+            <button class="btn btn-block w-[11.5rem] h-[4rem] absolute btn-success font-black px-10 border-black border-[0.185rem] rounded-[1rem] bg-main3 bottom-[-1.6rem] right-[2rem]" @click="CommentClickHandler"><p class="text-2xl font-[1000] text-white">comment!</p></button>
         </div>
     </div>
 </template>

@@ -7,7 +7,6 @@ import Comment from './icons/Post_icons/CommentIcon.vue'
 import { onMounted, ref , watch} from 'vue';
 import QuillComp from './QuilllComp.vue'
 import {GetAnswer} from '../Helpers/APIs/PostAPIs'
-import AnswersSectionChild from './AnswersSectionChild.vue';
 
 const props = defineProps({
     AnswerId:String
@@ -69,9 +68,6 @@ const ReplyHandler = () =>{
             <div v-if = "Reply" class="h-[6rem] my-4 mb-16">
                 <QuillComp :AnswerOfAnswerId="AnswerId"/>
             </div>
-            <template v-for="(e,i) in AnswerLists" :key="i">
-                <AnswersSectionChild :AnswerId="e"></AnswersSectionChild>
-            </template>
         </div>
     </div>
 </template>
