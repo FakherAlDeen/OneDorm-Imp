@@ -14,7 +14,7 @@ class AuthController {
             const { Fname, Lname, Email, Password } = req.body;
 
             if (!(Email && Password && Fname && Lname)) {
-              res.status(400).send("All input is required");
+              return res.status(400).send("All input is required");
             }
 
             const oldUser = await FindOneUserRecord({ Email });

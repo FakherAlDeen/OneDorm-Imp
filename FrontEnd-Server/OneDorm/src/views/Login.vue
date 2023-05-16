@@ -5,6 +5,8 @@ import {PageStore} from '../stores/PageStore'
 import Google_Icon from '../components/icons/Google_Icon.vue'
 import { UserStore } from '../stores/UserStore'
 import { ValidateEmpty , ValidateEmail , ValidatePassword} from '../Helpers/Validate'
+import router from '../router'
+import Alert from '../components/Alert.vue'
 
 const userStore = UserStore();
 const Store = PageStore();
@@ -29,6 +31,7 @@ async function LoginClick(){
   }
   await userStore.Login(data)
   console.log(userStore.GetUserData)
+  router.push('/NewsFeed');
 }
 
 </script>
@@ -53,7 +56,7 @@ async function LoginClick(){
             </div>
             <label class="font-bold remember text-sm ml-auto mr-1" >  Forgot Password? </label>
         </div>
-        
+        <Alert classProp="alert-warning"  v-if="userStore.error!=null"><template #Error_Message>{{ userStore.error }}</template></Alert>
         <button class="Button_Primary my-2" :class="transitionClass" @click="LoginClick">SIGN IN</button>
         <button class="Button_Primary_White my-2 focus:bg-[]" :class="transitionClass"><Google_Icon/>SIGN IN WITH GOOGLE</button>
       </div>

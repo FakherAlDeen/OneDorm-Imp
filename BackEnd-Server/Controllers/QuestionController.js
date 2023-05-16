@@ -11,9 +11,9 @@ class QuestionController {
     static async CreatePost(req, res){
       try{// connect it to hashtags table and user table
           
-          const { CreatedBy, QuestionTitle , QuestionDetails , Hashtags } = req.body; // loop over hashtags -> find -> 
-          if (!(CreatedBy && QuestionTitle && QuestionDetails)) {
-            res.status(400).send("Send all the fields");
+          const { CreatedBy, QuestionTitle , QuestionDetails , Hashtags, QuestionDetailsHTML } = req.body; // loop over hashtags -> find -> 
+          if (!(CreatedBy && QuestionTitle && QuestionDetails && QuestionDetailsHTML)) {
+            return res.status(400).send("Send all the fields");
           }
           let QuestionId = uuidv4()
           let arr = []
@@ -33,11 +33,13 @@ class QuestionController {
             arr.push(CategoryId)
             EditCategory(CategoryId , {$push: { PostIds: QuestionId }}  )
           }
+          console.log (QuestionDetails);
           const question = {
             QuestionId,
             CreatedBy,
             QuestionTitle,
             QuestionDetails,
+            QuestionDetailsHTML,
             Hashtags:arr // gwt_w gwt_w
           }
           await CreateQuestion(question)
@@ -46,7 +48,7 @@ class QuestionController {
           
           res.status(201).send(question)
       } catch (err) {
-          res.status(400).send(err) 
+          res.status(403).send(err) 
           console.log(err);
       }
     }

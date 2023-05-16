@@ -3,7 +3,7 @@ import {GET,POST} from '../../Helpers/APIs'
 export const UserStore = defineStore('User',{
     state: ()=>{
         return {
-            UserID:null,
+            UserID:'-1',
             Fname:'Anton',
             Lname:'Bahou',
             Username:null,
@@ -27,11 +27,12 @@ export const UserStore = defineStore('User',{
             const res = await POST ('SignUp' ,data);
             if (res.status=='201'){
                 const Data = res.data;
-                this.UserID = Data.UserID;
+                this.UserID = Data.UserId;
                 this.Fname = Data.Fname;
                 this.Lname = Data.Lname;
                 this.Email = Data.Email;
                 this.UserToken = Data.token;
+                console.log (this.UserID);
                 console.log (res);
             }else if (res.status == '409'){
                 console.log ("res from store ",res);
@@ -43,7 +44,11 @@ export const UserStore = defineStore('User',{
             const res = await POST('LogIn' , data);
             console.log(res)
             if(res.status=='200'){
-                const Data = res.data;
+                this.UserToken = res.Token;
+                const Data = res.data.UserData;
+                this .UserID = Data.UserId;
+                this.Fname = Data.Fname;
+                this.Lname = Data.Lname;
                 this.Email = Data.Email;
             }
             else if(res.status == '400'){

@@ -71,9 +71,11 @@ const PublishHandler=()=>{
         error.value.push("The should be at least 3 Hashtags!")
         return;
     }
+    const del = quill.getContents();
+    console.log (userStore.UserID);
     const data ={
         QuestionTitle: PostTitle.value,
-        QuestionDetails: quill.getContents(),
+        QuestionDetails: JSON.parse(JSON.stringify(del)),
         CreatedBy: userStore.UserID,
         Hashtags: HashtagsArr.value,
         QuestionDetailsHTML: quill.root.innerHTML,
@@ -81,7 +83,7 @@ const PublishHandler=()=>{
     console.log (quill.root.innerHTML)
     wtv.value = quill.root.innerHTML
     const res =CreatePost(data);
-    // console.log (res);
+    console.log (res);
 }
 
 </script>
