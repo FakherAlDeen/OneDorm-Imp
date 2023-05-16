@@ -4,11 +4,11 @@ import { UserStore } from '../stores/UserStore'
 
 const isAuthenticated =(to, from,next)=>{
   console.log (UserStore().UserID);
-  if (UserStore().UserID == '-1'){
-    next('Login');
-  }else {
+  // if (UserStore().UserID == '-1'){
+  //   next('Login');
+  // }else {
     next ();
-  }
+  // }
 } 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,7 +44,7 @@ const router = createRouter({
       component: () => import('../views/CreatePost.vue')
     },
     {
-      path:'/Post',
+      path:'/Post/:QuestionId',
       // path:'/Post:PostID',
       name: 'Post',
       beforeEnter: isAuthenticated,

@@ -13,6 +13,7 @@ import { ref } from 'vue'
         mine:Boolean,
         postFull:Boolean,
         AnswerCount:Number,
+        CreatorName:String,
     })
     const UPDOWNHanlder= ref(0);
 </script>
@@ -42,7 +43,7 @@ import { ref } from 'vue'
             </div>
             <div class="grow">
                 <div class="mx-10 mt-10 h-fit min-h-[9rem] border-b-2 border-black flex flex-col">
-                    <h1 class="text-2xl text-left text-main1 font-bold capitalize">{{UserStore().Fname + " " +UserStore().Lname}}</h1>
+                    <h1 class="text-2xl text-left text-main1 font-bold capitalize">{{CreatorName}}</h1>
                     <h2 class="text-black text-left text-4xl font-bold normal-case mt-2">{{ postTitle +'?' }}</h2>
                     <div class="grow"></div>
                     <p class="text-Grey justify-self-end font-light text-lg text-left">{{ AnswerCount + " ANSWERS - "}}   {{ UpVotes-DownVotes +" SCORE" }}</p>

@@ -8,7 +8,8 @@ export async function GET (str){
         console.log(response);
         return response;
       } catch (error) {
-        console.error(error);
+        console.log(error);
+        return error.response;
       }
 }
 
@@ -22,7 +23,7 @@ export async function POST (str,data){
         console.log(response);
         return response;
       } catch (error) {
-        console.error(error);
+        console.log(error);
         return error.response;
       }
 }

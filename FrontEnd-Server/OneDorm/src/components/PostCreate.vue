@@ -5,6 +5,9 @@ import { UserStore } from '../stores/UserStore'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import {CreatePost} from '../Helpers/APIs/PostAPIs'
 import Alert from './Alert.vue'
+import router from '../router';
+
+
 const userStore = UserStore();
 const editor = ref(null);
 const postContent = ref('');
@@ -56,7 +59,7 @@ const Hashtags_Handler = () =>{
     console.log(HashtagsArr.value);
 }
 const wtv = ref('');
-const PublishHandler=()=>{
+const PublishHandler=async ()=>{
     error.value = [];
     if (PostTitle.value==""){
         error.value.push("Title shouldn't be empty!")
@@ -82,7 +85,15 @@ const PublishHandler=()=>{
     }
     console.log (quill.root.innerHTML)
     wtv.value = quill.root.innerHTML
-    const res =CreatePost(data);
+    const res =await CreatePost(data);
+    console.log (res.data.QuestionId);
+    router.push ({
+                        name: 'Post',
+                        params: {
+                            QuestionId: res.data.QuestionId,
+                        }
+                    })
+    
     console.log (res);
 }
 
