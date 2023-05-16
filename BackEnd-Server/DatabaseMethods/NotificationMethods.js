@@ -3,7 +3,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
 catch(error => handleError(error));
 const Notification = require('../Schemas/NotificationSchema');
 module.exports = {
-    CreateNotification: (Data)=>{
+    CreateNotification: async function (Data){
         const newRecord = new Notification(Data);
         newRecord.save().catch((err) => {
             console.log(err);

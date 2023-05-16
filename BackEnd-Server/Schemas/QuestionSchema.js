@@ -16,9 +16,7 @@ const QuestionSchema = new mongoose.Schema({
     Attachments: [{
         Attachment:String // check later
     }],
-    AnswersList: [{
-        Id: {type:String , default:null}
-    }]
+    AnswersList: []
 });
 
 const Question = mongoose.model('Question', QuestionSchema);

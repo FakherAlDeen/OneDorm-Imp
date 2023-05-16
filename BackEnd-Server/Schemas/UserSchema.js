@@ -10,10 +10,12 @@ const UserSchema = new mongoose.Schema({
     Image: {type:String, default:null}, //Check Later
     DateOfBirth:{type:Date, default:null},
     TotalVotes:{type:Number, default:0},
+    UserDetails:{type:Object , default:null},
     NotificationList:[{
         Id: {type:String, default: null}
     }],
     PostList:[],
+    AnswersList:[],
     ChatList:[{
         Id: {type:String, default: null}
     }],
@@ -24,6 +26,7 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+
 });
 
 const User = mongoose.model('User', UserSchema);

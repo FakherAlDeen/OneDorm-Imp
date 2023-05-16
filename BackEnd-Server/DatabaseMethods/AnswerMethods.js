@@ -3,23 +3,23 @@ mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
 catch(error => handleError(error));
 const Answer = require('../Schemas/AnswerSchema');
 module.exports = {
-    CreateAnswer: (Data)=>{
+    CreateAnswer: async function (Data){
         const newRecord = new Answer(Data);
         newRecord.save().catch((err) => {
             console.log(err);
         });
     },
-    EditAnswer: async function (Id,Data){
+    EditAnswer: async function (AnswerId,Data){
         await Answer.findOneAndUpdate(
-            {Id},
+            {AnswerId},
             Data
         ).catch((err) => {
             console.log(err);
         });
     },
-    DeleteAnswer: async function (Id){
+    DeleteAnswer: async function (AnswerId){
         await Answer.deleteOne(
-            {Id}
+            {AnswerId}
         ).catch((err) => {
             console.log(err);
         });

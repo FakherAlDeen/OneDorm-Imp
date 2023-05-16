@@ -3,7 +3,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
 catch(error => handleError(error));
 const Category = require('../Schemas/CategorySchema');
 module.exports = {
-    CreateCategory: (Data)=>{
+    CreateCategory: async function (Data){
         const newRecord = new Category(Data);
         newRecord.save().catch((err) => {
             console.log(err);

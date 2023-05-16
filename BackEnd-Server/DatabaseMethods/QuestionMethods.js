@@ -3,7 +3,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
 catch(error => handleError(error));
 const Question = require('../Schemas/QuestionSchema');
 module.exports = {
-    CreateQuestion: (Data)=>{
+    CreateQuestion: async function (Data){
         const newRecord = new Question (Data);
         newRecord.save().catch((err) => {
             console.log(err);

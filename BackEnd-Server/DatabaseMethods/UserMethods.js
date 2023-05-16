@@ -5,7 +5,7 @@ catch(error => handleError(error));
 // Insert (ds,ds) Table 
 const User = require('../Schemas/UserSchema');
 module.exports = {
-    CreateUser: (Data)=>{
+    CreateUser: async function (Data){
         const newRecord = new User (Data);
         newRecord.save().catch((err) => {
             console.log(err);

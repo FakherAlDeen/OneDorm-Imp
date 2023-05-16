@@ -3,6 +3,7 @@ const AnswerSchema = new mongoose.Schema({
     AnswerId: {type:String, unique:true, index: true},
     CreatedBy: {type:String, default:null},
     AnswerDetails: {type:String, default:null},
+    AnswerDetailsHTML: {type:String, default:null},
     AnswerUpvoteCount: {type:Number, default:0},
     AnswerDownVoteCount: {type:Number, default:0},
     ReportedCount: {type:Number, default:0},
@@ -12,9 +13,7 @@ const AnswerSchema = new mongoose.Schema({
     Attachments: [{
         Attachment:String // check later
     }],
-    AnswersList: {
-        Id:{type:String , defualt:null}
-    }
+    AnswersList: []
 });
 
 const Answer = mongoose.model('Answer', AnswerSchema);

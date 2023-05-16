@@ -3,7 +3,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
 catch(error => handleError(error));
 const Blog = require('../Schemas/BlogSchema');
 module.exports = {
-    CreateBlog: (Data)=>{
+    CreateBlog: async function (Data){
         const newRecord = new Blog(Data);
         newRecord.save().catch((err) => {
             console.log(err);
