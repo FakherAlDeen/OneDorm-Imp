@@ -8,7 +8,6 @@ import { onMounted, ref , watch} from 'vue';
 import QuillComp from './QuilllComp.vue'
 import {GetAnswer} from '../Helpers/APIs/PostAPIs'
 import AnswersSectionChild from './AnswersSectionChild.vue';
-
 const props = defineProps({
     AnswerId:String
 })
@@ -70,7 +69,7 @@ const ReplyHandler = () =>{
                 <QuillComp :AnswerOfAnswerId="AnswerId"/>
             </div>
             <template v-for="(e,i) in AnswerLists" :key="i">
-                <AnswersSectionChild :AnswerId="e"></AnswersSectionChild>
+                <AnswersSection :AnswerId="e"></AnswersSection>
             </template>
         </div>
     </div>

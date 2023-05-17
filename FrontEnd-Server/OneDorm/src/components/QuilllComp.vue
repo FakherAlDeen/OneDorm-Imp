@@ -4,6 +4,8 @@ import Quill from 'quill';
 import { UserStore } from '../stores/UserStore'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import {CreateAnswer} from '../Helpers/APIs/PostAPIs'
+import VueCookies from 'vue-cookies'
+
 
 const props = defineProps({
   AnswerOfAnswerId:String
@@ -38,8 +40,9 @@ const SendClickHanlder = async () =>{
   if (quill.getLength() ==1){
         return;
     }
+    const cook= JSON.parse(atob($cookies.get('Token').split('.')[1]))
     const data = {
-        CreatedBy:UserStore().UserID,
+        CreatedBy:cook.UserId,
         AnswerDetails:JSON.parse(JSON.stringify(quill.getContents())),
         AnswerDetailsHTML: quill.root.innerHTML,
         Id:props.AnswerOfAnswerId ,

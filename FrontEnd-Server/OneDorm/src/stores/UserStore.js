@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import {GET,POST} from '../../Helpers/APIs'
+import VueCookies from 'vue-cookies'
+
 export const UserStore = defineStore('User',{
     state: ()=>{
         return {
@@ -32,7 +34,8 @@ export const UserStore = defineStore('User',{
                 this.Lname = Data.Lname;
                 this.Email = Data.Email;
                 this.UserToken = Data.token;
-                document.cookie = ''
+
+                $cookies.set('Token',this.UserToken);
                 console.log (this.UserID);
                 console.log (res);
                 return res;
@@ -53,6 +56,7 @@ export const UserStore = defineStore('User',{
                 this.Fname = Data.Fname;
                 this.Lname = Data.Lname;
                 this.Email = Data.Email;
+                $cookies.set('Token',this.UserToken);
                 return res;
             }
             else if(res.status == '400'){
