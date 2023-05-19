@@ -46,3 +46,14 @@ export async function GetAnswer (Id){
         }
         // return res;
 }
+export async function Vote(data){
+        const res = await POST ('Vote',data);
+        if (res.status=='201'){
+                console.log (res);
+                return res;
+        }else {
+                console.log (res);
+                return res;
+        }
+        // return res;
+}

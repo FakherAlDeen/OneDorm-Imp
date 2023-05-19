@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema({
     DateOfBirth:{type:Date, default:null},
     TotalVotes:{type:Number, default:0},
     UserDetails:{type:Object , default:null},
+    UserVotes:{type:Object , default:{}},
     NotificationList:[{
         Id: {type:String, default: null}
     }],

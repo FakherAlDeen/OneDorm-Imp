@@ -41,9 +41,9 @@ class AnswerController {
       static async GetAnswer(req, res){
         try{
           const Id = req.params.Id;
-          console.log (Id);
+        //   console.log (Id);
           const AnswerData = await FindOneAnswerRecord({AnswerId:Id});
-          console.log (AnswerData[0]);
+        //   console.log (AnswerData[0]);
           if (AnswerData.length == '0') return res.status(400).send("Answer Not Found!");
           const UserData = await FindOneUserRecord({UserId:AnswerData[0].CreatedBy})
           if (UserData.length == '0') return res.status(400).send("User Not Found!");
@@ -51,7 +51,7 @@ class AnswerController {
             Fname:UserData[0].Fname,
             Lname:UserData[0].Lname,
           }};
-          console.log (data);
+        //   console.log (data);
           res.status(200).send(data);
         }
         catch (err) {

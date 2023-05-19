@@ -18,11 +18,11 @@ class AuthController {
             }
 
             const oldUser = await FindOneUserRecord({ Email });
-            console.log (oldUser);
+            // console.log (oldUser);
             if (oldUser.length !=0) {
               return res.status(409).send("User Already Exist. Please Login");
             }
-            console.log (uuidv4())
+            // console.log (uuidv4())
             //Encrypt user password
             const encryptedPassword = await bcrypt.hash(Password, 10);
         
@@ -42,7 +42,7 @@ class AuthController {
             );
             // save user token
             user.token = token;
-            console.log (user);
+            // console.log (user);
             // return new user
             res.status(201).send(user);
           } catch (err) {
