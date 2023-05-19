@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
-catch(error => handleError(error));
+// mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
+// catch(error => handleError(error));
 // Find -> Table
 // Insert (ds,ds) Table 
 const User = require('../Schemas/UserSchema');

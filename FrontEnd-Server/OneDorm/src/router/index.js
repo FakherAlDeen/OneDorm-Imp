@@ -1,14 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { UserStore } from '../stores/UserStore'
+import VueCookies from 'vue-cookies'
 
-const isAuthenticated =(to, from,next)=>{
+
+const isAuthenticated = async (to, from,next)=>{
   console.log (UserStore().UserID);
-  // if (UserStore().UserID == '-1'){
-  //   next('Login');
-  // }else {
+  if (!VueCookies.get('Token')){
+    next('Login');
+  }else {
+    const TokenData = JSON.parse(atob(VueCookies.get('Token').split('.')[1]));
+    UserStore().Token = VueCookies.get('Token');
+    UserStore().UserID = TokenData.UserId;
+    await UserStore().GetUser(TokenData.UserId);
     next ();
-  // }
+  }
 } 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

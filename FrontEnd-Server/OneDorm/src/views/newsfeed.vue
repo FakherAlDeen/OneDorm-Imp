@@ -11,7 +11,8 @@ console.log (postcont.value)
 const Hashtags = ['#2312','#2312','#2312']
 const up=ref(12);
 const down =ref(13);
-// console.log(JSON.parse(atob($cookies.get('Token').split('.')[1])))
+// console.log (VueCookies.get('Token'))
+console.log(JSON.parse(atob(VueCookies.get('Token').split('.')[1])))
 </script>
 <template>
     <main class="relative">

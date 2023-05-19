@@ -25,6 +25,19 @@ app.use((req, res, next) => {
   req.io = io;
   return next();
 });
+const mongoose = require('mongoose');
+const connectDB = async () => {
+  try {
+      const conn = await mongoose.connect('mongodb+srv://fakheralden1:CHBsfnMo4Rzc9qZT@onedorm.nmnmx8u.mongodb.net/');
+      console.log(`Mongo db connected: ${conn.connection.host}`);
+  } catch (error) {
+      console.log(error);
+      process.exit(1);
+  }
+};
+
+connectDB();
+
 
 app.use(require('./Routers'));
 
