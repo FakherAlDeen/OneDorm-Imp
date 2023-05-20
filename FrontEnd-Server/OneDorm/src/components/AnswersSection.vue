@@ -11,6 +11,8 @@ import AnswersSectionChild from './AnswersSectionChild.vue';
 const props = defineProps({
     AnswerId:String
 })
+
+
 console.log (props.AnswerId)
 const v =ref ();
 const name =ref ("");
@@ -32,6 +34,10 @@ onMounted (async ()=>{
 const Reply=ref(false);
 const ReplyHandler = () =>{
     Reply.value = !Reply.value;
+}
+
+const EmitHanlder= (e)=>{
+    AnswerLists.value.push(e);
 }
 
 
@@ -66,7 +72,7 @@ const ReplyHandler = () =>{
                 <p class="text-lg font-bold text-Alert btn-ghost btn">Report</p>
             </div>
             <div v-if = "Reply" class="h-[6rem] my-4 mb-16">
-                <QuillComp :AnswerOfAnswerId="AnswerId"/>
+                <QuillComp @emit-ans-i-d="EmitHanlder" :AnswerOfAnswerId="AnswerId"/>
             </div>
             <template v-for="(e,i) in AnswerLists" :key="i">
                 <AnswersSection :AnswerId="e"></AnswersSection>

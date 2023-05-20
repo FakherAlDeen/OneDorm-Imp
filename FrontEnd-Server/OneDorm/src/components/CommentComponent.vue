@@ -8,6 +8,13 @@ const props = defineProps({
     QuestionId:String
 })
 
+const emit =defineEmits({
+    EmitAnsID:(e)=>{
+        return e;
+    }
+
+})
+
 let quill;
 const delta =ref(null);
 onMounted(()=>{
@@ -43,6 +50,7 @@ const CommentClickHandler = async () =>{
         Type:'Question'
     }
     const res = await CreateAnswer(data);
+    emit('EmitAnsID', res.data.AnswerId);
     console.log(res);
 };
 

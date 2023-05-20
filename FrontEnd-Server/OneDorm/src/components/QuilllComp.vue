@@ -14,6 +14,12 @@ const props = defineProps({
 let quill;
 const editor = ref();
 const delta =ref(null);
+const emit = defineEmits({
+    EmitAnsID:(e)=>{
+        return e;
+    }
+})
+
 onMounted(()=>{
     quill = new Quill(editor.value, {
         modules: {
@@ -49,6 +55,8 @@ const SendClickHanlder = async () =>{
         Type:'Answer'
     }
     const res = await CreateAnswer(data);
+    emit('EmitAnsID', res.data.AnswerId);
+    console.log (res.data)
     console.log(res);
 }
 </script>
