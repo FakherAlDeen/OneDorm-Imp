@@ -80,6 +80,7 @@ class QuestionController {
         console.log(err);
       }
     }
+
     static Delete = async (Id , Type) => {
 
       console.log("ID = " , Id)
@@ -103,10 +104,9 @@ class QuestionController {
           // console.log("ID = " , answer[0].AnswersList[i])
           await QuestionController.Delete(answer[0].AnswersList[i] , 1)
         }
-        
       }
-
     }
+    
     static async DeletePost(req, res){
       try{// connect it to hashtags table and user table
           

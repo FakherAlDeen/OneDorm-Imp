@@ -8,8 +8,7 @@ import { ref } from 'vue'
         postTitle:String,
         Hashtags:Array,
         PostContent:String,
-        UpVotes: Number,
-        DownVotes: Number,
+        Score: Number,
         mine:Boolean,
         postFull:Boolean,
         AnswerCount:Number,
@@ -37,7 +36,7 @@ import { ref } from 'vue'
                         <Arrowdown :class="[UPDOWNHanlder ==-1?'fill-Alert':'']" class="hover:fill-Alert" @click="UPDOWNHanlder=-1"></Arrowdown>
                     </div>
                     <div class="flex justify-center">
-                        <div class="btn text-lg btn-sm  text-white min-w-[3rem] w-3" :class="[UpVotes>DownVotes?'btn-success bg-main3':'btn-error bg-Alert']">{{UpVotes-DownVotes}}</div>
+                        <div class="btn text-lg btn-sm  text-white min-w-[3rem] w-3" :class="[UpVotes>DownVotes?'btn-success bg-main3':'btn-error bg-Alert']">{{Score}}</div>
                     </div>
                 </div>
             </div>
@@ -46,7 +45,7 @@ import { ref } from 'vue'
                     <h1 class="text-2xl text-left text-main1 font-bold capitalize">{{CreatorName}}</h1>
                     <h2 class="text-black text-left text-4xl font-bold normal-case mt-2">{{ postTitle +'?' }}</h2>
                     <div class="grow"></div>
-                    <p class="text-Grey justify-self-end font-light text-lg text-left">{{ AnswerCount + " ANSWERS - "}}   {{ UpVotes-DownVotes +" SCORE" }}</p>
+                    <p class="text-Grey justify-self-end font-light text-lg text-left">{{ AnswerCount + " ANSWERS - "}}   {{ Score +" SCORE" }}</p>
                 </div>
                 <div class="mx-10 mt-4">
                     <template v-for="(e,i) in Hashtags">

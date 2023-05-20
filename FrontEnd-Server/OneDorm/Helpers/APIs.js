@@ -5,10 +5,8 @@ const httpLink = "http://localhost:3000/api/";
 export async function GET (str){
     try {
         const response = await axios.get(httpLink + str);
-        console.log(response);
         return response;
       } catch (error) {
-        console.log(error);
         return error.response;
       }
 }
@@ -20,10 +18,8 @@ export async function POST (str,data){
               'Content-Type': 'application/x-www-form-urlencoded'
             }
         });
-        console.log(response);
         return response;
       } catch (error) {
-        console.log(error);
         return error.response;
       }
 }

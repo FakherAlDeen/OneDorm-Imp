@@ -12,23 +12,39 @@ const props = defineProps({
     AnswerId:String
 })
 
-
-console.log (props.AnswerId)
 const v =ref ();
 const name =ref ("");
 const score = ref (0);
 const AnswerLists=ref ([]);
+function diff_minutes(dt2, dt1) 
+ {
+
+  var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+  diff /= 60;
+  return Math.abs(Math.round(diff));
+  
+ }
+ const ActualDate = ref();
 onMounted (async ()=>{
     const res = await GetAnswer(props.AnswerId);
-    console.log (res)
     const commentData= res.data.AnswerData;
     const UserData= res.data.UserData;
-    console.log (commentData.AnswerDetailsHTML);
     v.value =  commentData.AnswerDetailsHTML;
     v.value=v.value.replaceAll('<p>', "<p class='text-lg font-bold my-1'>")
     v.value=v.value.replaceAll('<br>', "")
     name.value = UserData.Fname + " "+ UserData.Lname
-    score.value = parseInt(commentData.AnswerUpvoteCount) - parseInt(commentData.AnswerDownVoteCount)
+    score.value = parseInt(commentData.AnswerVotesCount)
+    const date = new Date((commentData.CreatedAt));
+    const date2= new Date ();
+    // console.log('date', date.getTime(), date2,diff_minutes(date,date2))
+    const dateDiff= diff_minutes(date,date2);
+    let hours = parseInt(dateDiff/60);
+    const days = parseInt(hours/24);
+    hours %=24;
+    const min = dateDiff%60;
+    const hoursMinStr= hours >0? hours + " hours " + min + " min ago": "" + min + " Min ago";
+    ActualDate.value = days>0 ? days + "days " + hoursMinStr: hoursMinStr;
+    console.log (hours,min, ActualDate.value)
     AnswerLists.value = commentData.AnswersList;
 })
 const Reply=ref(false);
@@ -53,8 +69,8 @@ const EmitHanlder= (e)=>{
         </div>
         <div class="flex flex-col gap-2 justify-center my-1 w-10/12">
             <div>
-                <h2 class="text-2xl font-extrabold">{{name}} <span class="text-base text-Grey font-extrabold ml-2">50 min ago</span></h2>
-                <h2 class="text-base text-Grey font-extrabold">PSUT - CS student - 122 answers</h2>
+                <h2 class="text-2xl font-extrabold">{{name}} <span class="text-base text-Grey font-extrabold ml-2">{{ActualDate}}</span></h2>
+                <h2 class="text-base text-Grey font-extrabold">PSUT - CS student - {{AnswerLists.length}} answers</h2>
             </div>
             <div v-html="v">
                 
