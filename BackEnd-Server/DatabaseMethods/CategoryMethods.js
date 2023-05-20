@@ -17,6 +17,14 @@ module.exports = {
             console.log(err);
         });
     },
+    EditCategoryByValue: async function (CategoryValue,Data){
+        await Category.findOneAndUpdate(
+            CategoryValue,
+            Data
+        ).catch((err) => {
+            console.log(err);
+        });
+    },
     DeleteCategory: async function (Id){
         await Category.deleteOne(
             {Id}

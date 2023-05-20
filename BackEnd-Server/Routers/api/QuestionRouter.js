@@ -4,5 +4,6 @@ const auth = require ('../../MiddleWare/auth')
 router.post('/CreatePost', QuestionController.CreatePost);
 router.get('/GetPost/:Id', QuestionController.GetPost);
 router.post('/Vote' , QuestionController.Vote);
+router.post('/DeletePost' , QuestionController.DeletePost);
 
 module.exports = router;

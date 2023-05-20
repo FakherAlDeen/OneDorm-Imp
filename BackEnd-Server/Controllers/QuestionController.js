@@ -3,11 +3,11 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("../MiddleWare/auth");
 const { v4: uuidv4 } = require('uuid');
-const { CreateQuestion,FindOneQuestionRecord, EditQuestion } = require("../DatabaseMethods/QuestionMethods");
-const { FindOneCategoryRecord , EditCategory , CreateCategory} = require("../DatabaseMethods/CategoryMethods");
+const { CreateQuestion,FindOneQuestionRecord, EditQuestion, DeleteQuestion } = require("../DatabaseMethods/QuestionMethods");
+const { FindOneCategoryRecord , EditCategory , CreateCategory , EditCategoryByValue} = require("../DatabaseMethods/CategoryMethods");
 const { EditUser } = require("../DatabaseMethods/UserMethods");
 const { FindOneUserRecord } = require("../DatabaseMethods/UserMethods");
-const { EditAnswer } = require("../DatabaseMethods/AnswerMethods");
+const { EditAnswer, FindOneAnswerRecord, DeleteAnswer } = require("../DatabaseMethods/AnswerMethods");
 
 class QuestionController {
     static async CreatePost(req, res){
@@ -17,7 +17,9 @@ class QuestionController {
           if (!(CreatedBy && QuestionTitle && QuestionDetails && QuestionDetailsHTML)) {
             return res.status(400).send("Send all the fields");
           }
+          // console.log("hastags : " , Hashtags)
           let QuestionId = uuidv4()
+          let categories = []
           for(let i = 0 ; i<Hashtags.length ; i++){
             const oldHashtag = await FindOneCategoryRecord({CategoryTitle:Hashtags[i]});
             let CategoryId = uuidv4() ;
@@ -31,9 +33,14 @@ class QuestionController {
             else{
               CategoryId = oldHashtag[0].CategoryId
             }
-            EditCategory(CategoryId , {$push: { PostIds: QuestionId }}  )
+            // console.log(i , CategoryId)
+            categories.push(CategoryId);
+            // await EditCategory(CategoryId , {$push: { PostIds: QuestionId }}  )
           }
           // console.log (QuestionDetails);
+          for(let i = 0 ; i<categories.length ; i++){
+            await EditCategory(categories[i] , {$push: { PostIds: QuestionId }}  )
+          }
           const question = {
             QuestionId,
             CreatedBy,
@@ -73,6 +80,49 @@ class QuestionController {
         console.log(err);
       }
     }
+    static Delete = async (Id , Type) => {
+
+      console.log("ID = " , Id)
+      if(Type == 0){
+        let question = await FindOneQuestionRecord({QuestionId:Id});
+        await DeleteQuestion(Id);
+        await EditUser(question[0].CreatedBy , {$pull : {PostList : Id}})
+        for(let i = 0 ; i<question[0].Hashtags.length ; i++){
+          await EditCategoryByValue({CategoryTitle:question[0].Hashtags[i]} , {$pull : {PostIds : Id}});
+        }
+        for(let i = 0 ; i<question[0].AnswersList.length ; i++){
+          // console.log("ID = " , question[0].AnswersList[i])
+          await QuestionController.Delete(question[0].AnswersList[i] , 1)
+        }
+      }
+      else{
+        let answer = await FindOneAnswerRecord({AnswerId : Id}) ;
+        await DeleteAnswer(Id);
+        await EditUser(answer[0].CreatedBy , {$pull : {AnswersList : Id}})
+        for(let i = 0 ; i<answer[0].AnswersList.length ; i++){
+          // console.log("ID = " , answer[0].AnswersList[i])
+          await QuestionController.Delete(answer[0].AnswersList[i] , 1)
+        }
+        
+      }
+
+    }
+    static async DeletePost(req, res){
+      try{// connect it to hashtags table and user table
+          
+          const { Id } = req.body; // loop over hashtags -> find -> 
+          if (!(Id)) {
+            return res.status(400).send("Send all the fields");
+          }
+          QuestionController.Delete(Id , 0) ;
+          console.log("reqqqq");
+          res.status(201).send("Deleted")
+      } catch (err) {
+          res.status(403).send(err) 
+          console.log(err);
+      }
+    }
+
     static async Vote(req, res){
       try{// connect it to hashtags table and user table
           // console.log("UPPPPP")

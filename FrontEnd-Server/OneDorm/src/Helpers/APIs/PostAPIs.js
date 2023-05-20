@@ -24,6 +24,15 @@ export async function GetPost (Id){
         // return res;
 }
 
+export async function DeletePost(data){
+        const res = await POST ('DeletePost',data);
+        if (res.status=='201'){
+                return res;
+        }else {
+                return res.data;
+        }
+}
+
 export async function CreateAnswer (data){
         console.log (data);
         const res = await POST ('CreateAnswer',data);
