@@ -52,6 +52,7 @@ const CommentClickHandler = async () =>{
     const res = await CreateAnswer(data);
     emit('EmitAnsID', res.data.AnswerId);
     console.log(res);
+    quill.setContents([{ insert: '\n' }]);
 };
 
 </script>

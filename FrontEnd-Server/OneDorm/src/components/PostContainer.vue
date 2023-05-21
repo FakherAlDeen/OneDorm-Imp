@@ -3,8 +3,9 @@ import { UserStore } from '../stores/UserStore'
 import flag04 from './icons/Post_icons/flag-04.vue';
 import Arrowup from './icons/Post_icons/ArrowUp.vue'
 import Arrowdown from './icons/Post_icons/ArrowDown.vue'
-import { ref } from 'vue'
-    defineProps({
+import { GetUser } from '../Helpers/APIs/UserAPIs';
+import { ref ,onBeforeMount} from 'vue'
+    const props = defineProps({
         postTitle:String,
         Hashtags:Array,
         PostContent:String,
@@ -13,6 +14,16 @@ import { ref } from 'vue'
         postFull:Boolean,
         AnswerCount:Number,
         CreatorName:String,
+        CreatedBy:String,
+    })
+    const Creator = ref (props.CreatorName);
+    onBeforeMount(async () =>{
+        if (!props.CreatorName){
+            console.log ("bzbz bzaz");
+            const res = await GetUser(props.CreatedBy);
+            Creator.value = res.data.Fname + " " + res.data.Lname;
+            console.log (Creator.value);
+        }
     })
     const UPDOWNHanlder= ref(0);
 </script>
@@ -42,7 +53,7 @@ import { ref } from 'vue'
             </div>
             <div class="grow">
                 <div class="mx-10 mt-10 h-fit min-h-[9rem] border-b-2 border-black flex flex-col">
-                    <h1 class="text-2xl text-left text-main1 font-bold capitalize">{{CreatorName}}</h1>
+                    <h1 class="text-2xl text-left text-main1 font-bold capitalize">{{Creator}}</h1>
                     <h2 class="text-black text-left text-4xl font-bold normal-case mt-2">{{ postTitle +'?' }}</h2>
                     <div class="grow"></div>
                     <p class="text-Grey justify-self-end font-light text-lg text-left">{{ AnswerCount + " ANSWERS - "}}   {{ Score +" SCORE" }}</p>

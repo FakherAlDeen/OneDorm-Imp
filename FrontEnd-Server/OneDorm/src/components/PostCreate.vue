@@ -56,6 +56,7 @@ const RemoveHashtag = (e)=>{
 const Hashtags_Handler = () =>{
     if (HashtagsArr.value.find(el => el =='#'+HashtagValue.value.trim().replaceAll(' ','_'))) return;
     HashtagsArr.value.push('#'+HashtagValue.value.trim().replaceAll(' ','_'));
+    HashtagValue.value="";
     console.log(HashtagsArr.value);
 }
 const wtv = ref('');

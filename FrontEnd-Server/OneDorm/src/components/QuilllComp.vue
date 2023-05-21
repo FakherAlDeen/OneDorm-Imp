@@ -15,12 +15,14 @@ let quill;
 const editor = ref();
 const delta =ref(null);
 const emit = defineEmits({
+    
     EmitAnsID:(e)=>{
         return e;
     }
 })
 
 onMounted(()=>{
+
     quill = new Quill(editor.value, {
         modules: {
           toolbar: [
@@ -43,22 +45,23 @@ onMounted(()=>{
 })
 
 const SendClickHanlder = async () =>{
-  if (quill.getLength() ==1){
+    if (quill.getLength() ==1){
         return;
     }
     const cook= JSON.parse(atob($cookies.get('Token').split('.')[1]))
     const data = {
-        CreatedBy:cook.UserId,
-        AnswerDetails:JSON.parse(JSON.stringify(quill.getContents())),
-        AnswerDetailsHTML: quill.root.innerHTML,
-        Id:props.AnswerOfAnswerId ,
-        Type:'Answer'
+      CreatedBy:cook.UserId,
+      AnswerDetails:JSON.parse(JSON.stringify(quill.getContents())),
+      AnswerDetailsHTML: quill.root.innerHTML,
+      Id:props.AnswerOfAnswerId ,
+      Type:'Answer'
     }
     const res = await CreateAnswer(data);
     emit('EmitAnsID', res.data.AnswerId);
     console.log (res.data)
     console.log(res);
-}
+    quill.setText('');
+  }
 </script>
 <template>
   <div class="w-full h-full relative">
