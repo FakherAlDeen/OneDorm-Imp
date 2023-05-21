@@ -5,5 +5,6 @@ router.use('/', require('./AuthRouter'));
 router.use('/', require('./QuestionRouter'));
 router.use('/', require('./AnswerRouter'));
 router.use('/', require('./UserRouter'));
+router.use('/', require('./SearchRouter'));
 
 module.exports = router;

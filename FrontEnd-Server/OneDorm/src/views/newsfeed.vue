@@ -20,7 +20,7 @@ console.log(JSON.parse(atob(VueCookies.get('Token').split('.')[1])))
 
         <!-- <button class="Button_Primary my-2" :class="transitionClass" @click="CreatePostClick">Share</button> -->
         <div class="m-5">
-            <h2 class="text-xl font-[1000] text-center scale-[2] pb-2">POST OF THE DAY</h2>
+            <h2 class="text-5xl font-[1000] text-center pb-2">POST OF THE DAY</h2>
         </div>
         <div class="">
             <PostContainer class="scale-110 mt-10" postTitle="Meow Meow" AnswerCount="122" :Hashtags="Hashtags" :PostContent="postcont" :DownVotes="down" :UpVotes="up"/>

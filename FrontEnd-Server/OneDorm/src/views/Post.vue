@@ -44,7 +44,7 @@ onMounted(async()=>{
         <!-- <button class="Button_Primary my-2" :class="transitionClass" @click="CreatePostClick">Share</button> -->
         <Alert classProp="alert-warning"  v-if="Error!='nth'"><template #Error_Message>{{ Error }}</template></Alert>
         <template v-else>
-            <PostContainer :CreatorName="Cname" :postTitle="postTitle" :AnswerCount="AnsCount" :Hashtags="Hashtags" :PostContent="postcont" :Score="score"/>
+            <PostContainer :postFull="true" :CreatorName="Cname" :postTitle="postTitle" :AnswerCount="AnsCount" :Hashtags="Hashtags" :PostContent="postcont" :Score="score"/>
             <CommentComponent @emit-ans-i-d="PushAnsId" :QuestionId="PostID" class="z-10"/>
             <template v-if="AnswersId.length!=0">
                 <div class="card bg-Grey2 w-9/12 rounded-none border border-t-[3rem] mt-[-4rem] border-[0.2rem]  border-black relative mx-auto my-10 h-full p-5">

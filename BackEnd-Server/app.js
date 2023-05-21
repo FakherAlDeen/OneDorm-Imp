@@ -5,6 +5,8 @@ const app = express();
 const server = createServer(app);
 const io = socketIo(server, { cors: { origin: "*" } });
 const port = 3000
+
+const SearchController = require('./Controllers/SearchController')
 var cors = require('cors');
 const bodyParser = require('body-parser');
 app.use(express.json());
@@ -35,7 +37,6 @@ const connectDB = async () => {
       process.exit(1);
   }
 };
-
 connectDB();
 
 

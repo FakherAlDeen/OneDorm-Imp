@@ -10,6 +10,22 @@ import HappyFace from './icons/Header_icons/HappyFace.vue'
 import Arrow_Bottom_White from './icons/Header_icons/Arrow_BottomWhite.vue'
 import { UserStore } from '../stores/UserStore'
 import router from '../router/index'
+import {SearchPost} from '../Helpers/APIs/SearchAPIs'
+
+import {ref} from 'vue'
+
+const SearchValue = ref();
+
+const SearchClickHanlder = async ()=>{
+    console.log (SearchValue.value);
+    // router.push(`/SearchResult/${SearchValue.value}`);
+
+    router.push(
+    {name: 'Search',
+    params: {
+        SearchVal: SearchValue.value,
+    }}).then(() => { router.go() })
+}
 const CreatePost = ()=>{
     router.push('/CreatePost')
 }
@@ -46,13 +62,13 @@ const userStore = UserStore();
         </div>
         <div class="navbar-center">
             <div class="flex w-96 rounded-lg h-12 p-2 bg-black align-center flex-wrap flex-row card">
-                <a class="btn btn-circle btn-outline btn-sm">
+                <a class="btn btn-circle btn-outline btn-sm" @click="SearchClickHanlder">
                     <searchIcon/>
                 </a>
                 <div class="grow">
-                    <input class="h-full bg-transparent input grow placeholder:text-white placeholder:font-light text-white" type="text" placeholder="search..">
+                    <input v-model="SearchValue" class="h-full bg-transparent input grow placeholder:text-white placeholder:font-light text-white" type="text" placeholder="search..">
                 </div>
-                <a class="btn btn-circle btn-outline btn-sm">
+                <a class="btn btn-circle btn-outline btn-sm" >
                     <FilterIcon/>
                 </a>
             </div>

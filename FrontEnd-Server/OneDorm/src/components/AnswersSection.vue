@@ -43,7 +43,7 @@ onMounted (async ()=>{
     hours %=24;
     const min = dateDiff%60;
     const hoursMinStr= hours >0? hours + " hours " + min + " min ago": "" + min + " Min ago";
-    ActualDate.value = days>0 ? days + "days " + hoursMinStr: hoursMinStr;
+    ActualDate.value = days>0 ? days + " days " + hoursMinStr: hoursMinStr;
     console.log (hours,min, ActualDate.value)
     AnswerLists.value = commentData.AnswersList;
 })
