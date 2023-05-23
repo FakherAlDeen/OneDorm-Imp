@@ -10,7 +10,7 @@ const QuestionSchema = new mongoose.Schema({
     // QuestionUpvoteCount: {type:Number, default:0},
     // QuestionDownVoteCount: {type:Number, default:0},
     ReportedCount: {type:Number, default:0},
-    IsPinned: {type:Boolean, default:false},
+    AnswerCount: {type:Number , default:1},
     CreatedAt: {type: Date, default: Date.now()},
     LastEdit: {type:Date , default: Date.now()},
     Hashtags: [],

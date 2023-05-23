@@ -21,7 +21,8 @@ const UserSchema = new mongoose.Schema({
         Id: {type:String, default: null}
     }],
     CategoriesList:[{
-        Id: {type:String, default: null}
+        Id: {type:String, default: null},
+        Title: {type:String , default:null}
     }],
     CreatedAt:{
         type: Date,

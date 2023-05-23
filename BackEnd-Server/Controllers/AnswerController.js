@@ -28,7 +28,7 @@ class AnswerController {
                 EditAnswer(Id , {$push: { AnswersList: AnswerId }})
             }
             else if(Type == 'Question'){
-                EditQuestion(Id , {$push: { AnswersList: AnswerId }})
+                EditQuestion(Id , {$push: { AnswersList: AnswerId } , $inc : {AnswerCount : 0.1} })
             }
             EditUser(CreatedBy , {$push: {AnswersList : AnswerId }} )
             console.log("reqqqq");

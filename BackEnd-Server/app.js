@@ -44,4 +44,5 @@ app.use(require('./Routers'));
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
+  // SearchController.NewsFeed();
 })
