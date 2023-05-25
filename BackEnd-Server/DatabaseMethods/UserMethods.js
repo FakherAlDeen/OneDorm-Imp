@@ -19,9 +19,9 @@ module.exports = {
             console.log(err);
         });
     },
-    DeleteUser: async function (Id){
+    DeleteUser: async function (UserId){
         await User.deleteOne(
-            {Id}
+            {UserId}
         ).catch((err) => {
             console.log(err);
         });
