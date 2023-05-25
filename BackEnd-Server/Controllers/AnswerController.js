@@ -19,6 +19,7 @@ class AnswerController {
             let AnswerId = uuidv4()
             const answer = {
               AnswerId,
+              ParentId:Id,
               CreatedBy,
               AnswerDetails,
               AnswerDetailsHTML

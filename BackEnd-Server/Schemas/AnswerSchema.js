@@ -1,6 +1,7 @@
 const mongoose = require('mongoose') ; 
 const AnswerSchema = new mongoose.Schema({
     AnswerId: {type:String, unique:true, index: true},
+    ParentId: {type:String},
     CreatedBy: {type:String, default:null},
     AnswerDetails: {type:Object, default:null},
     AnswerDetailsHTML: {type:String, default:null},

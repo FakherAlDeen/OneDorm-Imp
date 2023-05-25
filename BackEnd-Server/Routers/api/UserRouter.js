@@ -5,8 +5,9 @@ const auth = require('../../MiddleWare/auth');
 
 router.get('/GetUser/:Id', UserController.GetUser);
 router.post('/AddHashtags' , UserController.AddHastags);
-router.post('/AddUserDetails' , UserController.AddUserDetails);
+router.post('/EditProfile' , UserController.EditProfile);
 router.post('/DeleteUser' , UserController.DeleteUser);
+router.post('/SetUsername' , UserController.SetUsername);
 
 
 module.exports = router;

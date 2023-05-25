@@ -4,7 +4,7 @@ const UserSchema = new mongoose.Schema({
     Fname:{type:String, default:null},
     Lname:{type:String, default:null},
     Password:{type:String, default:null},
-    Username: {type:String, default:null},
+    Username: {type:String, unique:true , index: true , sparse: true},
     Email: {type:String, unique: true},
     Phonenumber:{type:String, default:null},
     Image: {type:String, default:null}, //Check Later

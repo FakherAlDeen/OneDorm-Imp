@@ -114,6 +114,13 @@ class QuestionController {
           if (!(Id)) {
             return res.status(400).send("Send all the fields");
           }
+          if(Type == 'Answer'){
+            const ans = await FindOneAnswerRecord({AnswerId:Id})
+            console.log(ans)
+            const Parent = ans[0].ParentId 
+            await EditAnswer(Parent , {$pull : {AnswersList : Id}})
+            await EditQuestion(Parent , {$pull : {AnswersList : Id}})
+          }
           QuestionController.Delete(Id , Type=='Answer') ;
           console.log("reqqqq");
           res.status(201).send("Deleted")

@@ -45,15 +45,39 @@ class UserController {
             console.log(err)
         }
     }
-    static async AddUserDetails(req , res){
+    static async EditProfile(req , res){
         try{
-            const {UserId , Phonenumber , DateOfBirth , UserDetails} = req.body ;
+            
+            const {UserId , Data} = req.body ;
             // console.log(UserId , Hashtags)
-            if (!(UserId && Phonenumber && DateOfBirth) || JSON.stringify(UserDetails) === "{}") {
+            if (!UserId || JSON.stringify(Data) === "{}") {
                 return res.status(400).send("Send all the fields");
             }
-            await EditUser(UserId , {Phonenumber , DateOfBirth , UserDetails} )
+            // console.log(req.body)
+            await EditUser(UserId , Data)
             res.status(201).send("done")
+        }
+        catch(err){
+            res.status(400).send(err)
+            console.log(err)
+        }
+    }   
+    static async SetUsername(req , res){
+        try{
+            const {UserId , Username} = req.body ;
+            // console.log(UserId , Hashtags)
+            if (!(UserId && Username)) {
+                return res.status(400).send("Send all the fields");
+            }
+            const User = await FindOneUserRecord({Username});
+            console.log(User)
+            if(User.length == 0){
+                await EditUser(UserId , {Username})
+                return res.status(201).send("done")
+            }
+            else{
+                return res.status(205).send("Username is taken")
+            }
         }
         catch(err){
             res.status(400).send(err)
