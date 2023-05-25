@@ -1,11 +1,13 @@
 <script setup>
 import { UserStore } from '../stores/UserStore'
-import flag04 from './icons/Post_icons/flag-04.vue';
-import Arrowup from './icons/Post_icons/ArrowUp.vue'
-import Arrowdown from './icons/Post_icons/ArrowDown.vue'
+import flag04 from '../assets/icons/Post_icons/flag-04.vue';
+import Arrowup from '../assets/icons/Post_icons/ArrowUp.vue'
+import Arrowdown from '../assets/icons/Post_icons/ArrowDown.vue'
 import { GetUser } from '../Helpers/APIs/UserAPIs';
+import {Vote} from '../Helpers/APIs/PostAPIs'
 import { ref ,onBeforeMount} from 'vue'
     const props = defineProps({
+        PostID:String,
         postTitle:String,
         Hashtags:Array,
         PostContent:String,
@@ -17,6 +19,34 @@ import { ref ,onBeforeMount} from 'vue'
         CreatedBy:String,
     })
     const Creator = ref (props.CreatorName);
+    const UserVotes= UserStore().UserVotes;
+    console.log('UserVotes',UserVotes)
+    const sScore = ref (props.Score)
+    console.log (props.Score);
+
+    console.log (sScore.value);
+
+    const MyVotes = ref (0);
+    if (UserVotes){
+        MyVotes.value = UserVotes[props.PostID]?UserVotes[props.PostID]:0
+    }
+    const VoteHandler = async (e)=>{
+        if (MyVotes.value == e) return;
+        if (MyVotes.value != e  && MyVotes.value!= 0){
+            sScore.value += e;
+        }
+        sScore.value+=e;
+        MyVotes.value =e;
+        UserVotes[props.PostID] = MyVotes.value
+        console.log (sScore.value);
+        const data = {
+            UserId: UserStore().UserID,
+            Id : props.PostID,
+            Type: 'Question',
+            VoteValue: e,
+        }
+        await Vote(data)
+    }
     onBeforeMount(async () =>{
         if (!props.CreatorName){
             console.log ("bzbz bzaz");
@@ -25,7 +55,6 @@ import { ref ,onBeforeMount} from 'vue'
             console.log (Creator.value);
         }
     })
-    const UPDOWNHanlder= ref(0);
 </script>
 
 
@@ -43,11 +72,11 @@ import { ref ,onBeforeMount} from 'vue'
             <div class="w-48 mt-48 justify-center flex">
                 <div class="flex flex-col my-16 ml-3 gap-5">
                     <div class="flex gap-2">
-                        <Arrowup :class="[UPDOWNHanlder == 1?'fill-main3':'']" class="hover:fill-main3" @click="UPDOWNHanlder=1"></Arrowup>
-                        <Arrowdown :class="[UPDOWNHanlder ==-1?'fill-Alert':'']" class="hover:fill-Alert" @click="UPDOWNHanlder=-1"></Arrowdown>
+                        <Arrowup :class="[MyVotes == 1?'fill-main3':'']" class="hover:fill-main3" @click="VoteHandler(1)"></Arrowup>
+                        <Arrowdown :class="[MyVotes ==-1?'fill-Alert':'']" class="hover:fill-Alert" @click="VoteHandler(-1)"></Arrowdown>
                     </div>
                     <div class="flex justify-center">
-                        <div class="btn text-lg btn-sm  text-white min-w-[3rem] w-3" :class="[UpVotes>DownVotes?'btn-success bg-main3':'btn-error bg-Alert']">{{Score}}</div>
+                        <div class="btn text-lg btn-sm  text-white min-w-[3rem] w-3" :class="[sScore>0?'btn-success bg-main3':'btn-error bg-Alert']">{{sScore}}</div>
                     </div>
                 </div>
             </div>
@@ -56,7 +85,7 @@ import { ref ,onBeforeMount} from 'vue'
                     <h1 class="text-2xl text-left text-main1 font-bold capitalize">{{Creator}}</h1>
                     <h2 class="text-black text-left text-4xl font-bold normal-case mt-2">{{ postTitle +'?' }}</h2>
                     <div class="grow"></div>
-                    <p class="text-Grey justify-self-end font-light text-lg text-left">{{ AnswerCount + " ANSWERS - "}}   {{ Score +" SCORE" }}</p>
+                    <p class="text-Grey justify-self-end font-light text-lg text-left">{{ AnswerCount + " ANSWERS - "}}   {{ sScore +" SCORE" }}</p>
                 </div>
                 <div class="mx-10 mt-4">
                     <template v-for="(e,i) in Hashtags">

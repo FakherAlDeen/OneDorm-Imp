@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
     DateOfBirth:{type:Date, default:null},
     TotalVotes:{type:Number, default:0},
     UserDetails:{type:Object , default:null},
-    UserVotes:{type:Object , default:{}},
+    UserVotes:{type:Object , default:{'test':'-1'}},
     NotificationList:[{
         Id: {type:String, default: null}
     }],
@@ -20,10 +20,7 @@ const UserSchema = new mongoose.Schema({
     ChatList:[{
         Id: {type:String, default: null}
     }],
-    CategoriesList:[{
-        Id: {type:String, default: null},
-        Title: {type:String , default:null}
-    }],
+    CategoriesList:[],
     CreatedAt:{
         type: Date,
         default: Date.now()

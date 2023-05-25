@@ -1,6 +1,6 @@
 <script setup>
 import Button_Basic from '../components/Button_Basic.vue'
-import OneDorm from '../components/icons/OneDorm.vue'
+import OneDorm from '../assets/icons/OneDorm.vue'
 import router from '../router/index';
 const Pclass="text-[1.05rem] text-black font-normal px-4 font-[450]";
 const props = defineProps(['to_Btn'])

@@ -20,6 +20,7 @@ export const UserStore = defineStore('User',{
             UserToken:null,
             error:null,
             image:'https://i.pravatar.cc/300',
+            UserVotes:{},
         }
     },
     getters: {
@@ -35,6 +36,7 @@ export const UserStore = defineStore('User',{
                 this.Fname = Data.Fname;
                 this.Lname = Data.Lname;
                 this.Email = Data.Email;
+                this.UserVotes = Data.UserVotes;
                 this.UserToken = Data.token;
                 window.$cookies.set('Token',this.UserToken);
                 return res;
@@ -56,6 +58,7 @@ export const UserStore = defineStore('User',{
                 this.Fname = Data.Fname;
                 this.Lname = Data.Lname;
                 this.Email = Data.Email;
+                this.UserVotes = Data.UserVotes;
                 // console.log (res);
                 window.$cookies.set('Token',res.data.Token);
                 // console.log (window.$cookies.get("Token"));
@@ -75,6 +78,8 @@ export const UserStore = defineStore('User',{
                 this.Fname = Data.Fname;
                 this.Lname = Data.Lname;
                 this.Email = Data.Email;
+                console.log ('Data from store',Data);
+                this.UserVotes = Data.UserVotes;
                 return res;
             }
             else if(res.status == '400'){

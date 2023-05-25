@@ -53,7 +53,7 @@ const router = createRouter({
       path:'/Post/:QuestionId',
       name: 'Post',
       beforeEnter: isAuthenticated,
-      component: () => import('../views/Post.vue')
+      component: () => import('../views/PostPage.vue')
     },
     {
       path:'/NewsFeed',
@@ -66,6 +66,13 @@ const router = createRouter({
       name: 'Search',
       beforeEnter: isAuthenticated,
       component: () => import('../views/SearchResult.vue')
+    }
+    ,
+    {
+      path:'/Profile',
+      name: 'Profile',
+      beforeEnter: isAuthenticated,
+      component: () => import('../views/UserProfile.vue')
     }
   ]
 })

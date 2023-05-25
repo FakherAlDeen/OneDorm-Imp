@@ -1,13 +1,13 @@
 <script setup>
-import OneDorm from '../components/icons/OneDorm.vue'
-import Arrow_Bottom_Black from './icons/Header_icons/Arrow_BottomBlack.vue';
-import FilterIcon from './icons/Header_icons/Search/Filter.vue'
-import searchIcon from './icons/Header_icons/Search/Search.vue'
-import PlusIcon from './icons/Header_icons/PlusIcon.vue'
-import ChatIcon from './icons/Header_icons/ChatIcon.vue'
-import NotifcationIcon from './icons/Header_icons/NotificationIcon.vue'
-import HappyFace from './icons/Header_icons/HappyFace.vue'
-import Arrow_Bottom_White from './icons/Header_icons/Arrow_BottomWhite.vue'
+import OneDorm from '../assets/icons/OneDorm.vue'
+import Arrow_Bottom_Black from '../assets/icons/Header_icons/Arrow_BottomBlack.vue';
+import FilterIcon from '../assets/icons/Header_icons/Search/Filter.vue'
+import searchIcon from '../assets/icons/Header_icons/Search/Search.vue'
+import PlusIcon from '../assets/icons/Header_icons/PlusIcon.vue'
+import ChatIcon from '../assets/icons/Header_icons/ChatIcon.vue'
+import NotifcationIcon from '../assets/icons/Header_icons/NotificationIcon.vue'
+import HappyFace from '../assets/icons/Header_icons/HappyFace.vue'
+import Arrow_Bottom_White from '../assets/icons/Header_icons/Arrow_BottomWhite.vue'
 import { UserStore } from '../stores/UserStore'
 import router from '../router/index'
 import {SearchPost} from '../Helpers/APIs/SearchAPIs'
@@ -29,6 +29,11 @@ const SearchClickHanlder = async ()=>{
 const CreatePost = ()=>{
     router.push('/CreatePost')
 }
+const ShowList = ref(false);
+const ClickHanlderShowList = ()=>{
+    console.log(ShowList.value);
+    ShowList.value = ! ShowList.value;
+}
 const userStore = UserStore();
 </script>
 
@@ -36,14 +41,14 @@ const userStore = UserStore();
     <div class="navbar bg-base-100 p-10">
         <div class="navbar-start">
             <div class="mr-9">
-                <a class="w-fit h-fit btn btn-ghost p-0"><OneDorm class="border-black border-2 w-20 h-20"></OneDorm></a>
+                <a class="w-fit h-fit btn btn-ghost p-0" @click="router.push('NewsFeed')"><OneDorm class="border-black border-2 w-20 h-20"></OneDorm></a>
             </div>
             <div class="dropdown dropdown-center">
                 <label tabindex="0" class="btn btn-ghost rounded-none">
                     <div class="indicator">
-                        <div class="flex flex-row gap-1.5">
+                        <div class="flex flex-row gap-3">
                             <p class="font-semibold text-base text-black">MY HASHTAGS</p>
-                            <Arrow_Bottom_Black/>
+                            <Arrow_Bottom_Black class="self-center"/>
                         </div>
                     </div>
                 </label>
@@ -74,7 +79,7 @@ const userStore = UserStore();
             </div>
 
         </div>
-        <div class="navbar-end flex gap-3">
+        <div class="navbar-end flex gap-3 dropdown dropdown-end">
             <div class="btn btn-sm bg-black p-1 px-3 min-h-fit" @click="CreatePost">
                 <PlusIcon/>
             </div>
@@ -97,9 +102,13 @@ const userStore = UserStore();
                     <HappyFace/>
                     <p class="text-main2 text-center">29+</p>
                 </div>
-                <div class="btn btn-cirle btn-ghost btn-sm self-center pr-1">
+                <div  tabindex="0" class="btn btn-cirle btn-ghost btn-sm self-center pr-1" @click="ClickHanlderShowList">
                     <Arrow_Bottom_White/>
                 </div>
+                <ul tabindex="0" class="mt-20 dropdown-content menu p-2 shadow bg-black w-52 dropdown-open" :class="[ShowList?'dropdown-open':'']">
+                    <li class="text-white" @click="router.push('/profile')"><a>profile</a></li>
+                    <li class="text-Alert" @click="router.push('/Login')"><a>Log out</a></li>
+                </ul>
                 
             </div>
 

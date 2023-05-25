@@ -1,21 +1,42 @@
 <script setup>
 import { UserStore } from '../stores/UserStore'
-import flag04 from './icons/Post_icons/flag-04.vue';
-import Arrowup from './icons/Post_icons/ArrowUp.vue'
-import Arrowdown from './icons/Post_icons/ArrowDown.vue'
-import Comment from './icons/Post_icons/CommentIcon.vue'
+import Arrowup from '../assets/icons/Post_icons/ArrowUp.vue'
+import Arrowdown from '../assets/icons/Post_icons/ArrowDown.vue'
+import Comment from '../assets/icons/Post_icons/CommentIcon.vue'
 import { onMounted, ref , watch} from 'vue';
 import QuillComp from './QuilllComp.vue'
-import {GetAnswer} from '../Helpers/APIs/PostAPIs'
-import AnswersSectionChild from './AnswersSectionChild.vue';
+import {GetAnswer , Vote} from '../Helpers/APIs/PostAPIs'
+
 const props = defineProps({
     AnswerId:String
 })
+const UserVotes= UserStore().UserVotes;
+const MyVotes = ref (0);
+MyVotes.value = UserVotes[props.AnswerId]?UserVotes[props.AnswerId]:0
+
+
 
 const v =ref ();
 const name =ref ("");
 const score = ref (0);
 const AnswerLists=ref ([]);
+const VoteHandler = async (e)=>{
+    if (MyVotes.value == e) return;
+    if (MyVotes.value != e && MyVotes.value!= 0){
+        score.value += e;
+    }
+    score.value+=e;
+    MyVotes.value =e;
+    UserVotes[props.PostID] = MyVotes.value
+    console.log (score.value);
+    const data = {
+        UserId: UserStore().UserID,
+        Id : props.AnswerId,
+        Type: 'Answer',
+        VoteValue: e,
+    }
+    await Vote(data)
+}
 function diff_minutes(dt2, dt1) 
  {
 
@@ -76,8 +97,8 @@ const EmitHanlder= (e)=>{
                 
             </div>
             <div class="flex gap-0 h-fit items-center">
-                <Arrowup class="w-9 h-9"/>
-                <Arrowdown class="w-9 h-9"/>
+                <Arrowup :class="[MyVotes == 1?'fill-main3':'']" @click = "VoteHandler(1)" class="hover:fill-main3 w-9 h-9"/>
+                <Arrowdown :class="[MyVotes ==-1?'fill-Alert':'']" @click = "VoteHandler(-1)" class="hover:fill-Alert w-9 h-9"/>
                 <p class="text-xl font-bold mx-4">{{ score }}</p>
                 <div class="btn-ghost btn">
 

@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import HeaderSignLog from '../components/HeaderSignLog.vue'
 import {PageStore} from '../stores/PageStore'
-import Google_Icon from '../components/icons/Google_Icon.vue'
+import Google_Icon from '../assets/icons/Google_Icon.vue'
 import Alert from '../components/Alert.vue'
 import { ValidateEmpty , ValidateEmail , ValidatePassword} from '../Helpers/Validate'
 import { UserStore } from '../stores/UserStore'
