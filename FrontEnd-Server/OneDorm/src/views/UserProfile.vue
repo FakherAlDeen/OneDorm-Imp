@@ -9,16 +9,7 @@ import CommentComponent from '../components/CommentComponent.vue'
 import AnswerSection from '../components/AnswersSection.vue'
 import { UserStore } from '../stores/UserStore';
 import ModalComponent from '../components/ModalComponent.vue';
-// User name 
-// Shrbt shai toggel
-// First name
-// Last name
-// email
-// Change Password
-// Major
-// University
-// Request Verif
-// 
+
 const isEdit = ref (true);
 const Fname = ref (UserStore().Fname);
 const Lname = ref (UserStore().Lname);
@@ -176,7 +167,7 @@ const ChangePassword = () =>{
                         </div>
                         <div class="flex mt-5 gap-10 justify-center">
                             <div class="form-control w-1/3">
-                                <button class="focus:none btn btn-success bg-main3 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Request Verification</button>
+                                <button class="focus:none btn btn-success bg-main3 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Request Academic Staff</button>
                             </div>
                             <div class="form-control w-1/3">
                                 <button class="focus:none btn btn-error bg-Alert border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Delete Account :c</button>

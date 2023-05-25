@@ -5,7 +5,8 @@ import Arrowdown from '../assets/icons/Post_icons/ArrowDown.vue'
 import Comment from '../assets/icons/Post_icons/CommentIcon.vue'
 import { onMounted, ref , watch} from 'vue';
 import QuillComp from './QuilllComp.vue'
-import {GetAnswer , Vote} from '../Helpers/APIs/PostAPIs'
+import {DeletePost,GetAnswer , Vote} from '../Helpers/APIs/PostAPIs'
+import router from '../router';
 
 const props = defineProps({
     AnswerId:String
@@ -75,6 +76,11 @@ const ReplyHandler = () =>{
 const EmitHanlder= (e)=>{
     AnswerLists.value.push(e);
 }
+const DeletePostHanlder = async ()=>{
+    const res = await DeletePost({Id:props.AnswerId , Type:'Answer'});
+    router.go();
+    console.log(res);
+}
 
 
 </script>
@@ -97,7 +103,7 @@ const EmitHanlder= (e)=>{
                         </button>
                         <ul tabindex="0" class="dropdown-content border-2 border-black menu p-1 shadow bg-base-100 rounded-none w-20">
                             <li class="text-sm font-extrabold text-center btn btn-ghost btn-sm self-center w-full">Edit</li>
-                            <li class="text-xs text-Alert font-extrabold btn btn-ghost btn-sm self-center w-full" @click="ModalDeleteShow=true">Delete</li>
+                            <li class="text-xs text-Alert font-extrabold btn btn-ghost btn-sm self-center w-full" @click="DeletePostHanlder">Delete</li>
                         </ul>
                     </div>
                 </div>
