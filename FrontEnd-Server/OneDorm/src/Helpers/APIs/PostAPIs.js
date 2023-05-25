@@ -10,6 +10,15 @@ export async function CreatePost (data){
         // return res;
 }
 
+export async function EditPost (data){
+        const res = await POST ('EditPost',data);
+        if (res.status=='201'){
+                return res;
+        }else {
+                return res.data;
+        }
+        // return res;
+}
 
 export async function GetPost (Id){
         const res = await GET ('GetPost/'+Id);
@@ -32,6 +41,16 @@ export async function DeletePost(data){
 
 export async function CreateAnswer (data){
         const res = await POST ('CreateAnswer',data);
+        if (res.status=='201'){
+                return res;
+        }else {
+                return res.data;
+        }
+        // return res;
+}
+
+export async function EditAnswer (data){
+        const res = await POST ('EditAnswer',data);
         if (res.status=='201'){
                 return res;
         }else {

@@ -60,6 +60,19 @@ class AnswerController {
           console.log(err);
         }
       }
+      static async EditAnswer(req, res){
+        try{// connect it to hashtags table and user table
+          const { Id , Data } = req.body; // loop over hashtags -> find -> 
+          if (!Id || JSON.stringify(Data) === "{}") {
+            return res.status(400).send("Send all the fields");
+          }
+          await EditAnswer(Id , Data);
+          res.status(201).send("Answer edited");
+        } catch (err) {
+            res.status(403).send(err) 
+            console.log(err);
+        }
+      }
 
 }
 
