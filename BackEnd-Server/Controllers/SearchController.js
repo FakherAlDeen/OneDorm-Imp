@@ -69,10 +69,10 @@ class SearchController{
         if(User.length == 0){
             return res.status(400).send("User Id was not found");
         }
-        let Hashtags = []
-        for(let i = 0 ; i<User[0].CategoriesList.length ; i++){
-            Hashtags.append(User[0].CategoriesList[i]['Title'])
-        }
+        let Hashtags = User.CategoriesList;
+        // for(let i = 0 ; i<User[0].CategoriesList.length ; i++){
+        //     Hashtags.append(User[0].CategoriesList[i])
+        // }
         try {
             let result = await collection.aggregate([
                 {
