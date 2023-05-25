@@ -110,11 +110,11 @@ class QuestionController {
     static async DeletePost(req, res){
       try{// connect it to hashtags table and user table
           
-          const { Id } = req.body; // loop over hashtags -> find -> 
+          const { Id , Type } = req.body; // loop over hashtags -> find -> 
           if (!(Id)) {
             return res.status(400).send("Send all the fields");
           }
-          QuestionController.Delete(Id , 0) ;
+          QuestionController.Delete(Id , Type=='Answer') ;
           console.log("reqqqq");
           res.status(201).send("Deleted")
       } catch (err) {

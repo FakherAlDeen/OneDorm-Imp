@@ -26,6 +26,35 @@ class SearchController{
                         "text": {
                             "query": `${query}`,
                             "path": ["QuestionDetailsHTML", "QuestionTitle","Hashtags"],
+                            "score": { 
+                                // "boost": { 
+                                //     "value": 1 
+                                // },
+                                "function": {
+                                    "multiply": [
+                                        {
+                                            "path":{
+                                                "value" : 'AnswerCount' ,
+                                                "undefined" : 1
+                                            }
+                                        },
+                                        {
+                                            "score": "relevance"
+                                        }
+                                    ],
+                                    "multiply": [
+                                        {
+                                            "path":{
+                                                "value" : 'QuestionVotesCount' ,
+                                                "undefined" : 1
+                                            }
+                                        },
+                                        {
+                                            "score": "relevance"
+                                        }
+                                    ]
+                                }
+                            },
                             "fuzzy": {
                                 "maxEdits": 2,
                                 "prefixLength": 3

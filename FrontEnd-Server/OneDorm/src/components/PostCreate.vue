@@ -133,7 +133,7 @@ const PublishHandler=async ()=>{
                     <h3 class="text-base font-semibold text-Alert"><spam class="font-extrabold">Tip:</spam> Use accurate ones!</h3>
                     <input type="text" placeholder="Hashtags" class="input w-full rounded-2 border border-2 border-black mb-5 self-center max-w-sm" v-model="HashtagValue" @keyup.enter="Hashtags_Handler"/>
                     <div class="card bg-white rounded-[0.5rem] border-2 border-black p-2 flex flex-row flex-wrap mb-4 max-w-sm" v-if="HashtagsArr.length !=0">
-                        <template v-for="(item, index) in HashtagsArr">
+                        <template v-for="(item, index) in HashtagsArr" :key="index">
                             <button class="btn btn-sm w-fit m-2 border-none font-light" :[key]="index" :class="[index%2? 'bg-main3' : 'bg-main1']" @click="RemoveHashtag(index)">{{ item }}</button>
                         </template>
                     </div>
@@ -142,7 +142,7 @@ const PublishHandler=async ()=>{
                     <h2 class="text-4xl font-bold font-Inter leading-10	text-black mb-5">Any Attachments?</h2>
                     <input type="file" ref="Attachments" @change="UplodHandler" class="file-input file-input-bordered border-2 border-black self-center mb-5 " />
                     <div class="card bg-white rounded-[0.5rem] border-2 border-black p-2 flex flex-row flex-wrap mb-4 max-w-sm" v-if="AttachmentsArr.length !=0">
-                        <template v-for="(item, index) in AttachmentsArr">
+                        <template v-for="(item, index) in AttachmentsArr" :key="index">
                             <button class="btn btn-sm w-fit m-2 border-none font-light" :[key]="index" :class="[index%2? 'bg-main3' : 'bg-main1']" @click="RemoveAttachment(index)">{{ item[0].name}}</button>
                         </template>
                     </div>

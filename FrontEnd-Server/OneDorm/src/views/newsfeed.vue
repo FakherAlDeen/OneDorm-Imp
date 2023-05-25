@@ -23,13 +23,13 @@ console.log(JSON.parse(atob(VueCookies.get('Token').split('.')[1])))
             <h2 class="text-5xl font-[1000] text-center pb-2">POST OF THE DAY</h2>
         </div>
         <div class="">
-            <PostContainer class="scale-110 mt-10" postTitle="Meow Meow" AnswerCount="122" :Hashtags="Hashtags" :PostContent="postcont" :DownVotes="down" :UpVotes="up"/>
+            <PostContainer class="scale-110 mt-10" postTitle="Meow Meow" :postFull="false" :AnswerCount="122" :Hashtags="Hashtags" :PostContent="postcont"/>
             <div class="w-1/2 mx-auto border-b-4 border-Grey pb-3">
                 <h2 class="text-2xl font-[1000] text-center text-Grey tracking-wide leading-8">MORE FOR YOU</h2>
             </div>
-            <PostContainer postTitle="Meow Meow" AnswerCount="122" :Hashtags="Hashtags" :PostContent="postcont" :DownVotes="down" :UpVotes="up"/>
-            <PostContainer postTitle="Meow Meow" AnswerCount="122" :Hashtags="Hashtags" :PostContent="postcont" :DownVotes="down" :UpVotes="up"/>
-            <PostContainer postTitle="Meow Meow" AnswerCount="122" :Hashtags="Hashtags" :PostContent="postcont" :DownVotes="down" :UpVotes="up"/>
+            <PostContainer postTitle="Meow Meow" :AnswerCount="122" :postFull="false" :Hashtags="Hashtags" :PostContent="postcont" />
+            <PostContainer postTitle="Meow Meow" :AnswerCount="122" :postFull="false" :Hashtags="Hashtags" :PostContent="postcont" />
+            <PostContainer postTitle="Meow Meow" :AnswerCount="122" :postFull="false" :Hashtags="Hashtags" :PostContent="postcont" />
         </div>
     </main>
 </template>

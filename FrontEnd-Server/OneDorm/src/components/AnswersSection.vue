@@ -10,12 +10,10 @@ import {GetAnswer , Vote} from '../Helpers/APIs/PostAPIs'
 const props = defineProps({
     AnswerId:String
 })
+const mine =  ref (false);
 const UserVotes= UserStore().UserVotes;
 const MyVotes = ref (0);
 MyVotes.value = UserVotes[props.AnswerId]?UserVotes[props.AnswerId]:0
-
-
-
 const v =ref ();
 const name =ref ("");
 const score = ref (0);
@@ -66,6 +64,7 @@ onMounted (async ()=>{
     const hoursMinStr= hours >0? hours + " hours " + min + " min ago": "" + min + " Min ago";
     ActualDate.value = days>0 ? days + " days " + hoursMinStr: hoursMinStr;
     console.log (hours,min, ActualDate.value)
+    mine.value = (UserStore().UserID == commentData.CreatedBy);
     AnswerLists.value = commentData.AnswersList;
 })
 const Reply=ref(false);
@@ -88,9 +87,20 @@ const EmitHanlder= (e)=>{
                 </div>
             </div>
         </div>
-        <div class="flex flex-col gap-2 justify-center my-1 w-10/12">
+        <div class="flex grow flex-col gap-2 justify-center my-1 w-10/12">
             <div>
-                <h2 class="text-2xl font-extrabold">{{name}} <span class="text-base text-Grey font-extrabold ml-2">{{ActualDate}}</span></h2>
+                <div class="flex gap-10 w-full">
+                    <h2 class="text-2xl font-extrabold">{{name}} <span class="text-base text-Grey font-extrabold ml-2">{{ActualDate}}</span></h2>
+                    <div class="dropdown dropdown-end mt-1" v-if="mine">
+                        <button tabindex="0"  class="btn btn-ghost btn-sm">
+                            <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
+                        </button>
+                        <ul tabindex="0" class="dropdown-content border-2 border-black menu p-1 shadow bg-base-100 rounded-none w-20">
+                            <li class="text-sm font-extrabold text-center btn btn-ghost btn-sm self-center w-full">Edit</li>
+                            <li class="text-xs text-Alert font-extrabold btn btn-ghost btn-sm self-center w-full" @click="ModalDeleteShow=true">Delete</li>
+                        </ul>
+                    </div>
+                </div>
                 <h2 class="text-base text-Grey font-extrabold">PSUT - CS student - {{AnswerLists.length}} answers</h2>
             </div>
             <div v-html="v">

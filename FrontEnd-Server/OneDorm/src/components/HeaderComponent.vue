@@ -41,7 +41,7 @@ const userStore = UserStore();
     <div class="navbar bg-base-100 p-10">
         <div class="navbar-start">
             <div class="mr-9">
-                <a class="w-fit h-fit btn btn-ghost p-0" @click="router.push('NewsFeed')"><OneDorm class="border-black border-2 w-20 h-20"></OneDorm></a>
+                <a class="w-fit h-fit btn btn-ghost p-0" @click="router.push('/NewsFeed')"><OneDorm class="border-black border-2 w-20 h-20"></OneDorm></a>
             </div>
             <div class="dropdown dropdown-center">
                 <label tabindex="0" class="btn btn-ghost rounded-none">
