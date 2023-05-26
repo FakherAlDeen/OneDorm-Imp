@@ -11,7 +11,7 @@ import Arrow_Bottom_White from '../assets/icons/Header_icons/Arrow_BottomWhite.v
 import { UserStore } from '../stores/UserStore'
 import router from '../router/index'
 import {SearchPost} from '../Helpers/APIs/SearchAPIs'
-
+import VueCookies from 'vue-cookies'
 import {ref} from 'vue'
 
 const SearchValue = ref();
@@ -35,6 +35,10 @@ const ClickHanlderShowList = ()=>{
     ShowList.value = ! ShowList.value;
 }
 const userStore = UserStore();
+const Logout = ()=>{
+    VueCookies.remove('Token')
+    router.push('/Login')
+}
 </script>
 
 <template>
@@ -107,7 +111,7 @@ const userStore = UserStore();
                 </div>
                 <ul tabindex="0" class="mt-20 dropdown-content menu p-2 shadow bg-black w-52 dropdown-open" :class="[ShowList?'dropdown-open':'']">
                     <li class="text-white" @click="router.push('/profile')"><a>profile</a></li>
-                    <li class="text-Alert" @click="router.push('/Login')"><a>Log out</a></li>
+                    <li class="text-Alert" @click="Logout"><a>Log out</a></li>
                 </ul>
                 
             </div>

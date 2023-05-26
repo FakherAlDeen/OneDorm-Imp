@@ -1,4 +1,4 @@
-import {GET,POST} from '../../../Helpers/APIs'
+import {GET} from '../../../Helpers/APIs'
 
 export async function SearchPost (SearchVal){
     const res = await GET (`SearchPost?query=${SearchVal}`);

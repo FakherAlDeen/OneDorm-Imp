@@ -1,4 +1,4 @@
-import {GET,POST} from '../../../Helpers/APIs'
+import {GET,POST,PUTIMAGE } from '../../../Helpers/APIs'
 
 
 export async function GetUser (Id){
@@ -30,27 +30,29 @@ export async function AddHashtags (data){
         }
 }
 export async function EditProfile (data){
-        console.log(data)  // UserId , Data
+        console.log(data)
         const res = await POST ('EditProfile' , data);
         if (res.status=='201'){
                 return res;
         }else {
-                console.log(res)
                 return res.data;
         }
 }
+
 export async function SetUsername (data){
-        console.log(data) // UserId , Username
+        console.log(data)
         const res = await POST ('SetUsername' , data);
-        if (res.status == '201'){ // done
-                console.log("Username set")
-                return res;
-        } else if(res.status == '205'){
-                // username taken
-                console.log("Username Taken");
-        }
-        else {
-                console.log(res)
-                return res.data;
-        }
+        // console.log ("User", res);
+        return res;
+}
+
+export async function UploadImage (data){
+        const res = await PUTIMAGE ('UploadImage' , data);
+        return res;
+}
+
+export async function GetImage (id){
+        const res = await GET (`GetImage/${id}` );
+        console.log (res);
+        return res;
 }

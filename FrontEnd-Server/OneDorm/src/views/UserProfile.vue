@@ -1,25 +1,35 @@
 <script setup>
 import { ref,onMounted } from 'vue'
 import HeaderComponent from '../components/HeaderComponent.vue';
-import PostContainer from '../components/PostContainer.vue';
-import {useRoute} from "vue-router";
-import { GetPost } from '../Helpers/APIs/PostAPIs';
-import Alert from '../components/Alert.vue'
-import CommentComponent from '../components/CommentComponent.vue'
-import AnswerSection from '../components/AnswersSection.vue'
 import { UserStore } from '../stores/UserStore';
 import ModalComponent from '../components/ModalComponent.vue';
+import FormData from 'form-data';
+import {UploadImage} from '../Helpers/APIs/UserAPIs'
 
 const isEdit = ref (true);
 const Fname = ref (UserStore().Fname);
 const Lname = ref (UserStore().Lname);
-const Uni = ref();
-const Major = ref();
+const Uni = ref(UserStore().UserDetails.University);
+const Major = ref(UserStore().UserDetails.Major);
+const username = ref (UserStore().Username);
+const email = ref (UserStore().Email);
 const ShowModal = ref (false);
+const phone = ref ();
+const Address = ref ();
+const city = ref ();
+const Country = ref ();
+const DateOfBirth= ref();
 const closeModal = ()=>{
     ShowModal.value = false;
 }
-
+const imageHandler = async (e)=>{
+    let fd = new FormData();
+    fd.append("UserId",UserStore().UserID);
+    fd.append("Image",e.target.files[0]);
+    console.log ('3aw',fd)
+    await UploadImage(fd);
+    await UserStore().GetUser(UserStore().UserID);
+};
 const OldPassword = ref ();
 const Password = ref ();
 const Password2 = ref();
@@ -70,7 +80,8 @@ const ChangePassword = () =>{
                         </div>
 
                     </div>
-                    <button class="focus:none btn btn-success bg-main3 shadow-main2 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Edit Profile Pecture</button>
+                    <input hidden id="Image" type="file" name="Image" @change="imageHandler" accept="image/*" />
+                    <label for="Image" class="focus:none btn btn-success bg-main3 shadow-main2 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Edit Profile Pecture</label>
                     <button @click="isEdit = !isEdit" class="mt-5 focus:none btn btn-error bg-Alert shadow-Alert border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Edit Profile Details</button>
                     <button @click="ShowModal= true" class="mt-5 focus:none btn btn-warning bg-main1 shadow-main1 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Change Password</button>
 
@@ -112,19 +123,19 @@ const ChangePassword = () =>{
                                     <label class="label">
                                         <span class="label-text text-lg font-bold">Your birth date:</span>
                                     </label>
-                                    <input type="date" v-model="Uni" placeholder="Type here" class="input input-bordered w-full"  :disabled="isEdit"/>
+                                    <input type="date" v-model="DateOfBirth" placeholder="Type here" class="input input-bordered w-full"  :disabled="isEdit"/>
                                 </div>
                                 <div class="form-control w-1/3">
                                     <label class="label">
                                         <span class="label-text text-lg font-bold">Country:</span>
                                     </label>
-                                    <input type="text" v-model="Major" placeholder="Jordan" class="input input-bordered w-full"  :disabled="isEdit"/>
+                                    <input type="text" v-model="Country" placeholder="Jordan" class="input input-bordered w-full"  :disabled="isEdit"/>
                                 </div>
                                 <div class="form-control w-1/3">
                                     <label class="label">
                                         <span class="label-text text-lg font-bold">City:</span>
                                     </label>
-                                    <input type="text" v-model="Major" placeholder="Amman" class="input input-bordered w-full" :disabled="isEdit" />
+                                    <input type="text" v-model="city" placeholder="Amman" class="input input-bordered w-full" :disabled="isEdit" />
                                 </div>
                                 
                             </div>
@@ -133,13 +144,13 @@ const ChangePassword = () =>{
                                     <label class="label">
                                         <span class="label-text text-lg font-bold">Your Phone Number?</span>
                                     </label>
-                                    <input type="text" v-model="Uni" placeholder="+(962) 000000000" class="input input-bordered w-full"  :disabled="isEdit"/>
+                                    <input type="text" v-model="phone" placeholder="+(962) 000000000" class="input input-bordered w-full"  :disabled="isEdit"/>
                                 </div>
                                 <div class="form-control w-2/3">
                                     <label class="label">
                                         <span class="label-text text-lg font-bold">Address:</span>
                                     </label>
-                                    <input type="text" v-model="Major" placeholder="Type here" class="input input-bordered w-full"  :disabled="isEdit"/>
+                                    <input type="text" v-model="Address" placeholder="Type here" class="input input-bordered w-full"  :disabled="isEdit"/>
                                 </div>
                             </div>
                             <div class="flex justify-center" v-if="!isEdit">
@@ -156,18 +167,18 @@ const ChangePassword = () =>{
                                 <label class="label">
                                     <span class="label-text text-lg font-bold">Your Email:</span>
                                 </label>
-                                <input type="text" v-model="Uni" placeholder="wtv.email.com" class="input input-bordered w-full" />
+                                <input type="text" v-model="email" placeholder="wtv.email.com" disabled class="input input-bordered w-full" />
                             </div>
                             <div class="form-control w-1/2">
                                 <label class="label">
                                     <span class="label-text text-lg font-bold">Your Username:</span>
                                 </label>
-                                <input type="text" v-model="Major" placeholder="MeowXXX69" class="input input-bordered w-full" />
+                                <input type="text" v-model="username" placeholder="MeowXXX69" disabled class="input input-bordered w-full" />
                             </div>
                         </div>
                         <div class="flex mt-5 gap-10 justify-center">
                             <div class="form-control w-1/3">
-                                <button class="focus:none btn btn-success bg-main3 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Request Academic Staff</button>
+                                <button class="focus:none btn btn-success bg-main3 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Request Academic Staff Role</button>
                             </div>
                             <div class="form-control w-1/3">
                                 <button class="focus:none btn btn-error bg-Alert border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Delete Account :c</button>

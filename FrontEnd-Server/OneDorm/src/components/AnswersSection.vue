@@ -7,7 +7,9 @@ import { onMounted, ref , watch} from 'vue';
 import QuillComp from './QuilllComp.vue'
 import {DeletePost,GetAnswer , Vote} from '../Helpers/APIs/PostAPIs'
 import router from '../router';
+import { GetUser } from '../Helpers/APIs/UserAPIs';
 
+const imageCreator = ref ('Loading');
 const props = defineProps({
     AnswerId:String
 })
@@ -49,6 +51,13 @@ onMounted (async ()=>{
     const res = await GetAnswer(props.AnswerId);
     const commentData= res.data.AnswerData;
     const UserData= res.data.UserData;
+    const User = await GetUser(commentData.CreatedBy);
+    console.log (User.data);
+    if (User.data.Image){
+        imageCreator.value = `data:${User.data.Image.contentType};base64,${User.data.Image.image}`
+    }else {
+        imageCreator.value = 'No Image';
+    }
     v.value =  commentData.AnswerDetailsHTML;
     v.value=v.value.replaceAll('<p>', "<p class='text-lg font-bold my-1'>")
     v.value=v.value.replaceAll('<br>', "")
@@ -89,7 +98,10 @@ const DeletePostHanlder = async ()=>{
         <div class="mr-5">
             <div class="avatar">
                 <div class="w-16 rounded-xl">
-                    <img :src="UserStore().image" />
+                    <div v-if="imageCreator=='Loading'" class="h-full flex justify-center align-center">
+                        <button  class="m-auto btn btn-square loading"></button>
+                    </div>
+                    <img v-else :src='imageCreator' />
                 </div>
             </div>
         </div>

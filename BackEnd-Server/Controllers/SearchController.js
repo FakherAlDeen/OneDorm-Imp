@@ -90,19 +90,18 @@ class SearchController{
     }
 
     static async NewsFeed(req, res){
-        await connect();
-        const UserId = req.params.Id;
-        // const UserId = '62b1e7d2-0ba8-45fb-a08d-9138e4bc7af9';
-        const User = await FindOneUserRecord ({UserId});
-        
-        if(User.length == 0){
-            return res.status(400).send("User Id was not found");
-        }
-        let Hashtags = User.CategoriesList;
-        // for(let i = 0 ; i<User[0].CategoriesList.length ; i++){
-        //     Hashtags.append(User[0].CategoriesList[i])
-        // }
         try {
+            await connect();
+            const UserId = req.params.Id;
+            // console.log (UserId)
+            // const UserId = '62b1e7d2-0ba8-45fb-a08d-9138e4bc7af9';
+            const User = await FindOneUserRecord ({UserId});
+            
+            if(User.length == 0){
+                return res.status(400).send("User Id was not found");
+            }
+            let Hashtags = User.CategoriesList?User.CategoriesList:[];
+            console.log (Hashtags)
             let result = await collection.aggregate([
                 {
                     "$search": {
@@ -138,23 +137,24 @@ class SearchController{
                   $project: {
                     QuestionDetailsHTML: 1,
                     QuestionTitle: 1,
-                    // QuestionId:1,
-                    // CreatedBy:1,
-                    // QuestionDetails:1,
+                    QuestionId:1,
+                    CreatedBy:1,
+                    QuestionDetails:1,
                     QuestionVotesCount:1,
-                    // ReportedCount:1,
-                    // IsPinned:1,
-                    // CreatedAt:1,
-                    // LastEdit:1,
+                    ReportedCount:1,
+                    IsPinned:1,
+                    CreatedAt:1,
+                    LastEdit:1,
                     Hashtags:1,
                     AnswersList:1,
                     // { "$ifNull": [ "$answers", [] ] } }
                     AnswerCount : 1,
-                    // Attachments:1,
+                    Attachments:1,
                     score: { $meta: "searchScore" }
                   }
                 }
             ]).sort({score:-1}).toArray();
+            // console.log (result)
             res.status(201).send(result);
         } catch (e) {
             res.status(400).send(e);

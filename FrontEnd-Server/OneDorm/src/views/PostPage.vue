@@ -4,7 +4,6 @@ import HeaderComponent from '../components/HeaderComponent.vue';
 import PostContainer from '../components/PostContainer.vue';
 import {useRoute} from "vue-router";
 import { GetPost } from '../Helpers/APIs/PostAPIs';
-
 import Alert from '../components/Alert.vue'
 import CommentComponent from '../components/CommentComponent.vue'
 import AnswerSection from '../components/AnswersSection.vue'
@@ -17,6 +16,7 @@ const Hashtags = ref()
 const score =ref();
 const Cname =ref();
 const Error = ref ("smth");
+
 const AnsCount = ref ();
 const CreatedBy= ref ();
 const PushAnsId = (e)=>{
@@ -32,6 +32,7 @@ onMounted(async()=>{
     console.log (PostData);
     Error.value="nth";
     PostData = PostData.data
+    
     Cname.value= PostData.UserData.Fname +" "+PostData.UserData.Lname;
     postTitle.value = PostData.PostData.QuestionTitle;
     postcont.value = PostData.PostData.QuestionDetailsHTML;

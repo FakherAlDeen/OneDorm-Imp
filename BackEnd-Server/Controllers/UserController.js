@@ -76,7 +76,8 @@ class UserController {
                 return res.status(201).send("done")
             }
             else{
-                return res.status(205).send("Username is taken")
+                // console.log ("Taken User")
+                return res.status(200).send("Username is taken")
             }
         }
         catch(err){

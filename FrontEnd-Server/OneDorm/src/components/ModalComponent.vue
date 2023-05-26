@@ -8,6 +8,7 @@ const props = defineProps({
     ModalContent:String,
     Btn1Funtion: Function,
     Btn2Funtion: Function,
+    withoutCancel : Boolean,
 })
 console.log(props.Btn1Cont)
 const emit =defineEmits(['emitClose','Func1','Func2'])
@@ -22,7 +23,7 @@ const emit =defineEmits(['emitClose','Func1','Func2'])
             <div class="modal-action">
             <button class="btn" v-if="withBtn1" @click="emit('Func1')">{{ Btn1Cont }}</button>
             <button class="btn" v-if="withBtn2" @click="Btn2Funtion">{{ Btn2Cont }}</button>
-            <button class="btn btn-error" @click="emit('emitClose')">close</button>
+            <button v-if="!withoutCancel" class="btn btn-error" @click="emit('emitClose')">close</button>
             </div>
         </div>
     </div>

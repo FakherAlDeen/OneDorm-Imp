@@ -23,3 +23,17 @@ export async function POST (str,data){
         return error.response;
       }
 }
+
+export async function PUTIMAGE (str,imageFile){
+  try {
+      const response = await axios.post(httpLink + str, imageFile, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+      });
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+}
+

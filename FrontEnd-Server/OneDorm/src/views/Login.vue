@@ -1,15 +1,16 @@
 <script setup>
 import { ref, computed } from 'vue'
 import HeaderSignLog from '../components/HeaderSignLog.vue'
-import {PageStore} from '../stores/PageStore'
+// import {PageStore} from '../stores/PageStore'
 import Google_Icon from '../assets/icons/Google_Icon.vue'
 import { UserStore } from '../stores/UserStore'
 import { ValidateEmpty , ValidateEmail , ValidatePassword} from '../Helpers/Validate'
 import router from '../router'
 import Alert from '../components/Alert.vue'
-
-const userStore = UserStore();
+import { PageStore } from '../stores/PageStore'
 const Store = PageStore();
+const userStore = UserStore();
+// const Store = PageStore();
 Store.ChangePage('Log In')
 const input_styling ="Input-Primary my-2"
 const transitionClass ="transition ease-in-out delay-150 hover:scale-[1.02]"

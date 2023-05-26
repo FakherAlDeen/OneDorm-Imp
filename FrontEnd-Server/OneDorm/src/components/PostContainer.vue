@@ -22,18 +22,13 @@ import router from '../router';
         CreatedBy:String,
     })
     const mine = ref (props.CreatedBy==UserStore().UserID)
-    console.log ('UserID',UserStore().UserID);
-    console.log ('CreatedBy',props.CreatedBy);
 
-    console.log ('mine',mine.value);
     const Creator = ref (props.CreatorName);
     const UserVotes= UserStore().UserVotes;
     const ModalDeleteShow = ref (false);
-    console.log('UserVotes',UserVotes)
+    const imageCreator = ref ('Loading');
     const sScore = ref (props.Score)
-    console.log (props.Score);
 
-    console.log (sScore.value);
 
     const MyVotes = ref (0);
     if (UserVotes){
@@ -47,7 +42,6 @@ import router from '../router';
         sScore.value+=e;
         MyVotes.value =e;
         UserVotes[props.PostID] = MyVotes.value
-        console.log (sScore.value);
         const data = {
             UserId: UserStore().UserID,
             Id : props.PostID,
@@ -57,16 +51,16 @@ import router from '../router';
         await Vote(data)
     }
     onBeforeMount(async () =>{
-        if (!props.CreatorName){
-            console.log ("bzbz bzaz");
-            const res = await GetUser(props.CreatedBy);
-            Creator.value = res.data.Fname + " " + res.data.Lname;
-            console.log (Creator.value);
+        const res = await GetUser(props.CreatedBy);
+        Creator.value = res.data.Fname?res.data.Fname + " " + res.data.Lname:'UNKOWN';
+        if (res.data.Image){
+            imageCreator.value = `data:${res.data.Image.contentType};base64,${res.data.Image.image}`
+        }else {
+            imageCreator.value = 'No Image';
         }
     })
     const DeletePostHanlder = async ()=>{
-        const res = await DeletePost({Id:props.PostID});
-        console.log(res);
+        await DeletePost({Id:props.PostID , Type:'Question'});
         router.push('/NewsFeed');
         ModalDeleteShow.value=false
     }
@@ -80,8 +74,11 @@ import router from '../router';
         <div class="card bg-postBG w-9/12 min-h-[20rem] rounded-none border border-2 border-black relative mx-auto my-16 p-0 m-0 z-0">
             <div class="absolute left-0 top-0">
                 <div class="avatar h-16 absolute">
-                    <div class="z-10 w-48 h-48 border-2 transition-all duration-150 ease-in-out border-black shadow-BoxBlackSm hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none hover:border-t-0 hover:border-l-0">
-                        <img :src='UserStore().image' />
+                    <div class="bg-white z-10 w-48 h-48 border-2 transition-all duration-150 ease-in-out border-black shadow-BoxBlackSm hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none hover:border-t-1 hover:border-l-1">
+                        <div v-if="imageCreator=='Loading'" class="h-full flex justify-center align-center">
+                            <button  class="m-auto btn btn-square loading"></button>
+                        </div>
+                        <img v-else :src='imageCreator' />
                     </div>
                 </div>
             </div>
@@ -121,7 +118,7 @@ import router from '../router';
                             <button class="btn btn-sm w-fit m-2 border-none font-light" :class="[i%2? 'bg-main3' : 'bg-main1']">{{ e }}</button>
                         </template>
                     </div>
-                    <div id="PostCont" v-html="PostContent" class="mx-10 mb-10">
+                    <div id="PostCont" :class="[!postFull?'max-h-[6rem]':'']" v-html="PostContent" class="mx-10 mb-10 overflow-hidden">
                         
                     </div>
                     <div class="flex justify-end m-10 shadow-none">
