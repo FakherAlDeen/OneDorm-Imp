@@ -58,7 +58,7 @@ export const UserStore = defineStore('User',{
                 this.UserVotes = Data.UserVotes;
                 this.UserDetails= Data.UserDetails
                 this.Username = Data.Username;
-                if (Data.Image.contentType){
+                if (Data.Image){
                     console.log (Data.Image);
                     this.image =`data:${Data.Image.contentType};base64,${Data.Image.image}`
                 }else {
