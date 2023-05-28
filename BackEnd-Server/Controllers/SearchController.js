@@ -1,6 +1,4 @@
-const express = require("express");
 const { MongoClient, ObjectID } = require("mongodb");
-const { GetUser } = require("./UserController");
 const { FindOneUserRecord } = require("../DatabaseMethods/UserMethods");
 
 const client = new MongoClient('mongodb+srv://fakheralden1:CHBsfnMo4Rzc9qZT@onedorm.nmnmx8u.mongodb.net/');
@@ -93,15 +91,11 @@ class SearchController{
         try {
             await connect();
             const UserId = req.params.Id;
-            // console.log (UserId)
-            // const UserId = '62b1e7d2-0ba8-45fb-a08d-9138e4bc7af9';
             const User = await FindOneUserRecord ({UserId});
-            
             if(User.length == 0){
                 return res.status(400).send("User Id was not found");
             }
             let Hashtags = User.CategoriesList?User.CategoriesList:[];
-            console.log (Hashtags)
             let result = await collection.aggregate([
                 {
                     "$search": {
@@ -147,14 +141,12 @@ class SearchController{
                     LastEdit:1,
                     Hashtags:1,
                     AnswersList:1,
-                    // { "$ifNull": [ "$answers", [] ] } }
                     AnswerCount : 1,
                     Attachments:1,
                     score: { $meta: "searchScore" }
                   }
                 }
             ]).sort({score:-1}).toArray();
-            // console.log (result)
             res.status(201).send(result);
         } catch (e) {
             res.status(400).send(e);

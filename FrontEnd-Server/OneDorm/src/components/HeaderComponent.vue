@@ -35,6 +35,7 @@ const ClickHanlderShowList = ()=>{
     ShowList.value = ! ShowList.value;
 }
 const userStore = UserStore();
+console.log (userStore.image)
 const Logout = ()=>{
     VueCookies.remove('Token')
     router.push('/Login')

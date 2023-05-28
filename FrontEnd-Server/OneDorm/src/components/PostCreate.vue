@@ -152,7 +152,7 @@ const PublishHandler=async ()=>{
         <Alert class="w-1/2 mx-auto mb-10" classProp="alert-error"  v-if="error.length !=0"><template #Error_Message>{{ error[0] }}</template></Alert>
         <div class="form-control w-10/12 mb-10 self-center">
             <div class="self-center">
-                <button class="btn mx-2 bg-Alert border-none btn-lg hover:shadow-BoxBlackSm" @click="Cancel">Cancel</button>
+                <button class="btn mx-2 bg-Alert border-none btn-lg hover:shadow-BoxBlackSm" @click="router.go(-1)">Cancel</button>
                 <button class="btn mx-2 bg-main3 border-2 border-black tracking-wider text-xl btn-lg hover:shadow-BoxBlackSm" @click="PublishHandler">Publish!</button>
             </div>
         </div>

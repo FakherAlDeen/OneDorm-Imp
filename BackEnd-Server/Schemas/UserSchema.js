@@ -7,7 +7,8 @@ const UserSchema = new mongoose.Schema({
     Username: {type:String, unique:true , index: true , sparse: true},
     Email: {type:String, unique: true},
     Phonenumber:{type:String, default:null},
-    Image: {}, //Check Later
+    Image: {
+    }, 
     DateOfBirth:{type:Date, default:null},
     TotalVotes:{type:Number, default:0},
     UserDetails:{type:Object , default:null},

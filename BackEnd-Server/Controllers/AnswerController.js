@@ -1,15 +1,10 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const auth = require("../MiddleWare/auth");
 const { v4: uuidv4 } = require('uuid');
-const { CreateQuestion,FindOneQuestionRecord, EditQuestion } = require("../DatabaseMethods/QuestionMethods");
+const { EditQuestion } = require("../DatabaseMethods/QuestionMethods");
 const { CreateAnswer, EditAnswer, FindOneAnswerRecord } = require("../DatabaseMethods/AnswerMethods");
 const { EditUser } = require("../DatabaseMethods/UserMethods");
 const {FindOneUserRecord} = require("../DatabaseMethods/UserMethods");
 
 class AnswerController {
-
     static async CreateAnswer(req, res){
         try{// connect it to hashtags table and user table
             const { CreatedBy, AnswerDetails , AnswerDetailsHTML , Id , Type } = req.body; // loop over hashtags -> find -> 
@@ -32,19 +27,17 @@ class AnswerController {
                 EditQuestion(Id , {$push: { AnswersList: AnswerId } , $inc : {AnswerCount : 0.1} })
             }
             EditUser(CreatedBy , {$push: {AnswersList : AnswerId }} )
-            console.log("reqqqq");
             res.status(201).send(answer)
         } catch (err) {
             res.status(403).send(err) 
             console.log(err);
         }
       }
+
       static async GetAnswer(req, res){
         try{
           const Id = req.params.Id;
-        //   console.log (Id);
           const AnswerData = await FindOneAnswerRecord({AnswerId:Id});
-        //   console.log (AnswerData[0]);
           if (AnswerData.length == '0') return res.status(400).send("Answer Not Found!");
           const UserData = await FindOneUserRecord({UserId:AnswerData[0].CreatedBy})
           if (UserData.length == '0') return res.status(400).send("User Not Found!");
@@ -52,7 +45,6 @@ class AnswerController {
             Fname:UserData[0].Fname,
             Lname:UserData[0].Lname,
           }};
-        //   console.log (data);
           res.status(200).send(data);
         }
         catch (err) {
@@ -60,9 +52,10 @@ class AnswerController {
           console.log(err);
         }
       }
+      
       static async EditAnswer(req, res){
-        try{// connect it to hashtags table and user table
-          const { Id , Data } = req.body; // loop over hashtags -> find -> 
+        try{
+          const { Id , Data } = req.body;
           if (!Id || JSON.stringify(Data) === "{}") {
             return res.status(400).send("Send all the fields");
           }

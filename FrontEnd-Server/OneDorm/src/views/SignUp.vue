@@ -8,8 +8,6 @@ import { ValidateEmpty , ValidateEmail , ValidatePassword} from '../Helpers/Vali
 import { UserStore } from '../stores/UserStore'
 import router from '../router'
 
-
-
 const pageStore = PageStore();
 const userStore = UserStore();
 pageStore.ChangePage('Sign Up')
@@ -67,7 +65,7 @@ async function CreatAccHandler(){
         <Alert classProp="alert-error"  v-if="error.length !=0"><template #Error_Message>{{ error[0] }}</template></Alert>
         <Alert classProp="alert-warning"  v-if="userStore.error!=null"><template #Error_Message>{{ userStore.error }}</template></Alert>
         <button class="Button_Primary my-2" :class="transitionClass" @click="CreatAccHandler">CREATE ACCOUNT</button>
-        <button class="Button_Primary_White my-2 focus:bg-[]" :class="transitionClass"><Google_Icon/>SIGN UP WITH GOOGLE</button>
+        <!-- <button class="Button_Primary_White my-2 focus:bg-[]" :class="transitionClass"><Google_Icon/>SIGN UP WITH GOOGLE</button> -->
       </div>
       <h2 class="StringPage rotate-[-90deg] w-fit fixed top-[38rem] right-[16.1rem]">{{(StringPage+' - ').repeat(4) }} <span class="font-bold">{{ StringPage }}</span> {{ (' - ' + StringPage) }}</h2>
       <div class="ml-[20rem] mr-10 mt-4 h-[44.875rem] w-[26rem] bg-[url('./src/assets/Rectangle_5.png')] Box_Shadow">

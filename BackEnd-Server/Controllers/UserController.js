@@ -1,9 +1,4 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const auth = require("../MiddleWare/auth");
-const { v4: uuidv4 } = require('uuid');
-const {CreateUser, EditUser, DeleteUser, FindOneUserRecord} = require("../DatabaseMethods/UserMethods");
+const { EditUser, DeleteUser, FindOneUserRecord} = require("../DatabaseMethods/UserMethods");
 
 class UserController {
     static async GetUser(req, res) {
@@ -32,8 +27,6 @@ class UserController {
     static async AddHastags(req , res){
         try{
             const {UserId , Hashtags} = req.body ;
-            console.log(req.body)
-            console.log(UserId , Hashtags)
             if (!UserId || Hashtags.length == 0) {
                 return res.status(400).send("Send all the fields");
             }
@@ -49,11 +42,9 @@ class UserController {
         try{
             
             const {UserId , Data} = req.body ;
-            // console.log(UserId , Hashtags)
             if (!UserId || JSON.stringify(Data) === "{}") {
                 return res.status(400).send("Send all the fields");
             }
-            // console.log(req.body)
             await EditUser(UserId , Data)
             res.status(201).send("done")
         }
@@ -65,18 +56,15 @@ class UserController {
     static async SetUsername(req , res){
         try{
             const {UserId , Username} = req.body ;
-            // console.log(UserId , Hashtags)
             if (!(UserId && Username)) {
                 return res.status(400).send("Send all the fields");
             }
             const User = await FindOneUserRecord({Username});
-            console.log(User)
             if(User.length == 0){
                 await EditUser(UserId , {Username})
                 return res.status(201).send("done")
             }
             else{
-                // console.log ("Taken User")
                 return res.status(200).send("Username is taken")
             }
         }

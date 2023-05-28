@@ -1,9 +1,7 @@
-const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const auth = require("../MiddleWare/auth");
 const { v4: uuidv4 } = require('uuid');
-const {CreateUser, EditUser, DeleteUser, FindOneUserRecord} = require("../DatabaseMethods/UserMethods");
+const {CreateUser, FindOneUserRecord} = require("../DatabaseMethods/UserMethods");
 
 class AuthController {
     static async SignUp(req, res) {
@@ -74,9 +72,6 @@ class AuthController {
         } catch (err) {
             console.log(err);
         }
-    }
-    static async wtv(req, res) {
-        res.send("brr3");
     }
 }
 
