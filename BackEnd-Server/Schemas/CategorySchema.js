@@ -3,7 +3,9 @@ const CategorySchema = new mongoose.Schema({
     CategoryId: {type:String, unique:true, index: true},
     CategoryTitle: {type:String , index:true},
     UserCount: {type:Number, default:0},
-    PostIds: [],
+    PostIds: [{
+        type:String , index:true
+    }],
     CreatedAt:{type: Date, default: Date.now()},
 });
 

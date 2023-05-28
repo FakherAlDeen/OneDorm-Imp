@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
 import {GET,POST} from '../../Helpers/APIs'
+import VueCookies from 'vue-cookies'
+
 export const UserStore = defineStore('User',{
     state: ()=>{
         return {
-            UserID:null,
+            UserID:'-1',
             Fname:'Anton',
             Lname:'Bahou',
             Username:null,
@@ -16,6 +18,8 @@ export const UserStore = defineStore('User',{
             UserToken:null,
             error:null,
             image:'https://i.pravatar.cc/300',
+            UserDetails:{},
+            UserVotes:{},
         }
     },
     getters: {
@@ -23,64 +27,74 @@ export const UserStore = defineStore('User',{
     },
     actions:{
         async SignUp (data) {
-            console.log (data)
             const res = await POST ('SignUp' ,data);
             if (res.status=='201'){
                 const Data = res.data;
-                this.UserID = Data.UserID;
+                console.log (Data);
+                this.UserID = Data.UserId;
                 this.Fname = Data.Fname;
                 this.Lname = Data.Lname;
                 this.Email = Data.Email;
+                // this.UserVotes = Data.UserVotes;
                 this.UserToken = Data.token;
-                console.log (res);
+                // this.Username = Data.Username;
+                // this.UserDetails= Data.UserDetails
+                window.$cookies.set('Token',this.UserToken);
+                return res;
             }else if (res.status == '409'){
-                console.log ("res from store ",res);
                 this.error = res.data;
+                return res;
             }
         },
         async Login (data){
-            console.log(data)
             const res = await POST('LogIn' , data);
-            console.log(res)
             if(res.status=='200'){
-                const Data = res.data;
+                this.UserToken = res.data.Token;
+                const Data = res.data.UserData;
+                this .UserID = Data.UserId;
+                this.Fname = Data.Fname;
+                this.Lname = Data.Lname;
                 this.Email = Data.Email;
+                this.UserVotes = Data.UserVotes;
+                this.UserDetails= Data.UserDetails
+                this.Username = Data.Username;
+                if (Data.Image){
+                    console.log (Data.Image);
+                    this.image =`data:${Data.Image.contentType};base64,${Data.Image.image}`
+                }else {
+                    this.image ='https://lh3.googleusercontent.com/Dq9gy_sLK2FmQ-vmMOQQGPfAMv5sSeyrwb1UcvR2urDFrPVTkbfCWtovJZjuI-yumftkgH_vgBXPIx06cmVIVNFlnbLLoy6cmip4B8X6t7Zf_RgNdtZXAD-VLguppLve70PDLHob3qHHf_kWme51kJ0-OiLO2Z7r74BHRXy87YNvHRXUCPMdcRXFbcJEQ__W74BYmqWn7sjHDS8MYt8k_LrZigHUc67yTsLXDAWndnkPb8kEwYc0586uW3_780brtk1hxkDD0pOhvAc1duE2qeuNvl7rIpub02yc0qcoa1PjN80Xo5bS3ryIrOuaT6GGsCUA7jneiC0xuaSqVnc63SHANR9feT_bZ2p6oMfhjIlVWGqqyxidq6p0Yph360b41Nl5wuMT2snmNrFDZdVYMFNstqfbnAbroT7Fk9xXY_Lp_H7qyL6YlhQo71WGfmInOtciH8ueg3pJJ06VjYySpnNjImH4zyL3X0E9VOVZ6R7yzs8OCLB99Kdqac1cr5Noa8cT1NzEawandu2BL9f0qXnGaZdhI5M_1PRGLasXrRFOEmet9lncKfDG5aZ3Eqo27eyViYetsT8jhs1yOyAI8X8yBgNg7xd-olVsaOk0573RzzvOYTXBAzNU65PdMWuhgfgAeu4wJ8eqT-QFUkREviSpr-3kn0LZEGKou6hJEUVuLLf3CVC3Vg-ZigOcWfNCNBpojMvAk19Ct5EgUe2MUDy0YSDCqbxXTadLp8drYqw_gYCi1Leoo-fibfk80zYcqDU8I_OwG6a8P0OBjBjfgaNaux-b2wUX3npiwXz4FRTKjQzt7wZSaIpgdlpyB3lDPS0kWurvQu4oX6KefKYvEAw-QM5D2VJ37Lq3RrcgtpgOuqCRIGIuI__Hm9SnG3HC8ysZRErpYZfhN3P6r1LjMYXixxHbLy-tUofB4wzx6m_2XhfmZTwe_6nkMml_qjp5aIN1t0xCteR5BDRK3xZkl_wVSfEsDc1tBs0svefPEdGaKDKLUtVCYyTOGEqC9UshrS-3LA2stGb38P7_GxRuSDhTwa0=w1080-h1080-s-no?authuser=0'
+                }
+                window.$cookies.set('Token',res.data.Token);
+                return res;
             }
             else if(res.status == '400'){
-                console.log("res from store " , res);
                 this.error = res.data ;
+                return res;
             }
         },
+        async GetUser(Id){
+            const res = await GET('GetUser/'+Id);
+            if(res.status=='201'){
+                const Data = res.data;
+                this.Fname = Data.Fname;
+                this.Lname = Data.Lname;
+                this.Email = Data.Email;
+                this.UserDetails= Data.UserDetails
+                this.Username = Data.Username;
+                this.UserVotes = Data.UserVotes;
+                if (Data.Image){
+                    console.log (Data.Image);
+                    this.image =`data:${Data.Image.contentType};base64,${Data.Image.image}`
+                }else {
+                    this.image ='https://lh3.googleusercontent.com/Dq9gy_sLK2FmQ-vmMOQQGPfAMv5sSeyrwb1UcvR2urDFrPVTkbfCWtovJZjuI-yumftkgH_vgBXPIx06cmVIVNFlnbLLoy6cmip4B8X6t7Zf_RgNdtZXAD-VLguppLve70PDLHob3qHHf_kWme51kJ0-OiLO2Z7r74BHRXy87YNvHRXUCPMdcRXFbcJEQ__W74BYmqWn7sjHDS8MYt8k_LrZigHUc67yTsLXDAWndnkPb8kEwYc0586uW3_780brtk1hxkDD0pOhvAc1duE2qeuNvl7rIpub02yc0qcoa1PjN80Xo5bS3ryIrOuaT6GGsCUA7jneiC0xuaSqVnc63SHANR9feT_bZ2p6oMfhjIlVWGqqyxidq6p0Yph360b41Nl5wuMT2snmNrFDZdVYMFNstqfbnAbroT7Fk9xXY_Lp_H7qyL6YlhQo71WGfmInOtciH8ueg3pJJ06VjYySpnNjImH4zyL3X0E9VOVZ6R7yzs8OCLB99Kdqac1cr5Noa8cT1NzEawandu2BL9f0qXnGaZdhI5M_1PRGLasXrRFOEmet9lncKfDG5aZ3Eqo27eyViYetsT8jhs1yOyAI8X8yBgNg7xd-olVsaOk0573RzzvOYTXBAzNU65PdMWuhgfgAeu4wJ8eqT-QFUkREviSpr-3kn0LZEGKou6hJEUVuLLf3CVC3Vg-ZigOcWfNCNBpojMvAk19Ct5EgUe2MUDy0YSDCqbxXTadLp8drYqw_gYCi1Leoo-fibfk80zYcqDU8I_OwG6a8P0OBjBjfgaNaux-b2wUX3npiwXz4FRTKjQzt7wZSaIpgdlpyB3lDPS0kWurvQu4oX6KefKYvEAw-QM5D2VJ37Lq3RrcgtpgOuqCRIGIuI__Hm9SnG3HC8ysZRErpYZfhN3P6r1LjMYXixxHbLy-tUofB4wzx6m_2XhfmZTwe_6nkMml_qjp5aIN1t0xCteR5BDRK3xZkl_wVSfEsDc1tBs0svefPEdGaKDKLUtVCYyTOGEqC9UshrS-3LA2stGb38P7_GxRuSDhTwa0=w1080-h1080-s-no?authuser=0'
+                }
+                return res;
+            }
+            else if(res.status == '400'){
+                this.error = res.data ;
+                return res;
+            }
+        }
     }
 
-})
-export const QuestionStore = defineStore('Question' , {
-    state: ()=>{
-        return {
-            QuestionId:null,
-            CreatedBy:null,
-            QuestionTitle:null,
-            QestionType:null,
-            QuestionDetails:null,
-            QuestionUpvoteCount:0,
-            QuestionDownvoteCount:0,
-            ReportedCount:0,
-            IsPinned:false,
-            CreatedAt:null,
-            LastEdit:null,
-            error:null,
-            Hashtags:null,
-            Attachments:null,
-            AnswersList:null
-        }
-    },
-    getters: {
-        GetQuestionData : (state) => {state.QuestionId,state.CreatedBy,state.QuestionTitle,state.QestionType,state.QuestionDetails}
-    },
-    actions:{
-        async CreatePost(data){
-            const res = await POST('CreatePost' , data);
-            
-        }
-    }
 })

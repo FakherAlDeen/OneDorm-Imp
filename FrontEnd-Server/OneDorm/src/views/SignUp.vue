@@ -2,13 +2,11 @@
 import { ref } from 'vue'
 import HeaderSignLog from '../components/HeaderSignLog.vue'
 import {PageStore} from '../stores/PageStore'
-import Google_Icon from '../components/icons/Google_Icon.vue'
+import Google_Icon from '../assets/icons/Google_Icon.vue'
 import Alert from '../components/Alert.vue'
 import { ValidateEmpty , ValidateEmail , ValidatePassword} from '../Helpers/Validate'
 import { UserStore } from '../stores/UserStore'
 import router from '../router'
-
-
 
 const pageStore = PageStore();
 const userStore = UserStore();
@@ -42,8 +40,9 @@ async function CreatAccHandler(){
     Email:Email.value,
     Password:Password.value
   }
-  userStore.SignUp(data);
-  router.push('/NewsFeed');
+  const res = await userStore.SignUp(data);
+  if (res.status == '201')
+    router.push('/NewsFeed');
   console.log(userStore.GetUserData)
 }
 
@@ -66,10 +65,10 @@ async function CreatAccHandler(){
         <Alert classProp="alert-error"  v-if="error.length !=0"><template #Error_Message>{{ error[0] }}</template></Alert>
         <Alert classProp="alert-warning"  v-if="userStore.error!=null"><template #Error_Message>{{ userStore.error }}</template></Alert>
         <button class="Button_Primary my-2" :class="transitionClass" @click="CreatAccHandler">CREATE ACCOUNT</button>
-        <button class="Button_Primary_White my-2 focus:bg-[]" :class="transitionClass"><Google_Icon/>SIGN UP WITH GOOGLE</button>
+        <!-- <button class="Button_Primary_White my-2 focus:bg-[]" :class="transitionClass"><Google_Icon/>SIGN UP WITH GOOGLE</button> -->
       </div>
       <h2 class="StringPage rotate-[-90deg] w-fit fixed top-[38rem] right-[16.1rem]">{{(StringPage+' - ').repeat(4) }} <span class="font-bold">{{ StringPage }}</span> {{ (' - ' + StringPage) }}</h2>
-      <div class="ml-[20rem] mr-10 mt-4 h-[44.875rem] w-[26rem] bg-[url('./src/assets/Rectangle_5.svg')] Box_Shadow">
+      <div class="ml-[20rem] mr-10 mt-4 h-[44.875rem] w-[26rem] bg-[url('./src/assets/Rectangle_5.png')] Box_Shadow">
       </div>
     </nav>
     <div class="w-[40rem] h-[40rem] rounded-full top-[34rem] right-[90rem] Pattern fixed z-0"></div>

@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
-catch(error => handleError(error));
+// mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
+// catch(error => handleError(error));
 // Find -> Table
 // Insert (ds,ds) Table 
 const User = require('../Schemas/UserSchema');
 module.exports = {
-    CreateUser: (Data)=>{
+    CreateUser: async function (Data){
         const newRecord = new User (Data);
         newRecord.save().catch((err) => {
             console.log(err);
@@ -19,9 +19,9 @@ module.exports = {
             console.log(err);
         });
     },
-    DeleteUser: async function (Id){
+    DeleteUser: async function (UserId){
         await User.deleteOne(
-            {Id}
+            {UserId}
         ).catch((err) => {
             console.log(err);
         });

@@ -5,6 +5,9 @@ import { UserStore } from '../stores/UserStore'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import {CreatePost} from '../Helpers/APIs/PostAPIs'
 import Alert from './Alert.vue'
+import router from '../router';
+
+
 const userStore = UserStore();
 const editor = ref(null);
 const postContent = ref('');
@@ -53,10 +56,11 @@ const RemoveHashtag = (e)=>{
 const Hashtags_Handler = () =>{
     if (HashtagsArr.value.find(el => el =='#'+HashtagValue.value.trim().replaceAll(' ','_'))) return;
     HashtagsArr.value.push('#'+HashtagValue.value.trim().replaceAll(' ','_'));
+    HashtagValue.value="";
     console.log(HashtagsArr.value);
 }
 const wtv = ref('');
-const PublishHandler=()=>{
+const PublishHandler=async ()=>{
     error.value = [];
     if (PostTitle.value==""){
         error.value.push("Title shouldn't be empty!")
@@ -71,17 +75,27 @@ const PublishHandler=()=>{
         error.value.push("The should be at least 3 Hashtags!")
         return;
     }
+    const del = quill.getContents();
+    console.log (userStore.UserID);
     const data ={
         QuestionTitle: PostTitle.value,
-        QuestionDetails: quill.getContents(),
+        QuestionDetails: JSON.parse(JSON.stringify(del)),
         CreatedBy: userStore.UserID,
         Hashtags: HashtagsArr.value,
         QuestionDetailsHTML: quill.root.innerHTML,
     }
     console.log (quill.root.innerHTML)
     wtv.value = quill.root.innerHTML
-    const res =CreatePost(data);
-    // console.log (res);
+    const res =await CreatePost(data);
+    console.log (res.data.QuestionId);
+    router.push ({
+                        name: 'Post',
+                        params: {
+                            QuestionId: res.data.QuestionId,
+                        }
+                    })
+    
+    console.log (res);
 }
 
 </script>
@@ -119,7 +133,7 @@ const PublishHandler=()=>{
                     <h3 class="text-base font-semibold text-Alert"><spam class="font-extrabold">Tip:</spam> Use accurate ones!</h3>
                     <input type="text" placeholder="Hashtags" class="input w-full rounded-2 border border-2 border-black mb-5 self-center max-w-sm" v-model="HashtagValue" @keyup.enter="Hashtags_Handler"/>
                     <div class="card bg-white rounded-[0.5rem] border-2 border-black p-2 flex flex-row flex-wrap mb-4 max-w-sm" v-if="HashtagsArr.length !=0">
-                        <template v-for="(item, index) in HashtagsArr">
+                        <template v-for="(item, index) in HashtagsArr" :key="index">
                             <button class="btn btn-sm w-fit m-2 border-none font-light" :[key]="index" :class="[index%2? 'bg-main3' : 'bg-main1']" @click="RemoveHashtag(index)">{{ item }}</button>
                         </template>
                     </div>
@@ -128,7 +142,7 @@ const PublishHandler=()=>{
                     <h2 class="text-4xl font-bold font-Inter leading-10	text-black mb-5">Any Attachments?</h2>
                     <input type="file" ref="Attachments" @change="UplodHandler" class="file-input file-input-bordered border-2 border-black self-center mb-5 " />
                     <div class="card bg-white rounded-[0.5rem] border-2 border-black p-2 flex flex-row flex-wrap mb-4 max-w-sm" v-if="AttachmentsArr.length !=0">
-                        <template v-for="(item, index) in AttachmentsArr">
+                        <template v-for="(item, index) in AttachmentsArr" :key="index">
                             <button class="btn btn-sm w-fit m-2 border-none font-light" :[key]="index" :class="[index%2? 'bg-main3' : 'bg-main1']" @click="RemoveAttachment(index)">{{ item[0].name}}</button>
                         </template>
                     </div>
@@ -138,7 +152,7 @@ const PublishHandler=()=>{
         <Alert class="w-1/2 mx-auto mb-10" classProp="alert-error"  v-if="error.length !=0"><template #Error_Message>{{ error[0] }}</template></Alert>
         <div class="form-control w-10/12 mb-10 self-center">
             <div class="self-center">
-                <button class="btn mx-2 bg-Alert border-none btn-lg hover:shadow-BoxBlackSm" @click="Cancel">Cancel</button>
+                <button class="btn mx-2 bg-Alert border-none btn-lg hover:shadow-BoxBlackSm" @click="router.go(-1)">Cancel</button>
                 <button class="btn mx-2 bg-main3 border-2 border-black tracking-wider text-xl btn-lg hover:shadow-BoxBlackSm" @click="PublishHandler">Publish!</button>
             </div>
         </div>

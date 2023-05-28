@@ -1,9 +1,7 @@
-const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const auth = require("../MiddleWare/auth");
 const { v4: uuidv4 } = require('uuid');
-const {CreateUser, EditUser, DeleteUser, FindOneUserRecord} = require("../DatabaseMethods/UserMethods");
+const {CreateUser, FindOneUserRecord} = require("../DatabaseMethods/UserMethods");
 
 class AuthController {
     static async SignUp(req, res) {
@@ -14,15 +12,15 @@ class AuthController {
             const { Fname, Lname, Email, Password } = req.body;
 
             if (!(Email && Password && Fname && Lname)) {
-              res.status(400).send("All input is required");
+              return res.status(400).send("All input is required");
             }
 
             const oldUser = await FindOneUserRecord({ Email });
-            console.log (oldUser);
+            // console.log (oldUser);
             if (oldUser.length !=0) {
               return res.status(409).send("User Already Exist. Please Login");
             }
-            console.log (uuidv4())
+            // console.log (uuidv4())
             //Encrypt user password
             const encryptedPassword = await bcrypt.hash(Password, 10);
         
@@ -42,7 +40,7 @@ class AuthController {
             );
             // save user token
             user.token = token;
-            console.log (user);
+            // console.log (user);
             // return new user
             res.status(201).send(user);
           } catch (err) {
@@ -74,9 +72,6 @@ class AuthController {
         } catch (err) {
             console.log(err);
         }
-    }
-    static async wtv(req, res) {
-        res.send("brr3");
     }
 }
 

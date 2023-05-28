@@ -6,19 +6,18 @@ const QuestionSchema = new mongoose.Schema({
     QuestionType: {type:String, default:null},
     QuestionDetails: {type:Object, default:null},
     QuestionDetailsHTML: {type:String , default:null},
-    QuestionUpvoteCount: {type:Number, default:0},
-    QuestionDownVoteCount: {type:Number, default:0},
+    QuestionVotesCount: {type:Number , default:0},
     ReportedCount: {type:Number, default:0},
-    IsPinned: {type:Boolean, default:false},
+    AnswerCount: {type:Number , default:1},
     CreatedAt: {type: Date, default: Date.now()},
     LastEdit: {type:Date , default: Date.now()},
     Hashtags: [],
+    Images:{
+    },
     Attachments: [{
         Attachment:String // check later
     }],
-    AnswersList: [{
-        Id: {type:String , default:null}
-    }]
+    AnswersList: []
 });
 
 const Question = mongoose.model('Question', QuestionSchema);

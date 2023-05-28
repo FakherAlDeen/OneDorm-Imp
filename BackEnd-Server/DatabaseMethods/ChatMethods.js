@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
-catch(error => handleError(error));
+// mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
+// catch(error => handleError(error));
 const Chat = require('../Schemas/ChatSchema');
 module.exports = {
-    CreateChat: (Data)=>{
+    CreateChat: async function (Data){
         const newRecord = new Chat(Data);
         newRecord.save().catch((err) => {
             console.log(err);

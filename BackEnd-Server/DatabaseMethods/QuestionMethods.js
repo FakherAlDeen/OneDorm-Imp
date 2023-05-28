@@ -1,25 +1,25 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
-catch(error => handleError(error));
+// mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
+// catch(error => handleError(error));
 const Question = require('../Schemas/QuestionSchema');
 module.exports = {
-    CreateQuestion: (Data)=>{
+    CreateQuestion: async function (Data){
         const newRecord = new Question (Data);
         newRecord.save().catch((err) => {
             console.log(err);
         });
     },
-    EditQuestion: async function (Id,Data){
+    EditQuestion: async function (QuestionId,Data){
         await Question.findOneAndUpdate(
-            {Id},
+            {QuestionId},
             Data
         ).catch((err) => {
             console.log(err);
         });
     },
-    DeleteQuestion: async function (Id){
+    DeleteQuestion: async function (QuestionId){
         await Question.deleteOne(
-            {Id}
+            {QuestionId}
         ).catch((err) => {
             console.log(err);
         });
