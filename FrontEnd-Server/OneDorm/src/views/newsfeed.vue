@@ -215,7 +215,7 @@ const NextHandler = () =>{
             <div class="m-5">
             </div>
             <TransitionGroup name="list" tag="PostContainer">
-                <template v-for="(e,i) in PostsList" :key="e.QuestionId">
+                <template v-for="(e,i) in PostsList" :key="i">
                     <div class="">
                         <div v-if="i==0">
                             <PostContainer @click="ClickHanlder(e.QuestionId)"  class="transition ease-in-out hover:scale-110 cursor-pointer mt-10 scale-105 hover:none" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Hashtags="e.Hashtags" :Score="e.QuestionVotesCount"/>
