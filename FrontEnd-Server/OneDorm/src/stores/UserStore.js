@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import {GET,POST} from '../../Helpers/APIs'
 import VueCookies from 'vue-cookies'
+import { io } from "socket.io-client";
+
 
 export const UserStore = defineStore('User',{
     state: ()=>{
@@ -21,6 +23,7 @@ export const UserStore = defineStore('User',{
             UserDetails:{},
             UserVotes:{},
             AcademicStaff:'inactive',
+            socket:null,
         }
     },
     getters: {
@@ -77,6 +80,9 @@ export const UserStore = defineStore('User',{
         },
         async GetUser(Id){
             const res = await GET('GetUser/'+Id);
+            this.socket = io('ws://localhost:3001', { transports: ['websocket', 'polling', 'flashsocket'] });
+            this.socket.emit('join',Id);
+            console.log(this.socket);
             if(res.status=='201'){
                 const Data = res.data;
                 this.Fname = Data.Fname;

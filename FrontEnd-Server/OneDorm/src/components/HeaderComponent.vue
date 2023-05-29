@@ -15,6 +15,7 @@ import VueCookies from 'vue-cookies'
 import {ref} from 'vue'
 
 const SearchValue = ref();
+const showDrawer = ref (false);
 
 const SearchClickHanlder = async ()=>{
     console.log (SearchValue.value);
@@ -40,34 +41,48 @@ const Logout = ()=>{
     VueCookies.remove('Token')
     router.push('/Login')
 }
+const arr = ref ([]);
+for (let i=0;i<30;i++){
+    arr.value.push('#psut');
+}
 </script>
 
 <template>
     <div class="navbar bg-base-100 p-10">
+        <Transition name="slide-fade">
+            <div class="drawer-side fixed z-10 left-0 top-0 border-r-2 border-black w-screen" v-if="showDrawer">
+                <div class="flex">
+                    <div class="h-screen p-4 w-80 bg-black bg-opacity-20">
+                        <div class="ContHash bg-white shadow-BoxBlackSm border-2 border-black p-4 m-1">
+                            <h2 class="text-2xl font-extrabold mx-3 mt-2 border-b-2 pb-3 mb-3 border-black">My Hashtags</h2>
+                            <div class=" text-base-content h-[44.3vw] overflow-y-auto text-center">
+                                <template v-for="(e,i) in arr" :key="i">
+                                    <div 
+                                    class="btn btn-wide my-1 w-11/12 btn-success bg-main3 text-white" 
+                                    :class="[i%2==0?'':'']">
+                                    {{e + ' ' +i}}
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grow bg-black bg-opacity-20 h-screen" @click="showDrawer=false"></div>
+            </div>
+        </Transition>
         <div class="navbar-start">
             <div class="mr-9">
                 <a class="w-fit h-fit btn btn-ghost p-0" @click="router.push('/NewsFeed')"><OneDorm class="border-black border-2 w-20 h-20"></OneDorm></a>
             </div>
             <div class="dropdown dropdown-center">
-                <label tabindex="0" class="btn btn-ghost rounded-none">
+                <label tabindex="0" class="btn btn-ghost rounded-none" @click = "showDrawer=!showDrawer">
                     <div class="indicator">
                         <div class="flex flex-row gap-3">
                             <p class="font-semibold text-base text-black">MY HASHTAGS</p>
-                            <Arrow_Bottom_Black class="self-center"/>
+                            <Arrow_Bottom_Black class="self-center " :class="[showDrawer?'rotate-90':'rotate-[-90deg]']"/>
                         </div>
                     </div>
                 </label>
-                <div tabindex="0" class="mt-3 card card-compact dropdown-content w-52 border-black bg-main2 shadow rounded-none border-2	">
-                    <div class="card-body">
-                    <span class="font-bold text-xl text-black">Your Hashatgs!</span>
-                    <div class="divider before:bg-black after:bg-black m-0"></div> 
-                    <ul class="menu bg-base-100 w-full rounded-box overflow-y-auto">
-                        <li><a>Item 1</a></li>
-                        <li><a>Item 2</a></li>
-                        <li><a>Item 3</a></li>
-                    </ul>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="navbar-center">
@@ -120,3 +135,27 @@ const Logout = ()=>{
         </div>
     </div>
 </template>
+
+<style scoped>
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+    transition: all 0.3s ease-in-out;
+
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(-20px);
+  opacity: 0;
+}
+
+.ContHash{
+    animation-delay: 10s;
+    animation: mymove 0.5s;
+}
+
+@keyframes mymove {
+    from {box-shadow: none;}
+    to {box-shadow:0.5rem 0.5rem #000000;}
+}
+</style>
