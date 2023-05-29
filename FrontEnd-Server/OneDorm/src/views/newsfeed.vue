@@ -215,15 +215,33 @@ const NextHandler = () =>{
             <div class="m-5">
             </div>
             <TransitionGroup name="list" tag="PostContainer">
-                <template v-for="(e,i) in PostsList" :key="i">
+                <template v-for="(e,i) in PostsList" :key="e.QuestionId">
                     <div class="">
                         <div v-if="i==0">
-                            <PostContainer @click="ClickHanlder(e.QuestionId)"  class="transition ease-in-out hover:scale-110 cursor-pointer mt-10 scale-105 hover:none" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Hashtags="e.Hashtags" :Score="e.QuestionVotesCount"/>
+                            <PostContainer 
+                            @click="ClickHanlder(e.QuestionId)"  
+                            class="transition ease-in-out hover:scale-110 cursor-pointer mt-10 scale-105 hover:none" 
+                            :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" 
+                            :AnswerCount="e.AnswersList.length" :postFull="false" 
+                            :mine="e.CreatedBy == UserStore().UserID" 
+                            :PostContent="turnfun(e.QuestionDetailsHTML)" 
+                            :Hashtags="e.Hashtags" 
+                            :Score="e.QuestionVotesCount"/>
                             <div class="w-1/2 mx-auto border-b-4 border-Grey pb-3">
                                 <h2 class="text-2xl font-[1000] text-center text-Grey tracking-wide leading-8">MORE FOR YOU</h2>
                             </div>
                         </div>
-                        <PostContainer v-else @click="ClickHanlder(e.QuestionId)" class="cursor-pointer transition ease-in-out hover:scale-105"  :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
+                        <PostContainer v-else 
+                        @click="ClickHanlder(e.QuestionId)" 
+                        class="cursor-pointer transition ease-in-out hover:scale-105"  
+                        :CreatedBy="e.CreatedBy" 
+                        :postTitle="e.QuestionTitle" 
+                        :AnswerCount="e.AnswersList.length" 
+                        :Hashtags="e.Hashtags" 
+                        :postFull="false" 
+                        :mine="e.CreatedBy == UserStore().UserID" 
+                        :PostContent="turnfun(e.QuestionDetailsHTML)" 
+                        :Score="e.QuestionVotesCount"/>
     
                     </div>
                 </template>

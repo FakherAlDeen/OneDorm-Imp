@@ -140,13 +140,13 @@ const ShowAcademicModal = ref (false);
                 </div>
                 <div v-else class="flex flex-col gap-2 my-3">
                     <h2 class="text-2xl font-base">
-                        You Are Already an 
+                        You are already an 
                         <span class="text-main3 font-extrabold">
-                            Acedemic Staff!
+                            Academic Staff!
                         </span>
                     </h2>
                     <h2 class="text-base font-base">
-                        Enoy the perks!
+                        Enjoy the perks!
                     </h2>
                 </div>
             </template>
@@ -169,7 +169,7 @@ const ShowAcademicModal = ref (false);
                 </div>
                 <div class="grow flex flex-col gap-10">
                     <div class="grow p-5 bg-Grey2 shadow-BoxBlackSm shadow-Grey border-2 border-black hover:translate-x-[0.45rem] transition-all duration-150 ease-in-out hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">
-                        <h1 class="text-4xl font-[1000] mb-4">Personal Details</h1>
+                        <h1 class="text-4xl font-[1000] mb-4">Personal Details </h1>
                         <div class="flex flex-col gap-5 relative">
                             <div class="flex gap-10 justify-center">
                                 <div class="form-control w-full">
