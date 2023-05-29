@@ -24,3 +24,11 @@ export async function ApproveRequest (data){ // RequestId
             return res.data;
     }
 }
+export async function DenyRequest (data){ // RequestId
+        const res = await POST ('DenyRequest',data);
+        if (res.status=='201'){
+                return res;
+        }else {
+                return res.data;
+        }
+    }

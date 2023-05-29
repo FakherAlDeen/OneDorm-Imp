@@ -24,7 +24,7 @@ class RequestController {
             console.log(err);
         }
     }
-    static async GetRequests(){
+    static async GetRequests(req, res){
         try{
             const request = await FindRequests();
             res.status(201).send(request)
@@ -41,6 +41,21 @@ class RequestController {
             }
             const request = await FindOneRequestRecord({RequestId});
             await EditUser(request[0].RequesterId , {VerificationState : "active"} )
+            await DeleteRequest(RequestId);
+            res.status(201).send(request)
+        } catch (err) {
+            res.status(403).send(err) 
+            console.log(err);
+        }
+    }
+    static async DenyRequest(req, res){
+        try{
+            const { RequestId } = req.body; 
+            if (!(RequestId)) {
+              return res.status(400).send("Send all the fields");
+            }
+            const request = await FindOneRequestRecord({RequestId});
+            await EditUser(request[0].RequesterId , {VerificationState : "denied"} )
             await DeleteRequest(RequestId);
             res.status(201).send(request)
         } catch (err) {

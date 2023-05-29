@@ -66,6 +66,13 @@ const router = createRouter({
       beforeEnter: isAuthenticated,
       component: () => import('../views/UserProfile.vue')
     }
+    ,
+    {
+      path:'/Admin',
+      name: 'Admin',
+      beforeEnter: isAuthenticated,
+      component: () => import('../views/AdminPanel.vue')
+    }
   ]
 })
 

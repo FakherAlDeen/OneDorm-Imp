@@ -5,12 +5,18 @@ import { UserStore } from '../stores/UserStore';
 import ModalComponent from '../components/ModalComponent.vue';
 import FormData from 'form-data';
 import {UploadImage} from '../Helpers/APIs/UserAPIs'
+import {CreateRequest} from '../Helpers/APIs/RequestAPIs'
+import Alert from '../components/Alert.vue';
 
 const isEdit = ref (true);
 const Fname = ref (UserStore().Fname);
 const Lname = ref (UserStore().Lname);
-const Uni = ref(UserStore().UserDetails.University);
-const Major = ref(UserStore().UserDetails.Major);
+const Uni = ref();
+const Major = ref();
+if (UserStore().UserDetails){
+    Uni.value = ref(UserStore().UserDetails.University);
+    Major.value = ref(UserStore().UserDetails.Major);
+}
 const username = ref (UserStore().Username);
 const email = ref (UserStore().Email);
 const ShowModal = ref (false);
@@ -36,10 +42,38 @@ const Password2 = ref();
 const ChangePassword = () =>{
     console.log (Password.value + " " + Password2.value);
 }
+const errorAcademicModal = ref ();
+const MessageValueForAcademic= ref ('');
+const SendRequestAcademic = async () =>{
+    errorAcademicModal.value='';
+    if (MessageValueForAcademic.value==''){
+        errorAcademicModal.value= "Please Insert the message!";
+        return ;
+    }
+    const data = {
+        UserId:UserStore().UserID,
+        RequestMessage:MessageValueForAcademic.value
+    }
+    console.log (data);
+    const res = await CreateRequest(data);
+    console.log ("res",res);
+    if (res.status ==201){
+        UserStore().AcademicStaff='pending';
+    }
+    console.log (UserStore().AcademicStaff);
+    ShowAcademicModal.value= false;
+}
+const ShowAcademicModal = ref (false);
 </script>
 <template>
     <main>
-        <ModalComponent @emit-close="closeModal" :class="[ShowModal? 'modal-open' : '']" @Func1="ChangePassword" ModalContent="Please change your password by writing your old one then the new one! Yes as simple as that!" ModalContentHeader="Change your Password:" Btn1Cont="Change!" :with-btn1="true">
+        <ModalComponent 
+        @emit-close="closeModal" 
+        :class="[ShowModal? 'modal-open' : '']" 
+        @Func1="ChangePassword" 
+        ModalContent="Please change your password by writing your old one then the new one! Yes as simple as that!" 
+        ModalContentHeader="Change your Password:" Btn1Cont="Change!" 
+        :with-btn1="true">
         <template #content>
             <div class="flex flex-col gap-2 my-3">
                 <div class="flex gap-10 justify-start">
@@ -69,6 +103,53 @@ const ChangePassword = () =>{
                 </div>
             </div>
         </template>
+        </ModalComponent>
+
+        <ModalComponent 
+        @emit-close="ShowAcademicModal=false" 
+        :ModalContent = "UserStore().AcademicStaff == 'inactive'?'Please note that an admin would read your request and evaluate it by contacting you via email then give you the role.':''"
+        ModalContentHeader="Request Academic Staff role"  
+        :class="[ShowAcademicModal? 'modal-open' : '']" 
+        @Func1="SendRequestAcademic"  Btn1Cont="Send Request" 
+        :with-btn1="UserStore().AcademicStaff == 'inactive' || UserStore().AcademicStaff == 'denied'">
+            <template #content>
+                <div v-if="UserStore().AcademicStaff == 'inactive' || UserStore().AcademicStaff == 'denied'" class="flex flex-col gap-2 my-3">
+                    <div v-if="UserStore().AcademicStaff == 'denied'" class="mb-4">
+                        <h2  class="text-2xl font-base">Your Request status is 
+                            <span class="text-Alert font-extrabold">
+                                Denied.
+                            </span>
+                        </h2>
+                        <h2 class="text-base font-base">
+                            Feel free to submit another request.
+                        </h2>
+
+                    </div>
+                    <textarea v-model="MessageValueForAcademic" class="textarea textarea-bordered" placeholder="Why do you think we should give you the role"></textarea>
+                    <Alert classProp="alert-warning"  v-if="errorAcademicModal"><template #Error_Message>{{ errorAcademicModal }}</template></Alert>
+                </div>
+                <div v-else-if="UserStore().AcademicStaff == 'pending'" class="flex flex-col gap-2 my-3">
+                    <h2 class="text-2xl font-base">Your Request status is still 
+                        <span class="text-main1 font-extrabold">
+                            pending.
+                        </span>
+                    </h2>
+                    <h2 class="text-base font-base">
+                        Please wait till one of our admins to approve or deny.
+                    </h2>
+                </div>
+                <div v-else class="flex flex-col gap-2 my-3">
+                    <h2 class="text-2xl font-base">
+                        You Are Already an 
+                        <span class="text-main3 font-extrabold">
+                            Acedemic Staff!
+                        </span>
+                    </h2>
+                    <h2 class="text-base font-base">
+                        Enoy the perks!
+                    </h2>
+                </div>
+            </template>
         </ModalComponent>
         <HeaderComponent></HeaderComponent>
         <div class="w-5/6 h-full mx-auto">
@@ -178,7 +259,7 @@ const ChangePassword = () =>{
                         </div>
                         <div class="flex mt-5 gap-10 justify-center">
                             <div class="form-control w-1/3">
-                                <button class="focus:none btn btn-success bg-main3 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Request Academic Staff Role</button>
+                                <button @click="ShowAcademicModal = true" class="focus:none btn btn-success bg-main3 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Request Academic Staff Role</button>
                             </div>
                             <div class="form-control w-1/3">
                                 <button class="focus:none btn btn-error bg-Alert border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Delete Account :c</button>

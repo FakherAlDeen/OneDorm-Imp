@@ -20,6 +20,7 @@ export const UserStore = defineStore('User',{
             image:'https://i.pravatar.cc/300',
             UserDetails:{},
             UserVotes:{},
+            AcademicStaff:'inactive',
         }
     },
     getters: {
@@ -35,6 +36,7 @@ export const UserStore = defineStore('User',{
                 this.Fname = Data.Fname;
                 this.Lname = Data.Lname;
                 this.Email = Data.Email;
+                this.AcademicStaff = Data.VerificationState?Data.VerificationState:'inactive';
                 // this.UserVotes = Data.UserVotes;
                 this.UserToken = Data.token;
                 // this.Username = Data.Username;
@@ -56,7 +58,8 @@ export const UserStore = defineStore('User',{
                 this.Lname = Data.Lname;
                 this.Email = Data.Email;
                 this.UserVotes = Data.UserVotes;
-                this.UserDetails= Data.UserDetails
+                this.UserDetails= Data.UserDetails;
+                this.AcademicStaff = Data.VerificationState?Data.VerificationState:'inactive';
                 this.Username = Data.Username;
                 if (Data.Image){
                     console.log (Data.Image);
@@ -82,6 +85,7 @@ export const UserStore = defineStore('User',{
                 this.UserDetails= Data.UserDetails
                 this.Username = Data.Username;
                 this.UserVotes = Data.UserVotes;
+                this.AcademicStaff = Data.VerificationState?Data.VerificationState:'inactive';
                 if (Data.Image){
                     console.log (Data.Image);
                     this.image =`data:${Data.Image.contentType};base64,${Data.Image.image}`
