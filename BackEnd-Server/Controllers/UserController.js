@@ -1,4 +1,5 @@
 const { EditUser, DeleteUser, FindOneUserRecord} = require("../DatabaseMethods/UserMethods");
+const bcrypt = require("bcryptjs");
 
 class UserController {
     static async GetUser(req, res) {
@@ -67,6 +68,29 @@ class UserController {
             else{
                 return res.status(200).send("Username is taken")
             }
+        }
+        catch(err){
+            res.status(400).send(err)
+            console.log(err)
+        }
+    }
+    static async ChangePassword(req , res){
+        try{
+        
+            const {UserId , OldPassword , NewPassword} = req.body ;
+            const User = await FindOneUserRecord({UserId}) ;
+            if(User.length == 0){
+                return res.status(401).send("User not found");
+            }
+            const Password = User[0].Password;
+            // console.log(OldPassword , NewPassword , Password , encryptedPassword)
+            if(await bcrypt.compare(OldPassword , Password)){
+                const Pass = await bcrypt.hash(NewPassword, 10);
+                console.log(Pass);
+                await EditUser(UserId , {Password:Pass});
+                return res.status(201).send("Done");
+            }
+            return res.status(402).send('Old Password does not match your password');
         }
         catch(err){
             res.status(400).send(err)

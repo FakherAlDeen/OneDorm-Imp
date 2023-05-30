@@ -4,27 +4,24 @@ import HeaderComponent from '../components/HeaderComponent.vue';
 import { UserStore } from '../stores/UserStore';
 import ModalComponent from '../components/ModalComponent.vue';
 import FormData from 'form-data';
-import {UploadImage} from '../Helpers/APIs/UserAPIs'
+import {EditProfile, GetUser, UploadImage, ChangePassword} from '../Helpers/APIs/UserAPIs'
 import {CreateRequest} from '../Helpers/APIs/RequestAPIs'
 import Alert from '../components/Alert.vue';
+import { ValidatePassword } from '../Helpers/Validate';
 
 const isEdit = ref (true);
 const Fname = ref (UserStore().Fname);
 const Lname = ref (UserStore().Lname);
-const Uni = ref();
-const Major = ref();
-if (UserStore().UserDetails){
-    Uni.value = ref(UserStore().UserDetails.University);
-    Major.value = ref(UserStore().UserDetails.Major);
-}
+const Uni = ref(UserStore().UserDetails.University);
+const Major = ref(UserStore().UserDetails.Major);
 const username = ref (UserStore().Username);
 const email = ref (UserStore().Email);
 const ShowModal = ref (false);
-const phone = ref ();
-const Address = ref ();
-const city = ref ();
-const Country = ref ();
-const DateOfBirth= ref();
+const phone = ref (UserStore().Phonenumber);
+const Address = ref (UserStore().UserDetails.Address);
+const City = ref (UserStore().UserDetails.City);
+const Country = ref (UserStore().UserDetails.Country);
+
 const closeModal = ()=>{
     ShowModal.value = false;
 }
@@ -39,8 +36,57 @@ const imageHandler = async (e)=>{
 const OldPassword = ref ();
 const Password = ref ();
 const Password2 = ref();
-const ChangePassword = () =>{
-    console.log (Password.value + " " + Password2.value);
+const Match = ref(''); 
+const ChangePass = async() =>{
+    Match.value = '' ;
+    console.log(Password.value , Password2.value);
+    if(Password.value != Password2.value){
+        Match.value = 'Password does not match';
+        return;
+    }
+    if(ValidatePassword(Password.value)){
+        Match.value = ValidatePassword(Password.value);
+        return ;
+    }
+    const data = {
+        UserId: UserStore().UserID,
+        OldPassword: OldPassword.value,
+        NewPassword: Password.value 
+    }
+    ///
+    const res = await ChangePassword(data) ;
+    console.log(res)
+    if(res.status != '201'){
+        Match.value = res.data;
+    }
+    else{
+        closeModal();
+    }
+    // console.log(res)
+    // res.status!
+}
+let curr = UserStore().DateOfBirth;
+let DateOfBirth = ref(curr?curr.substring(0,10):'');
+const EditProfileInfo = async() =>{  
+    const UserId = UserStore().UserID;
+    const data = {
+        UserId,
+        Data : {
+            Fname: Fname.value?Fname.value:"",
+            Lname: Lname.value?Lname.value:"",
+            Phonenumber: phone.value?phone.value:"",
+            DateOfBirth: DateOfBirth.value?DateOfBirth.value:"",
+            UserDetails: {
+                University:Uni.value?Uni.value:"",
+                Major: Major.value?Major.value:"",
+                Country: Country.value?Country.value:"",
+                City: City.value?City.value:"",
+                Address: Address.value?Address.value:""
+            }
+        }
+    }
+    const res = await EditProfile(data);
+    isEdit.value = !isEdit.value;
 }
 const errorAcademicModal = ref ();
 const MessageValueForAcademic= ref ('');
@@ -70,7 +116,7 @@ const ShowAcademicModal = ref (false);
         <ModalComponent 
         @emit-close="closeModal" 
         :class="[ShowModal? 'modal-open' : '']" 
-        @Func1="ChangePassword" 
+        @Func1="ChangePass" 
         ModalContent="Please change your password by writing your old one then the new one! Yes as simple as that!" 
         ModalContentHeader="Change your Password:" Btn1Cont="Change!" 
         :with-btn1="true">
@@ -81,7 +127,7 @@ const ShowAcademicModal = ref (false);
                         <label class="label">
                             <span class="label-text text-lg font-bold">Your Old Password:</span>
                         </label>
-                        <input v-model="OldPassword" type="text" placeholder="Old Password" class="input input-bordered w-full" />
+                        <input v-model="OldPassword" type="password" placeholder="Old Password" class="input input-bordered w-full" />
                     </div>
                 </div>
                 <div class="flex gap-10 justify-start">
@@ -89,18 +135,19 @@ const ShowAcademicModal = ref (false);
                         <label class="label">
                             <span class="label-text text-lg font-bold">Your New Password:</span>
                         </label>
-                        <input v-model="Password" type="text" placeholder="New Password" class="input input-bordered w-full" />
+                        <input v-model="Password" type="password" placeholder="New Password" class="input input-bordered w-full" />
                     </div>
                     <div class="form-control w-1/2">
                         <label class="label">
                             <span class="label-text text-lg font-bold">Repeat it:</span>
                         </label>
-                        <input v-model="Password2" type="text" placeholder="Repeat" class="input input-bordered w-full" />
+                        <input v-model="Password2" type="password" placeholder="Repeat" class="input input-bordered w-full" />
                     </div>
                 </div>
                 <div class="w-full">
                     <a class="text-Alert">Forget password?</a>
                 </div>
+                <Alert classProp="alert-error"  v-if="Match!=''"><template #Error_Message> {{ Match }} </template></Alert>
             </div>
         </template>
         </ModalComponent>
@@ -162,7 +209,7 @@ const ShowAcademicModal = ref (false);
 
                     </div>
                     <input hidden id="Image" type="file" name="Image" @change="imageHandler" accept="image/*" />
-                    <label for="Image" class="focus:none btn btn-success bg-main3 shadow-main2 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Edit Profile Pecture</label>
+                    <label for="Image" class="focus:none btn btn-success bg-main3 shadow-main2 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Edit Profile Picture</label>
                     <button @click="isEdit = !isEdit" class="mt-5 focus:none btn btn-error bg-Alert shadow-Alert border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Edit Profile Details</button>
                     <button @click="ShowModal= true" class="mt-5 focus:none btn btn-warning bg-main1 shadow-main1 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Change Password</button>
 
@@ -216,7 +263,7 @@ const ShowAcademicModal = ref (false);
                                     <label class="label">
                                         <span class="label-text text-lg font-bold">City:</span>
                                     </label>
-                                    <input type="text" v-model="city" placeholder="Amman" class="input input-bordered w-full" :disabled="isEdit" />
+                                    <input type="text" v-model="City" placeholder="Amman" class="input input-bordered w-full" :disabled="isEdit" />
                                 </div>
                                 
                             </div>
@@ -236,7 +283,7 @@ const ShowAcademicModal = ref (false);
                             </div>
                             <div class="flex justify-center" v-if="!isEdit">
 
-                                <button @click="isEdit = !isEdit" class="mt-5 focus:none btn btn-error bg-Alert shadow-Alert border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Done?</button>
+                                <button @click="EditProfileInfo" class="mt-5 focus:none btn btn-error bg-Alert shadow-Alert border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Done?</button>
                             </div>
 
                         </div>
