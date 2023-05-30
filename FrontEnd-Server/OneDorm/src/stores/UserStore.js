@@ -20,10 +20,17 @@ export const UserStore = defineStore('User',{
             UserToken:null,
             error:null,
             image:'https://i.pravatar.cc/300',
-            UserDetails:{},
+            UserDetails:{
+                University:'',
+                Major:'',
+                Country:'',
+                City:'',
+                Address:''
+            },
             UserVotes:{},
             AcademicStaff:'inactive',
             socket:null,
+            DateOfBirth:null,
         }
     },
     getters: {
@@ -91,6 +98,8 @@ export const UserStore = defineStore('User',{
                 this.UserDetails= Data.UserDetails
                 this.Username = Data.Username;
                 this.UserVotes = Data.UserVotes;
+                this.DateOfBirth = Data.DateOfBirth;
+                this.Phonenumber = Data.Phonenumber;
                 this.AcademicStaff = Data.VerificationState?Data.VerificationState:'inactive';
                 if (Data.Image){
                     console.log (Data.Image);
