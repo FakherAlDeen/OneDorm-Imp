@@ -11,8 +11,13 @@ import { GetUser } from '../Helpers/APIs/UserAPIs';
 
 const imageCreator = ref ('Loading');
 const props = defineProps({
-    AnswerId:String
+    AnswerId:String,
+    PostId:String,
+    PostCreator:String,
 })
+console.log ('post Id',props.PostId);
+console.log ('Creator Id',props.PostCreator);
+// UserStore().socket.emit('NotificationSend','boobs');
 const mine =  ref (false);
 const UserVotes= UserStore().UserVotes;
 const MyVotes = ref (0);
@@ -140,7 +145,7 @@ const DeletePostHanlder = async ()=>{
                 <QuillComp @emit-ans-i-d="EmitHanlder" :AnswerOfAnswerId="AnswerId"/>
             </div>
             <template v-for="(e,i) in AnswerLists" :key="i">
-                <AnswersSection :AnswerId="e"></AnswersSection>
+                <AnswersSection :PostCreator="PostCreator" :PostId="PostId" :AnswerId="e"></AnswersSection>
             </template>
         </div>
     </div>

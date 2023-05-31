@@ -5,7 +5,8 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import { UserStore } from '../stores/UserStore'
 import {CreateAnswer} from '../Helpers/APIs/PostAPIs'
 const props = defineProps({
-    QuestionId:String
+    QuestionId:String,
+    PostCreator:String,
 })
 
 const emit =defineEmits({
@@ -53,6 +54,14 @@ const CommentClickHandler = async () =>{
     emit('EmitAnsID', res.data.AnswerId);
     console.log(res);
     quill.setContents([{ insert: '\n' }]);
+    const notification = {
+        QuestionId: props.QuestionId,
+        PostCreator:props.PostCreator,
+        Type:'Question',
+        AnswerCreatorName : UserStore().Fname + " " + UserStore().Lname,
+        AnswerCreator: UserStore().UserID,
+    }
+    UserStore().socket.emit('NotificationSend',notification);
 };
 
 </script>

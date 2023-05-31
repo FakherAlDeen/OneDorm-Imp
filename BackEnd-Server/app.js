@@ -1,5 +1,9 @@
 const express = require('express');
-const { createServer } = require("http"); // you can use https as well
+const { createServer } = require("http"); 
+const { CreateNotification } = require('./DatabaseMethods/NotificationMethods')
+const { EditUser,FindOneUserRecord } = require ('./DatabaseMethods/UserMethods')
+const { v4: uuidv4 } = require('uuid');
+
 const socketIo = require("socket.io");
 const app = express();
 const server = createServer(app);
@@ -25,9 +29,29 @@ io.on('connection', (socket) => {
     socket.join(msg);
     // console.log (socket.rooms)
   });
+  socket.on ('NotificationSend',async (msg)=>{
+    if (msg.Type=='Question'){
+      try{
+        let NotificationId = uuidv4();
+        const notification = {
+          NotificationId,
+          NotificationCreater:msg.PostCreator,
+          NotificationTitle:'Answer created by '+msg.AnswerCreatorName,
+          NotificationDetails:{
+            redirectLink: msg.QuestionId
+          }
+        }
+        await CreateNotification(notification);
+        await EditUser(msg.PostCreator,{$push: { NotificationList: NotificationId }})
+        io.to(msg.PostCreator).emit('Notifications','GetNotification');
+      } catch (e){
+        console.log (e);
+      }
+    }
+    console.log ('msg',msg);
+  })
 
 });
-// console.log(io);
 app.use((req, res, next) => {
   req.io = io;
   return next();

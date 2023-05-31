@@ -36,7 +36,7 @@ const ClickHanlderShowList = ()=>{
     ShowList.value = ! ShowList.value;
 }
 const userStore = UserStore();
-console.log (userStore.image)
+// console.log (userStore.image)
 const Logout = ()=>{
     VueCookies.remove('Token')
     router.push('/Login')
@@ -108,7 +108,7 @@ for (let i=0;i<30;i++){
                 <ChatIcon/>
             </div>
             <div class="btn btn-ghost px-1 indicator">
-                <span class="indicator-item badge badge-secondary top-2 right-2 text-sm bg-Alert border-Alert">99</span>
+                <span class="indicator-item badge badge-secondary top-2 right-2 text-sm bg-Alert border-Alert" >99</span>
                 <NotifcationIcon/>
             </div>
             <div class="flex h-20 bg-black flex place-content-center static gap-2 ml-4">

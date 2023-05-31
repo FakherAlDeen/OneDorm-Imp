@@ -20,9 +20,8 @@ const UserSchema = new mongoose.Schema({
         Country:''
     }},
     UserVotes:{type:Object , default:{'test':'-1'}},
-    NotificationList:[{
-        Id: {type:String, default: null}
-    }],
+    NotificationList:[
+    ],
     PostList:[],
     AnswersList:[],
     ChatList:[{
