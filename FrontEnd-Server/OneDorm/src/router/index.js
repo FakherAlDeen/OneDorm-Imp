@@ -42,6 +42,12 @@ const router = createRouter({
       component: () => import('../views/CreatePost.vue')
     },
     {
+      path:'/EditPost/:QuestionId',
+      name: 'EditPost',
+      beforeEnter: isAuthenticated,
+      component: () => import('../views/EditPost.vue')
+    },
+    {
       path:'/Post/:QuestionId',
       name: 'Post',
       beforeEnter: isAuthenticated,
