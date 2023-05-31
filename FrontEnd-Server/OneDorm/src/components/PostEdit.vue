@@ -3,28 +3,38 @@ import { onMounted, ref , onBeforeMount } from 'vue';
 import Quill from 'quill';
 import { UserStore } from '../stores/UserStore'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
-import {CreatePost} from '../Helpers/APIs/PostAPIs'
+import {CreatePost, EditPost} from '../Helpers/APIs/PostAPIs'
 import Alert from './Alert.vue'
 import router from '../router';
+import { GetPost} from '../Helpers/APIs/PostAPIs';
 
 const props = defineProps({
     PostID:String,
-    postTitle:String,
-    Hashtags:Array,
-    PostContent:String,
 })
 const userStore = UserStore();
-const HashtagValue= ref('');
-const HashtagsArr = ref(props.Hashtags);
+const HashtagValue= ref();
+const HashtagsArr = ref([]);
+const postcont = ref();
 const delta =ref(null);
 const Attachments = ref (null);
 const AttachmentsArr = ref ([]);
 const error = ref([]);
-const PostTitle = ref(props.postTitle);
-console.log (props.postTitle);
+const PostTitle = ref();
 let quill;
+let PostData = 0;
 
-onMounted(()=>{
+onBeforeMount(async ()=>{
+    // console.log(props.PostID);
+    PostData = await GetPost(props.PostID);
+    if (PostData.status !='200') {Error.value=PostData.data; return}
+    // console.log (PostData);
+    PostData = PostData.data 
+    PostTitle.value = PostData.PostData.QuestionTitle;
+    postcont.value = PostData.PostData.QuestionDetailsHTML;
+    // postcont.value=postcont.value.replaceAll('<p>', "<p class='text-lg my-1'>");
+    // postcont.value=postcont.value.replaceAll('<br>', "");
+    console.log(postcont.value)
+    HashtagsArr.value = PostData.PostData.Hashtags;
     quill = new Quill(document.querySelector('#editor'), {
         modules: {
           toolbar: [
@@ -39,10 +49,9 @@ onMounted(()=>{
         },
         placeholder: 'WRITE YOUR QUESTION!',
         theme: 'snow'
-      }
-      )
-        delta.value = quill.getContents();
-        quill.root.innerHTML = props.PostContent;
+    })
+    delta.value = quill.getContents();
+    quill.root.innerHTML = postcont.value;
 })
 const UplodHandler = () =>{
     AttachmentsArr.value.push (Attachments.value.files)
@@ -82,23 +91,24 @@ const PublishHandler=async ()=>{
     const del = quill.getContents();
     console.log (userStore.UserID);
     const data ={
-        QuestionTitle: PostTitle.value,
-        QuestionDetails: JSON.parse(JSON.stringify(del)),
-        CreatedBy: userStore.UserID,
-        Hashtags: HashtagsArr.value,
-        QuestionDetailsHTML: quill.root.innerHTML,
+        Id: props.PostID,
+        Data:{
+            QuestionTitle: PostTitle.value,
+            QuestionDetails: JSON.parse(JSON.stringify(del)),
+            Hashtags: HashtagsArr.value,
+            QuestionDetailsHTML: quill.root.innerHTML,
+        }
     }
     console.log (quill.root.innerHTML)
     wtv.value = quill.root.innerHTML
-    const res =await CreatePost(data);
-    console.log (res.data.QuestionId);
+    const res =await EditPost(data);
+    // console.log (res.data.QuestionId);
     router.push ({
-                        name: 'Post',
-                        params: {
-                            QuestionId: res.data.QuestionId,
-                        }
-                    })
-    
+        name: 'Post',
+        params: {
+            QuestionId: props.PostID,
+        }
+    })
     console.log (res);
 }
 

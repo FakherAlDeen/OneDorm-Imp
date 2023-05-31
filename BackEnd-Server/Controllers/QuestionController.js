@@ -79,6 +79,26 @@ class QuestionController {
         if (!Id || JSON.stringify(Data) === "{}") {
           return res.status(400).send("Send all the fields");
         }
+        let categories = []
+        const Hashtags = Data.Hashtags;
+        for(let i = 0 ; i<Hashtags.length ; i++){
+          const oldHashtag = await FindOneCategoryRecord({CategoryTitle:Hashtags[i]});
+          let CategoryId = uuidv4() ;
+          if (oldHashtag.length == 0) {
+            const category = {
+              CategoryId,
+              CategoryTitle : Hashtags[i]
+            }
+            await CreateCategory(category)
+          }
+          else{
+            CategoryId = oldHashtag[0].CategoryId
+          }
+          categories.push(CategoryId);
+        }
+        for(let i = 0 ; i<categories.length ; i++){
+          await EditCategory(categories[i] , {$push: { PostIds: Id }}  )
+        }
         await EditQuestion(Id , Data);
         res.status(201).send("Question edited");
       } catch (err) {
