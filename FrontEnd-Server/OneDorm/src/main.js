@@ -6,6 +6,7 @@ import router from './router'
 import VueCookies from 'vue-cookies'
 import './assets/main.css'
 import vue3GoogleLogin from 'vue3-google-login'
+import PostEdit from './components/PostEdit.vue'
 
 const app = createApp(App)
 app.use(vue3GoogleLogin, {
@@ -21,3 +22,4 @@ app.use(createPinia())
 app.use(router)
 
 app.mount('#app')
+app.component('PostEdit',PostEdit)

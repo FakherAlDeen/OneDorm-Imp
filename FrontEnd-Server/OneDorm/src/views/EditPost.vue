@@ -35,6 +35,6 @@ onBeforeMount(async()=>{
     <main>
         <HeaderComponent></HeaderComponent>
         <!-- <button class="Button_Primary my-2" :class="transitionClass" @click="CreatePostClick">Share</button> -->
-        <PostEdit :PostID="PostID" :postTitle="postTitle" :Hashtags="Hashtags" :PostContent="postcont"></PostEdit>
+        <PostEdit :PostID="PostID" :postTitle="postTitle" :Hashtags="Hashtags" :PostContent="postcont" />
     </main>
 </template>

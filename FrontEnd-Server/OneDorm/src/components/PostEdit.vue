@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref , watch , onBeforeMount } from 'vue';
+import { onMounted, ref , onBeforeMount } from 'vue';
 import Quill from 'quill';
 import { UserStore } from '../stores/UserStore'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
@@ -7,32 +7,24 @@ import {CreatePost} from '../Helpers/APIs/PostAPIs'
 import Alert from './Alert.vue'
 import router from '../router';
 
-const userStore = UserStore();
-const HashtagValue= ref('');
-const HashtagsArr = ref([]);
-const delta =ref(null);
-const Attachments = ref (null);
-const AttachmentsArr = ref ([]);
-const error = ref([]);
-let quill;
-
 const props = defineProps({
     PostID:String,
     postTitle:String,
     Hashtags:Array,
     PostContent:String,
 })
+const userStore = UserStore();
+const HashtagValue= ref('');
+const HashtagsArr = ref(props.Hashtags);
+const delta =ref(null);
+const Attachments = ref (null);
+const AttachmentsArr = ref ([]);
+const error = ref([]);
 const PostTitle = ref(props.postTitle);
-// console.log(props.postTitle)
-// onBeforeMount(()=>{
-//     PostTitle.value = props.postTitle;
-// })
+console.log (props.postTitle);
+let quill;
+
 onMounted(()=>{
-    PostTitle.value = props.postTitle;
-    // for(let i = 0 ; i<props.Hashtags.length ; i++){
-    //     HashtagsArr.value.push(props.Hashtags[i]);
-    // }
-    // PostTitle.value = props.postTitle;
     quill = new Quill(document.querySelector('#editor'), {
         modules: {
           toolbar: [
@@ -42,19 +34,15 @@ onMounted(()=>{
             ['image', 'code-block']
           ],
           history: {
-            // Local undo shouldn't undo changes
-            // from remote users
             userOnly: true
           }
         },
         placeholder: 'WRITE YOUR QUESTION!',
-        theme: 'snow' // 'bubble' is also great
+        theme: 'snow'
       }
       )
         delta.value = quill.getContents();
         quill.root.innerHTML = props.PostContent;
-        // console.log(props.PostContent)
-
 })
 const UplodHandler = () =>{
     AttachmentsArr.value.push (Attachments.value.files)
@@ -150,7 +138,7 @@ const PublishHandler=async ()=>{
                     <input type="text" placeholder="Hashtags" class="input w-full rounded-2 border border-2 border-black mb-5 self-center max-w-sm" v-model="HashtagValue" @keyup.enter="Hashtags_Handler"/>
                     <div class="card bg-white rounded-[0.5rem] border-2 border-black p-2 flex flex-row flex-wrap mb-4 max-w-sm" v-if="HashtagsArr.length !=0">
                         <template v-for="(item, index) in HashtagsArr" :key="index">
-                            <button class="btn btn-sm w-fit m-2 border-none font-light" :[key]="index" :class="[index%2? 'bg-main3' : 'bg-main1']" @click="RemoveHashtag(index)">{{ item }}</button>
+                            <button class="btn btn-sm w-fit m-2 border-none font-light" :class="[index%2? 'bg-main3' : 'bg-main1']" @click="RemoveHashtag(index)">{{ item }}</button>
                         </template>
                     </div>
                 </div>
@@ -159,7 +147,7 @@ const PublishHandler=async ()=>{
                     <input type="file" ref="Attachments" @change="UplodHandler" class="file-input file-input-bordered border-2 border-black self-center mb-5 " />
                     <div class="card bg-white rounded-[0.5rem] border-2 border-black p-2 flex flex-row flex-wrap mb-4 max-w-sm" v-if="AttachmentsArr.length !=0">
                         <template v-for="(item, index) in AttachmentsArr" :key="index">
-                            <button class="btn btn-sm w-fit m-2 border-none font-light" :[key]="index" :class="[index%2? 'bg-main3' : 'bg-main1']" @click="RemoveAttachment(index)">{{ item[0].name}}</button>
+                            <button class="btn btn-sm w-fit m-2 border-none font-light" :class="[index%2? 'bg-main3' : 'bg-main1']" @click="RemoveAttachment(index)">{{ item[0].name}}</button>
                         </template>
                     </div>
                 </div>
