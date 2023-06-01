@@ -7,7 +7,7 @@ import VueCookies from 'vue-cookies'
 import { UserStore } from '../stores/UserStore';
 import router from '../router';
 import ModalComponent from '../components/ModalComponent.vue';
-import { SetUsername, EditProfile } from '../Helpers/APIs/UserAPIs';
+import { SetUsername, EditProfile, AddHashtags } from '../Helpers/APIs/UserAPIs';
 import Alert from '../components/Alert.vue';
 
 
@@ -53,9 +53,9 @@ const SetUsernameHandler = async () =>{
         ModalPage.value++;
         return;
     }else{
-        error.value = res;
+        error.value = res.data;
     }
-    ModalPage.value++;
+    // ModalPage.value++;
 }
 const HashtagClickHanlder = (e)=>{
     SelectedHash.value[e] = !SelectedHash.value[e];
@@ -92,7 +92,7 @@ const EditUser = async () =>{
     await EditProfile(data);
     ModalPage.value++;
 }
-const NextHandler = () =>{
+const NextHandler = async() =>{
     error.value = "";
     for(const s in SelectedHash.value){
         if (SelectedHash.value[s])arr.value.push(s);
@@ -101,6 +101,11 @@ const NextHandler = () =>{
         error.value = "At Least Three!";
         return;
     }
+    const data = {
+        UserId:UserStore().UserID,
+        Hashtags:arr.value
+    }
+    await AddHashtags(data);
     ModalPage.value++;
 }
 

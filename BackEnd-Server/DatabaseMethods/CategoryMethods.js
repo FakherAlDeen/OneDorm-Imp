@@ -25,9 +25,9 @@ module.exports = {
             console.log(err);
         });
     },
-    DeleteCategory: async function (Id){
+    DeleteCategory: async function (CategoryTitle){
         await Category.deleteOne(
-            {Id}
+            {CategoryTitle}
         ).catch((err) => {
             console.log(err);
         });
