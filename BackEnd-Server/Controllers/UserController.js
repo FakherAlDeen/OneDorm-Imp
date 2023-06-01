@@ -109,7 +109,7 @@ class UserController {
             const PostsIds = User[0].PostList ;
             for(let i = 0 ; i<PostsIds.length ; i++){
                 const post = await FindOneQuestionRecord({QuestionId:PostsIds[i]});
-                Posts.push(post);
+                Posts.push(post[0]);
             }
             res.status(201).send(Posts); 
         }

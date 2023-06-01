@@ -83,6 +83,7 @@ const PublishHandler=async ()=>{
         CreatedBy: userStore.UserID,
         Hashtags: HashtagsArr.value,
         QuestionDetailsHTML: quill.root.innerHTML,
+        CreatedAt: Date.now()
     }
     console.log (quill.root.innerHTML)
     wtv.value = quill.root.innerHTML

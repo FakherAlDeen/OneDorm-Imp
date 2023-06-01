@@ -28,9 +28,10 @@ class QuestionController {
             else{
               CategoryId = oldHashtag[0].CategoryId
             }
-            categories.push(CategoryId);
+            categories.push(Hashtags[i]);
           }
           for(let i = 0 ; i<categories.length ; i++){
+            console.log(categories[i])
             await EditCategory(categories[i] , {$push: { PostIds: QuestionId }}  )
           }
           const question = {
@@ -73,6 +74,38 @@ class QuestionController {
         console.log(err);
       }
     }
+    static compare( a, b ) {
+      if ( a.QuestionVotesCount > b.QuestionVotesCount ){
+        return -1;
+      }
+      if ( a.QuestionVotesCount < b.QuestionVotesCount ){
+        return 1;
+      }
+      return 0;
+    }
+    static async GetHashtagPosts(req, res){
+      try{
+        const Id = '#' + req.params.Id;
+        console.log (Id);
+        const category = await FindOneCategoryRecord({CategoryTitle:Id});
+        if (category.length == '0') return res.status(400).send("Category Not Found!");
+        const PostsIds = category[0].PostIds ;
+        console.log(PostsIds);
+        let Posts = []
+        for(let i = 0 ; i<PostsIds.length ; i++){
+          const post = await FindOneQuestionRecord({QuestionId:PostsIds[i]});
+          Posts.push(post[0]);
+        }
+        Posts.sort(QuestionController.compare);
+        // console.log(Posts)
+        res.status(200).send(Posts);
+      }
+      catch (err) {
+        // res.status(403).send(err) 
+        console.log(err);
+      }
+    }
+
 
     static async EditPost(req, res){
       try{// connect it to hashtags table and user table

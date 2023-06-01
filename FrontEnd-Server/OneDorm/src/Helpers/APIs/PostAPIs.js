@@ -30,6 +30,17 @@ export async function GetPost (Id){
         // return res;
 }
 
+export async function GetHashtagPosts (Id){
+        console.log("ayy")
+        const res = await GET ('GetHashtagPosts/'+Id);
+        if (res.status=='200'){
+                return res;
+        }else {
+                return res;
+        }
+        // return res;
+}
+
 export async function DeletePost(data){
         const res = await POST ('DeletePost',data);
         if (res.status=='201'){
