@@ -8,9 +8,11 @@ import VueCookies from 'vue-cookies'
 
 
 const props = defineProps({
-  AnswerOfAnswerId:String
+  AnswerOfAnswerId:String,
+  CreatedBy:String,
+  PostId:String,
+  PostCreator:String,
 })
-
 let quill;
 const editor = ref();
 const delta =ref(null);
@@ -20,9 +22,7 @@ const emit = defineEmits({
         return e;
     }
 })
-
 onMounted(()=>{
-
     quill = new Quill(editor.value, {
         modules: {
           toolbar: [
@@ -32,13 +32,11 @@ onMounted(()=>{
             ['image', 'code-block']
           ],
           history: {
-            // Local undo shouldn't undo changes
-            // from remote users
             userOnly: true
           }
         },
         placeholder: 'WRITE YOUR QUESTION!',
-        theme: 'snow' // 'bubble' is also great
+        theme: 'snow'
       }
       )
         delta.value = quill.getContents();
@@ -62,6 +60,16 @@ const SendClickHanlder = async () =>{
     console.log (res.data)
     console.log(res);
     quill.setText('');
+    const notification = {
+        QuestionId: props.PostId,
+        PostCreator:props.PostCreator,
+        ParentId: props.CreatedBy,
+        Type:'Answer',
+        AnswerCreatorName : UserStore().Fname + " " + UserStore().Lname,
+        AnswerCreator: UserStore().UserID,
+        CreatedAt:Date.now(),
+    }
+    UserStore().socket.emit('NotificationSend',notification);
   }
 </script>
 <template>

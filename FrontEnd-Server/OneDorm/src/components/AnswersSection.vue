@@ -52,9 +52,11 @@ function diff_minutes(dt2, dt1)
   
  }
  const ActualDate = ref();
+ const CreatedBy=ref();
 onMounted (async ()=>{
     const res = await GetAnswer(props.AnswerId);
     const commentData= res.data.AnswerData;
+    CreatedBy.value = commentData.CreatedBy;
     const UserData= res.data.UserData;
     const User = await GetUser(commentData.CreatedBy);
     console.log (User.data);
@@ -142,7 +144,7 @@ const DeletePostHanlder = async ()=>{
                 <p class="text-lg font-bold text-Alert btn-ghost btn">Report</p>
             </div>
             <div v-if = "Reply" class="h-[6rem] my-4 mb-16">
-                <QuillComp @emit-ans-i-d="EmitHanlder" :AnswerOfAnswerId="AnswerId"/>
+                <QuillComp :CreatedBy="CreatedBy" @emit-ans-i-d="EmitHanlder" :AnswerOfAnswerId="AnswerId"/>
             </div>
             <template v-for="(e,i) in AnswerLists" :key="i">
                 <AnswersSection :PostCreator="PostCreator" :PostId="PostId" :AnswerId="e"></AnswersSection>

@@ -14,7 +14,7 @@ class NotificationController {
     static async OpenNotification(req, res) {
         try{
             const NotId = req.params.Id;
-            const Notification = await EditNotification({NotificationId:NotId}, {status:'Active'});
+            const Notification = await EditNotification(NotId, {status:'Active'});
             res.status(201).send('Done!');
         }catch(e){
             res.status(403).send(err);

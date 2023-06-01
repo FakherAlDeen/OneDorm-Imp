@@ -31,6 +31,7 @@ io.on('connection', (socket) => {
     console.log(socket.rooms)
   });
   socket.on ('NotificationSend',async (msg)=>{
+    console.log ('msg',msg);
     if (msg.Type=='Question'){
       try{
         let NotificationId = uuidv4();
@@ -39,7 +40,8 @@ io.on('connection', (socket) => {
           NotificationCreater: msg.PostCreator,
           NotificationTitle: msg.AnswerCreatorName,
           NotificationDetails:{
-            redirectLink: msg.QuestionId
+            redirectLink: msg.QuestionId,
+            ReplytoAns: false,
           },
           CreatedAt:msg.CreatedAt
         }
@@ -51,7 +53,25 @@ io.on('connection', (socket) => {
         console.log (e);
       }
     }
-    console.log ('msg',msg);
+    else if (msg.Type=='Answer'){
+      let NotificationId = uuidv4();
+        const notification = {
+          NotificationId,
+          NotificationCreater: msg.PostCreator,
+          NotificationTitle: msg.AnswerCreatorName,
+          NotificationDetails:{
+            redirectLink: msg.QuestionId,
+            ReplytoAns: true,
+          },
+          CreatedAt:msg.CreatedAt
+        }
+        await CreateNotification(notification);
+        // await EditUser(msg.PostCreator,{$push: { NotificationList: NotificationId }})
+        await EditUser(msg.ParentId,{$push: { NotificationList: NotificationId }})
+        // io.to(msg.PostCreator).emit('Notifications',NotificationId);
+        io.to(msg.ParentId).emit('Notifications',NotificationId);
+    }
+    
   })
 
 });

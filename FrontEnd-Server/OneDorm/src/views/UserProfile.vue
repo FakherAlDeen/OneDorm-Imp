@@ -199,7 +199,7 @@ const ShowAcademicModal = ref (false);
             </template>
         </ModalComponent>
         <HeaderComponent></HeaderComponent>
-        <div class="w-5/6 h-full mx-auto">
+        <div class="w-5/6 h-full mx-auto mt-10">
             <div class="flex gap-6">
                 <div class="w-1/4 h-1/3">
                     <div class="avatar mb-7">
