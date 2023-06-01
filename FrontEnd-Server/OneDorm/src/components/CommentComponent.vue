@@ -60,6 +60,7 @@ const CommentClickHandler = async () =>{
         Type:'Question',
         AnswerCreatorName : UserStore().Fname + " " + UserStore().Lname,
         AnswerCreator: UserStore().UserID,
+        CreatedAt:Date.now(),
     }
     UserStore().socket.emit('NotificationSend',notification);
 };

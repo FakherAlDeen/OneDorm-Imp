@@ -12,11 +12,31 @@ import { UserStore } from '../stores/UserStore'
 import router from '../router/index'
 import {SearchPost} from '../Helpers/APIs/SearchAPIs'
 import VueCookies from 'vue-cookies'
-import {ref} from 'vue'
+import {ref, onBeforeMount} from 'vue'
+import {Notification} from '../Helpers/APIs/NotificationAPIs'
+import { useTimeAgo } from '@vueuse/core'
 
 const SearchValue = ref();
 const showDrawer = ref (false);
+const ShowNotification=ref(false);
+const NotificationArr = ref([]);
+UserStore().socket.on('Notifications',async(msg)=>{
+    console.log ('meow',msg);
+    const res = await Notification(msg);
+    NotificationArr.value.unshift(res.data);
+})
 
+onBeforeMount(async()=>{
+    console.log (UserStore().NotificationList)
+    for (let i=0;i<UserStore().NotificationList.length;i++){
+        const res = await Notification(UserStore().NotificationList[i])
+        console.log (res);
+        const timeAgo = useTimeAgo(new Date(res.data.CreatedAt))
+        console.log (timeAgo.value);
+        NotificationArr.value.push(res.data);
+    }
+    NotificationArr.value=NotificationArr.value.reverse();
+})
 const SearchClickHanlder = async ()=>{
     console.log (SearchValue.value);
     // router.push(`/SearchResult/${SearchValue.value}`);
@@ -48,7 +68,7 @@ for (let i=0;i<30;i++){
 </script>
 
 <template>
-    <div class="navbar bg-base-100 p-10">
+    <div class="navbar bg-base-100 p-10 z-10">
         <Transition name="slide-fade">
             <div class="drawer-side fixed z-10 left-0 top-0 border-r-2 border-black w-screen" v-if="showDrawer">
                 <div class="flex">
@@ -107,9 +127,27 @@ for (let i=0;i<30;i++){
                 <span class="indicator-item badge badge-secondary top-2 right-2 text-sm bg-Alert border-Alert">99</span>
                 <ChatIcon/>
             </div>
-            <div class="btn btn-ghost px-1 indicator">
-                <span class="indicator-item badge badge-secondary top-2 right-2 text-sm bg-Alert border-Alert" >99</span>
-                <NotifcationIcon/>
+            <div class="relative" >
+                <div class="btn btn-ghost px-1 indicator " @click="ShowNotification=!ShowNotification">
+                    <span class="indicator-item badge badge-secondary top-2 right-2 text-sm bg-Alert border-Alert" >{{ NotificationArr.filter(e=>e.status=='Inactive').length }}</span>
+                    <NotifcationIcon/>
+                </div>
+                <div class="w-80 bg-white border-2 border-black absolute h-[22rem] top-16 right-0 z-20 shadow-BoxBlackSm flex flex-col" v-if="ShowNotification">
+                    <h2 class="text-2xl font-extrabold mx-3 mt-2 border-b-2 pb-3 mb-3 border-black capitalize text-left mt-3">Notifications</h2>
+                    <div class="grow m-3 overflow-y-auto">
+                        <template v-for="e in NotificationArr" :key="e.NotificationId">
+                            <div class="card w-full mb-3 p-4" :class="[e.status=='Inactive'?'bg-main1':'bg-Grey2']">
+                                <h2 class="card-title text-2xl capitalize text-black">
+                                    {{ e.NotificationTitle +"!" }}
+                                </h2>
+                                <h2 class="card-title font-light text-black text-gray-800">
+                                answered on your question!
+                                </h2>
+                                <p class="font-light text-base-200 text-xs self-end">{{ useTimeAgo(new Date(e.CreatedAt)) }}</p>
+                            </div>
+                        </template>
+                    </div>
+                </div>
             </div>
             <div class="flex h-20 bg-black flex place-content-center static gap-2 ml-4">
                 <div class="avatar h-16 self-center asbolute right-2 indicator ">

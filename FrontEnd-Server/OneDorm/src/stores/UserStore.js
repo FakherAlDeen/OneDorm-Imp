@@ -13,7 +13,7 @@ export const UserStore = defineStore('User',{
             Username:null,
             Email:null,
             Phonenumber:null,
-            NotificationList:null,
+            NotificationList:[],
             PostList:null,
             ChatList:null,
             CategoriesList:null,
@@ -46,11 +46,14 @@ export const UserStore = defineStore('User',{
                 this.Fname = Data.Fname;
                 this.Lname = Data.Lname;
                 this.Email = Data.Email;
+                this.NotificationList = Data.NotificationList;
                 this.AcademicStaff = Data.VerificationState?Data.VerificationState:'inactive';
                 // this.UserVotes = Data.UserVotes;
                 this.UserToken = Data.token;
                 // this.Username = Data.Username;
                 // this.UserDetails= Data.UserDetails
+                this.socket = io('ws://localhost:3001', { transports: ['websocket', 'polling', 'flashsocket'] });
+                this.socket.emit('join',this.UserID);
                 window.$cookies.set('Token',this.UserToken);
                 return res;
             }else if (res.status == '409'){
@@ -69,8 +72,11 @@ export const UserStore = defineStore('User',{
                 this.Email = Data.Email;
                 this.UserVotes = Data.UserVotes;
                 this.UserDetails= Data.UserDetails;
+                this.NotificationList = Data.NotificationList;
                 this.AcademicStaff = Data.VerificationState?Data.VerificationState:'inactive';
                 this.Username = Data.Username;
+                this.socket = io('ws://localhost:3001', { transports: ['websocket', 'polling', 'flashsocket'] });
+                this.socket.emit('join',this.UserID);
                 if (Data.Image){
                     console.log (Data.Image);
                     this.image =`data:${Data.Image.contentType};base64,${Data.Image.image}`
@@ -99,6 +105,7 @@ export const UserStore = defineStore('User',{
                 this.UserVotes = Data.UserVotes;
                 this.DateOfBirth = Data.DateOfBirth;
                 this.Phonenumber = Data.Phonenumber;
+                this.NotificationList = Data.NotificationList;
                 this.AcademicStaff = Data.VerificationState?Data.VerificationState:'inactive';
                 if (Data.Image){
                     // console.log (Data.Image);
