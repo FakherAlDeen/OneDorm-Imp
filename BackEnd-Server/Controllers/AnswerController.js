@@ -7,7 +7,7 @@ const {FindOneUserRecord} = require("../DatabaseMethods/UserMethods");
 class AnswerController {
     static async CreateAnswer(req, res){
         try{// connect it to hashtags table and user table
-            const { CreatedBy, AnswerDetails , AnswerDetailsHTML , Id , Type } = req.body; // loop over hashtags -> find -> 
+            const { CreatedBy, AnswerDetails , AnswerDetailsHTML , Id , Type , CreatedAt } = req.body; // loop over hashtags -> find -> 
             if (!(CreatedBy && AnswerDetails && AnswerDetailsHTML && Id && Type)) {
               return res.status(400).send("Send all the fields");
             }
@@ -17,7 +17,8 @@ class AnswerController {
               ParentId:Id,
               CreatedBy,
               AnswerDetails,
-              AnswerDetailsHTML
+              AnswerDetailsHTML,
+              CreatedAt
             }
             await CreateAnswer(answer)
             if(Type == 'Answer'){

@@ -9,8 +9,8 @@ class QuestionController {
     static async CreatePost(req, res){
       try{// connect it to hashtags table and user table
           
-          const { CreatedBy, QuestionTitle , QuestionDetails , Hashtags, QuestionDetailsHTML } = req.body; // loop over hashtags -> find -> 
-          if (!(CreatedBy && QuestionTitle && QuestionDetails && QuestionDetailsHTML)) {
+          const { CreatedBy, QuestionTitle , QuestionDetails , Hashtags, QuestionDetailsHTML , CreatedAt } = req.body; // loop over hashtags -> find -> 
+          if (!(CreatedBy && QuestionTitle && QuestionDetails && QuestionDetailsHTML && CreatedAt)) {
             return res.status(400).send("Send all the fields");
           }
           let QuestionId = uuidv4()
@@ -39,7 +39,8 @@ class QuestionController {
             QuestionTitle,
             QuestionDetails,
             QuestionDetailsHTML,
-            Hashtags // gwt_w gwt_w
+            Hashtags,
+            CreatedAt
           }
           await CreateQuestion(question)
           EditUser(CreatedBy , {$push: { PostList: QuestionId }} )

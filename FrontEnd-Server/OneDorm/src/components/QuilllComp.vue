@@ -54,7 +54,8 @@ const SendClickHanlder = async () =>{
       AnswerDetails:JSON.parse(JSON.stringify(quill.getContents())),
       AnswerDetailsHTML: quill.root.innerHTML,
       Id:props.AnswerOfAnswerId ,
-      Type:'Answer'
+      Type:'Answer',
+      CreatedAt: Date.now()
     }
     const res = await CreateAnswer(data);
     emit('EmitAnsID', res.data.AnswerId);

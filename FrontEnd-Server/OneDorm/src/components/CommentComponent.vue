@@ -48,7 +48,8 @@ const CommentClickHandler = async () =>{
         AnswerDetails:JSON.parse(JSON.stringify(quill.getContents())),
         AnswerDetailsHTML: quill.root.innerHTML,
         Id:props.QuestionId ,
-        Type:'Question'
+        Type:'Question',
+        CreatedAt: Date.now()
     }
     const res = await CreateAnswer(data);
     emit('EmitAnsID', res.data.AnswerId);
