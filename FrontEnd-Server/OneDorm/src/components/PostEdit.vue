@@ -63,9 +63,9 @@ const savePost = ()=>{
 const RemoveAttachment = (e)=>{
     AttachmentsArr.value.splice(e,1);
 }
-const RemoveHashtag = (e)=>{
-    HashtagsArr.value.splice(e,1);
-}
+// const RemoveHashtag = (e)=>{
+//     HashtagsArr.value.splice(e,1);
+// }
 const Hashtags_Handler = () =>{
     if (HashtagsArr.value.find(el => el =='#'+HashtagValue.value.trim().replaceAll(' ','_'))) return;
     HashtagsArr.value.push('#'+HashtagValue.value.trim().replaceAll(' ','_'));
@@ -95,7 +95,6 @@ const PublishHandler=async ()=>{
         Data:{
             QuestionTitle: PostTitle.value,
             QuestionDetails: JSON.parse(JSON.stringify(del)),
-            Hashtags: HashtagsArr.value,
             QuestionDetailsHTML: quill.root.innerHTML,
         }
     }
@@ -143,12 +142,13 @@ const PublishHandler=async ()=>{
         <div class="card-body items-start text-left w-10/12 self-center px-0 ">
             <div class="flex flex-row justify-between w-full">
                 <div class="max-w-[50%]">
-                    <h2 class="text-4xl font-bold font-Inter leading-10	text-black">Edit your post hashtags:</h2>
-                    <h3 class="text-base font-semibold text-Alert"><spam class="font-extrabold">Tip:</spam> Use accurate ones!</h3>
-                    <input type="text" placeholder="Hashtags" class="input w-full rounded-2 border border-2 border-black mb-5 self-center max-w-sm" v-model="HashtagValue" @keyup.enter="Hashtags_Handler"/>
+                    <h2 class="text-4xl font-bold font-Inter leading-10	text-black">Post hashtags:</h2>
+                    <!-- <h3 class="text-base font-semibold text-Alert"><spam class="font-extrabold">Tip:</spam> Use accurate ones!</h3> -->
+                    <br>
+                    <input type="text" disabled='true' placeholder="Hashtags" class="input w-full rounded-2 border border-2 border-black mb-5 self-center max-w-sm" v-model="HashtagValue" @keyup.enter="Hashtags_Handler"/>
                     <div class="card bg-white rounded-[0.5rem] border-2 border-black p-2 flex flex-row flex-wrap mb-4 max-w-sm" v-if="HashtagsArr.length !=0">
                         <template v-for="(item, index) in HashtagsArr" :key="index">
-                            <button class="btn btn-sm w-fit m-2 border-none font-light" :class="[index%2? 'bg-main3' : 'bg-main1']" @click="RemoveHashtag(index)">{{ item }}</button>
+                            <button class="btn btn-sm w-fit m-2 border-none font-light" :class="[index%2? 'bg-main3' : 'bg-main1']">{{ item }}</button>
                         </template>
                     </div>
                 </div>

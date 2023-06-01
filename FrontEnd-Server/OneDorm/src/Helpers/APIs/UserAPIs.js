@@ -67,3 +67,11 @@ export async function ChangePassword (data){
         // }
         return res; 
 }
+export async function GetUserPosts (Id){
+        const res = await GET (`GetUserPosts/${Id}`);
+        if (res.status=='201'){
+            return res;
+        }else {
+            return res.data;
+        }
+}
