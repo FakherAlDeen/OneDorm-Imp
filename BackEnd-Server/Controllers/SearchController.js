@@ -15,7 +15,7 @@ class SearchController{
     static async SearchPost(req, res){
         await connect();
         let query = req.query.query;
-        console.log (query);
+        // console.log (query);
         try {
             let result = await collection.aggregate([
                 {
@@ -79,7 +79,7 @@ class SearchController{
                   }
                 }
             ]).sort({score:-1}).toArray();
-            console.log (result)
+            // console.log (result)
             res.status(201).send(result);
         } catch (e) {
             console.log (e);

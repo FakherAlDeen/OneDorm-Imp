@@ -63,6 +63,14 @@ import router from '../router';
         router.push('/NewsFeed');
         ModalDeleteShow.value=false
     }
+    const PostEdit = ()=>{
+        router.push({
+            name: 'EditPost',
+            params: {
+                QuestionId: props.PostID,
+            }
+        });
+    }
 </script>
 
 
@@ -101,7 +109,7 @@ import router from '../router';
                                     <svg class="w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
                                 </button>
                                 <ul tabindex="0" class="dropdown-content border-2 border-black menu p-1 shadow bg-base-100 rounded-none w-20">
-                                    <li class="text-sm font-extrabold text-center btn btn-ghost btn-sm self-center w-full">Edit</li>
+                                    <li class="text-sm font-extrabold text-center btn btn-ghost btn-sm self-center w-full" @click="PostEdit">Edit</li>
                                     <li class="text-xs text-Alert font-extrabold btn btn-ghost btn-sm self-center w-full" @click="ModalDeleteShow=true">Delete</li>
                                 </ul>
                             </div>

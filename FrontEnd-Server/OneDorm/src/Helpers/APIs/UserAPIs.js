@@ -56,3 +56,22 @@ export async function GetImage (id){
         console.log (res);
         return res;
 }
+export async function ChangePassword (data){
+        // console.log(data)  // UserId , OldPasswor , NewPassword
+        const res = await POST ('ChangePassword' , data);
+        // if (res.status=='201'){
+        //         return res;
+        // }else {
+        //         console.log(res)
+        //         return res.data;
+        // }
+        return res; 
+}
+export async function GetUserPosts (Id){
+        const res = await GET (`GetUserPosts/${Id}`);
+        if (res.status=='201'){
+            return res;
+        }else {
+            return res.data;
+        }
+}

@@ -7,15 +7,21 @@ const UserSchema = new mongoose.Schema({
     Username: {type:String, unique:true , index: true , sparse: true},
     Email: {type:String, unique: true},
     Phonenumber:{type:String, default:null},
+    VerificationState:{type:String , default:'inactive'},
     Image: {
     }, 
     DateOfBirth:{type:Date, default:null},
     TotalVotes:{type:Number, default:0},
-    UserDetails:{type:Object , default:null},
+    UserDetails:{type:Object , default:{
+        University:'',
+        Major:'',
+        Address:'',
+        City:'',
+        Country:''
+    }},
     UserVotes:{type:Object , default:{'test':'-1'}},
-    NotificationList:[{
-        Id: {type:String, default: null}
-    }],
+    NotificationList:[
+    ],
     PostList:[],
     AnswersList:[],
     ChatList:[{

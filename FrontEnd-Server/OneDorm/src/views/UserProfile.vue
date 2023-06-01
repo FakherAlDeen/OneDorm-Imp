@@ -4,7 +4,10 @@ import HeaderComponent from '../components/HeaderComponent.vue';
 import { UserStore } from '../stores/UserStore';
 import ModalComponent from '../components/ModalComponent.vue';
 import FormData from 'form-data';
-import {UploadImage} from '../Helpers/APIs/UserAPIs'
+import {EditProfile, GetUser, UploadImage, ChangePassword} from '../Helpers/APIs/UserAPIs'
+import {CreateRequest} from '../Helpers/APIs/RequestAPIs'
+import Alert from '../components/Alert.vue';
+import { ValidatePassword } from '../Helpers/Validate';
 
 const isEdit = ref (true);
 const Fname = ref (UserStore().Fname);
@@ -14,11 +17,11 @@ const Major = ref(UserStore().UserDetails.Major);
 const username = ref (UserStore().Username);
 const email = ref (UserStore().Email);
 const ShowModal = ref (false);
-const phone = ref ();
-const Address = ref ();
-const city = ref ();
-const Country = ref ();
-const DateOfBirth= ref();
+const phone = ref (UserStore().Phonenumber);
+const Address = ref (UserStore().UserDetails.Address);
+const City = ref (UserStore().UserDetails.City);
+const Country = ref (UserStore().UserDetails.Country);
+
 const closeModal = ()=>{
     ShowModal.value = false;
 }
@@ -33,13 +36,90 @@ const imageHandler = async (e)=>{
 const OldPassword = ref ();
 const Password = ref ();
 const Password2 = ref();
-const ChangePassword = () =>{
-    console.log (Password.value + " " + Password2.value);
+const Match = ref(''); 
+const ChangePass = async() =>{
+    Match.value = '' ;
+    console.log(Password.value , Password2.value);
+    if(Password.value != Password2.value){
+        Match.value = 'Password does not match';
+        return;
+    }
+    if(ValidatePassword(Password.value)){
+        Match.value = ValidatePassword(Password.value);
+        return ;
+    }
+    const data = {
+        UserId: UserStore().UserID,
+        OldPassword: OldPassword.value,
+        NewPassword: Password.value 
+    }
+    ///
+    const res = await ChangePassword(data) ;
+    console.log(res)
+    if(res.status != '201'){
+        Match.value = res.data;
+    }
+    else{
+        closeModal();
+    }
+    // console.log(res)
+    // res.status!
 }
+let curr = UserStore().DateOfBirth;
+let DateOfBirth = ref(curr?curr.substring(0,10):'');
+const EditProfileInfo = async() =>{  
+    const UserId = UserStore().UserID;
+    const data = {
+        UserId,
+        Data : {
+            Fname: Fname.value?Fname.value:"",
+            Lname: Lname.value?Lname.value:"",
+            Phonenumber: phone.value?phone.value:"",
+            DateOfBirth: DateOfBirth.value?DateOfBirth.value:"",
+            UserDetails: {
+                University:Uni.value?Uni.value:"",
+                Major: Major.value?Major.value:"",
+                Country: Country.value?Country.value:"",
+                City: City.value?City.value:"",
+                Address: Address.value?Address.value:""
+            }
+        }
+    }
+    const res = await EditProfile(data);
+    isEdit.value = !isEdit.value;
+}
+const errorAcademicModal = ref ();
+const MessageValueForAcademic= ref ('');
+const SendRequestAcademic = async () =>{
+    errorAcademicModal.value='';
+    if (MessageValueForAcademic.value==''){
+        errorAcademicModal.value= "Please Insert the message!";
+        return ;
+    }
+    const data = {
+        UserId:UserStore().UserID,
+        RequestMessage:MessageValueForAcademic.value
+    }
+    console.log (data);
+    const res = await CreateRequest(data);
+    console.log ("res",res);
+    if (res.status ==201){
+        UserStore().AcademicStaff='pending';
+    }
+    console.log (UserStore().AcademicStaff);
+    ShowAcademicModal.value= false;
+}
+const ShowAcademicModal = ref (false);
 </script>
 <template>
     <main>
-        <ModalComponent @emit-close="closeModal" :class="[ShowModal? 'modal-open' : '']" @Func1="ChangePassword" ModalContent="Please change your password by writing your old one then the new one! Yes as simple as that!" ModalContentHeader="Change your Password:" Btn1Cont="Change!" :with-btn1="true">
+        <ModalComponent 
+        @emit-close="closeModal" 
+        :class="[ShowModal? 'modal-open' : '']" 
+        @Func1="ChangePass" 
+        ModalContent="Please change your password by writing your old one then the new one! Yes as simple as that!" 
+        ModalContentHeader="Change your Password:" Btn1Cont="Change!" 
+        :with-btn1="true">
         <template #content>
             <div class="flex flex-col gap-2 my-3">
                 <div class="flex gap-10 justify-start">
@@ -47,7 +127,7 @@ const ChangePassword = () =>{
                         <label class="label">
                             <span class="label-text text-lg font-bold">Your Old Password:</span>
                         </label>
-                        <input v-model="OldPassword" type="text" placeholder="Old Password" class="input input-bordered w-full" />
+                        <input v-model="OldPassword" type="password" placeholder="Old Password" class="input input-bordered w-full" />
                     </div>
                 </div>
                 <div class="flex gap-10 justify-start">
@@ -55,23 +135,71 @@ const ChangePassword = () =>{
                         <label class="label">
                             <span class="label-text text-lg font-bold">Your New Password:</span>
                         </label>
-                        <input v-model="Password" type="text" placeholder="New Password" class="input input-bordered w-full" />
+                        <input v-model="Password" type="password" placeholder="New Password" class="input input-bordered w-full" />
                     </div>
                     <div class="form-control w-1/2">
                         <label class="label">
                             <span class="label-text text-lg font-bold">Repeat it:</span>
                         </label>
-                        <input v-model="Password2" type="text" placeholder="Repeat" class="input input-bordered w-full" />
+                        <input v-model="Password2" type="password" placeholder="Repeat" class="input input-bordered w-full" />
                     </div>
                 </div>
                 <div class="w-full">
                     <a class="text-Alert">Forget password?</a>
                 </div>
+                <Alert classProp="alert-error"  v-if="Match!=''"><template #Error_Message> {{ Match }} </template></Alert>
             </div>
         </template>
         </ModalComponent>
+
+        <ModalComponent 
+        @emit-close="ShowAcademicModal=false" 
+        :ModalContent = "UserStore().AcademicStaff == 'inactive'?'Please note that an admin would read your request and evaluate it by contacting you via email then give you the role.':''"
+        ModalContentHeader="Request Academic Staff role"  
+        :class="[ShowAcademicModal? 'modal-open' : '']" 
+        @Func1="SendRequestAcademic"  Btn1Cont="Send Request" 
+        :with-btn1="UserStore().AcademicStaff == 'inactive' || UserStore().AcademicStaff == 'denied'">
+            <template #content>
+                <div v-if="UserStore().AcademicStaff == 'inactive' || UserStore().AcademicStaff == 'denied'" class="flex flex-col gap-2 my-3">
+                    <div v-if="UserStore().AcademicStaff == 'denied'" class="mb-4">
+                        <h2  class="text-2xl font-base">Your Request status is 
+                            <span class="text-Alert font-extrabold">
+                                Denied.
+                            </span>
+                        </h2>
+                        <h2 class="text-base font-base">
+                            Feel free to submit another request.
+                        </h2>
+
+                    </div>
+                    <textarea v-model="MessageValueForAcademic" class="textarea textarea-bordered" placeholder="Why do you think we should give you the role"></textarea>
+                    <Alert classProp="alert-warning"  v-if="errorAcademicModal"><template #Error_Message>{{ errorAcademicModal }}</template></Alert>
+                </div>
+                <div v-else-if="UserStore().AcademicStaff == 'pending'" class="flex flex-col gap-2 my-3">
+                    <h2 class="text-2xl font-base">Your Request status is still 
+                        <span class="text-main1 font-extrabold">
+                            pending.
+                        </span>
+                    </h2>
+                    <h2 class="text-base font-base">
+                        Please wait till one of our admins to approve or deny.
+                    </h2>
+                </div>
+                <div v-else class="flex flex-col gap-2 my-3">
+                    <h2 class="text-2xl font-base">
+                        You are already an 
+                        <span class="text-main3 font-extrabold">
+                            Academic Staff!
+                        </span>
+                    </h2>
+                    <h2 class="text-base font-base">
+                        Enjoy the perks!
+                    </h2>
+                </div>
+            </template>
+        </ModalComponent>
         <HeaderComponent></HeaderComponent>
-        <div class="w-5/6 h-full mx-auto">
+        <div class="w-5/6 h-full mx-auto mt-10">
             <div class="flex gap-6">
                 <div class="w-1/4 h-1/3">
                     <div class="avatar mb-7">
@@ -81,14 +209,14 @@ const ChangePassword = () =>{
 
                     </div>
                     <input hidden id="Image" type="file" name="Image" @change="imageHandler" accept="image/*" />
-                    <label for="Image" class="focus:none btn btn-success bg-main3 shadow-main2 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Edit Profile Pecture</label>
+                    <label for="Image" class="focus:none btn btn-success bg-main3 shadow-main2 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Edit Profile Picture</label>
                     <button @click="isEdit = !isEdit" class="mt-5 focus:none btn btn-error bg-Alert shadow-Alert border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Edit Profile Details</button>
                     <button @click="ShowModal= true" class="mt-5 focus:none btn btn-warning bg-main1 shadow-main1 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Change Password</button>
 
                 </div>
                 <div class="grow flex flex-col gap-10">
                     <div class="grow p-5 bg-Grey2 shadow-BoxBlackSm shadow-Grey border-2 border-black hover:translate-x-[0.45rem] transition-all duration-150 ease-in-out hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">
-                        <h1 class="text-4xl font-[1000] mb-4">Personal Details</h1>
+                        <h1 class="text-4xl font-[1000] mb-4">Personal Details </h1>
                         <div class="flex flex-col gap-5 relative">
                             <div class="flex gap-10 justify-center">
                                 <div class="form-control w-full">
@@ -135,7 +263,7 @@ const ChangePassword = () =>{
                                     <label class="label">
                                         <span class="label-text text-lg font-bold">City:</span>
                                     </label>
-                                    <input type="text" v-model="city" placeholder="Amman" class="input input-bordered w-full" :disabled="isEdit" />
+                                    <input type="text" v-model="City" placeholder="Amman" class="input input-bordered w-full" :disabled="isEdit" />
                                 </div>
                                 
                             </div>
@@ -155,7 +283,7 @@ const ChangePassword = () =>{
                             </div>
                             <div class="flex justify-center" v-if="!isEdit">
 
-                                <button @click="isEdit = !isEdit" class="mt-5 focus:none btn btn-error bg-Alert shadow-Alert border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Done?</button>
+                                <button @click="EditProfileInfo" class="mt-5 focus:none btn btn-error bg-Alert shadow-Alert border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Done?</button>
                             </div>
 
                         </div>
@@ -178,7 +306,7 @@ const ChangePassword = () =>{
                         </div>
                         <div class="flex mt-5 gap-10 justify-center">
                             <div class="form-control w-1/3">
-                                <button class="focus:none btn btn-success bg-main3 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Request Academic Staff Role</button>
+                                <button @click="ShowAcademicModal = true" class="focus:none btn btn-success bg-main3 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Request Academic Staff Role</button>
                             </div>
                             <div class="form-control w-1/3">
                                 <button class="focus:none btn btn-error bg-Alert border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">Delete Account :c</button>

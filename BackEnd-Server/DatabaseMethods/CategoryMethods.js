@@ -9,9 +9,9 @@ module.exports = {
             console.log(err);
         });
     },
-    EditCategory: async function (CategoryId,Data){
+    EditCategory: async function (CategoryTitle,Data){
         await Category.findOneAndUpdate(
-            {CategoryId},
+            {CategoryTitle},
             Data
         ).catch((err) => {
             console.log(err);
@@ -25,9 +25,9 @@ module.exports = {
             console.log(err);
         });
     },
-    DeleteCategory: async function (Id){
+    DeleteCategory: async function (CategoryTitle){
         await Category.deleteOne(
-            {Id}
+            {CategoryTitle}
         ).catch((err) => {
             console.log(err);
         });

@@ -11,6 +11,6 @@ export function ValidateEmail(str){
 export function ValidatePassword(str){
     const passwordRegex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,20}$/);
     if(!passwordRegex.test(str)){
-        return "Password must be at least 8 that contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character"
+        return "Password must be at least 8 characters that contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character"
     }
 }

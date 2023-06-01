@@ -42,6 +42,12 @@ const router = createRouter({
       component: () => import('../views/CreatePost.vue')
     },
     {
+      path:'/EditPost/:QuestionId',
+      name: 'EditPost',
+      beforeEnter: isAuthenticated,
+      component: () => import('../views/EditPost.vue')
+    },
+    {
       path:'/Post/:QuestionId',
       name: 'Post',
       beforeEnter: isAuthenticated,
@@ -65,6 +71,13 @@ const router = createRouter({
       name: 'Profile',
       beforeEnter: isAuthenticated,
       component: () => import('../views/UserProfile.vue')
+    }
+    ,
+    {
+      path:'/Admin',
+      name: 'Admin',
+      beforeEnter: isAuthenticated,
+      component: () => import('../views/AdminPanel.vue')
     }
   ]
 })

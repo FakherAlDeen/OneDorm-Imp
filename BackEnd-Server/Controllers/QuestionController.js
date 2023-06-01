@@ -9,8 +9,8 @@ class QuestionController {
     static async CreatePost(req, res){
       try{// connect it to hashtags table and user table
           
-          const { CreatedBy, QuestionTitle , QuestionDetails , Hashtags, QuestionDetailsHTML } = req.body; // loop over hashtags -> find -> 
-          if (!(CreatedBy && QuestionTitle && QuestionDetails && QuestionDetailsHTML)) {
+          const { CreatedBy, QuestionTitle , QuestionDetails , Hashtags, QuestionDetailsHTML , CreatedAt } = req.body; // loop over hashtags -> find -> 
+          if (!(CreatedBy && QuestionTitle && QuestionDetails && QuestionDetailsHTML && CreatedAt)) {
             return res.status(400).send("Send all the fields");
           }
           let QuestionId = uuidv4()
@@ -28,9 +28,10 @@ class QuestionController {
             else{
               CategoryId = oldHashtag[0].CategoryId
             }
-            categories.push(CategoryId);
+            categories.push(Hashtags[i]);
           }
           for(let i = 0 ; i<categories.length ; i++){
+            console.log(categories[i])
             await EditCategory(categories[i] , {$push: { PostIds: QuestionId }}  )
           }
           const question = {
@@ -39,7 +40,8 @@ class QuestionController {
             QuestionTitle,
             QuestionDetails,
             QuestionDetailsHTML,
-            Hashtags // gwt_w gwt_w
+            Hashtags,
+            CreatedAt
           }
           await CreateQuestion(question)
           EditUser(CreatedBy , {$push: { PostList: QuestionId }} )
@@ -72,6 +74,38 @@ class QuestionController {
         console.log(err);
       }
     }
+    static compare( a, b ) {
+      if ( a.QuestionVotesCount > b.QuestionVotesCount ){
+        return -1;
+      }
+      if ( a.QuestionVotesCount < b.QuestionVotesCount ){
+        return 1;
+      }
+      return 0;
+    }
+    static async GetHashtagPosts(req, res){
+      try{
+        const Id = '#' + req.params.Id;
+        console.log (Id);
+        const category = await FindOneCategoryRecord({CategoryTitle:Id});
+        if (category.length == '0') return res.status(400).send("Category Not Found!");
+        const PostsIds = category[0].PostIds ;
+        console.log(PostsIds);
+        let Posts = []
+        for(let i = 0 ; i<PostsIds.length ; i++){
+          const post = await FindOneQuestionRecord({QuestionId:PostsIds[i]});
+          Posts.push(post[0]);
+        }
+        Posts.sort(QuestionController.compare);
+        // console.log(Posts)
+        res.status(200).send(Posts);
+      }
+      catch (err) {
+        // res.status(403).send(err) 
+        console.log(err);
+      }
+    }
+
 
     static async EditPost(req, res){
       try{// connect it to hashtags table and user table

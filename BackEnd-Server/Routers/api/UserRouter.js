@@ -8,6 +8,7 @@ router.post('/AddHashtags' , UserController.AddHastags);
 router.post('/EditProfile' , UserController.EditProfile);
 router.post('/DeleteUser' , UserController.DeleteUser);
 router.post('/SetUsername' , UserController.SetUsername);
-
+router.post('/ChangePassword' , UserController.ChangePassword);
+router.get('/GetUserPosts/:Id', UserController.GetUserPosts);
 
 module.exports = router;

@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-// mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
-// catch(error => handleError(error));
 const Notification = require('../Schemas/NotificationSchema');
 module.exports = {
     CreateNotification: async function (Data){
@@ -9,17 +7,17 @@ module.exports = {
             console.log(err);
         });
     },
-    EditNotification: async function (Id,Data){
+    EditNotification: async function (NotificationId,Data){
         await Notification.findOneAndUpdate(
-            {Id},
+            {NotificationId},
             Data
         ).catch((err) => {
             console.log(err);
         });
     },
-    DeleteNotification: async function (Id){
+    DeleteNotification: async function (NotificationId){
         await Notification.deleteOne(
-            {Id}
+            {NotificationId}
         ).catch((err) => {
             console.log(err);
         });
