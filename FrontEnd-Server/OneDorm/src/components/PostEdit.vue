@@ -3,28 +3,38 @@ import { onMounted, ref , onBeforeMount } from 'vue';
 import Quill from 'quill';
 import { UserStore } from '../stores/UserStore'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
-import {CreatePost} from '../Helpers/APIs/PostAPIs'
+import {CreatePost, EditPost} from '../Helpers/APIs/PostAPIs'
 import Alert from './Alert.vue'
 import router from '../router';
+import { GetPost} from '../Helpers/APIs/PostAPIs';
 
 const props = defineProps({
     PostID:String,
-    postTitle:String,
-    Hashtags:Array,
-    PostContent:String,
 })
 const userStore = UserStore();
-const HashtagValue= ref('');
-const HashtagsArr = ref(props.Hashtags);
+const HashtagValue= ref();
+const HashtagsArr = ref([]);
+const postcont = ref();
 const delta =ref(null);
 const Attachments = ref (null);
 const AttachmentsArr = ref ([]);
 const error = ref([]);
-const PostTitle = ref(props.postTitle);
-console.log (props.postTitle);
+const PostTitle = ref();
 let quill;
+let PostData = 0;
 
-onMounted(()=>{
+onBeforeMount(async ()=>{
+    // console.log(props.PostID);
+    PostData = await GetPost(props.PostID);
+    if (PostData.status !='200') {Error.value=PostData.data; return}
+    // console.log (PostData);
+    PostData = PostData.data 
+    PostTitle.value = PostData.PostData.QuestionTitle;
+    postcont.value = PostData.PostData.QuestionDetailsHTML;
+    // postcont.value=postcont.value.replaceAll('<p>', "<p class='text-lg my-1'>");
+    // postcont.value=postcont.value.replaceAll('<br>', "");
+    console.log(postcont.value)
+    HashtagsArr.value = PostData.PostData.Hashtags;
     quill = new Quill(document.querySelector('#editor'), {
         modules: {
           toolbar: [
@@ -39,10 +49,9 @@ onMounted(()=>{
         },
         placeholder: 'WRITE YOUR QUESTION!',
         theme: 'snow'
-      }
-      )
-        delta.value = quill.getContents();
-        quill.root.innerHTML = props.PostContent;
+    })
+    delta.value = quill.getContents();
+    quill.root.innerHTML = postcont.value;
 })
 const UplodHandler = () =>{
     AttachmentsArr.value.push (Attachments.value.files)
@@ -54,9 +63,9 @@ const savePost = ()=>{
 const RemoveAttachment = (e)=>{
     AttachmentsArr.value.splice(e,1);
 }
-const RemoveHashtag = (e)=>{
-    HashtagsArr.value.splice(e,1);
-}
+// const RemoveHashtag = (e)=>{
+//     HashtagsArr.value.splice(e,1);
+// }
 const Hashtags_Handler = () =>{
     if (HashtagsArr.value.find(el => el =='#'+HashtagValue.value.trim().replaceAll(' ','_'))) return;
     HashtagsArr.value.push('#'+HashtagValue.value.trim().replaceAll(' ','_'));
@@ -82,23 +91,23 @@ const PublishHandler=async ()=>{
     const del = quill.getContents();
     console.log (userStore.UserID);
     const data ={
-        QuestionTitle: PostTitle.value,
-        QuestionDetails: JSON.parse(JSON.stringify(del)),
-        CreatedBy: userStore.UserID,
-        Hashtags: HashtagsArr.value,
-        QuestionDetailsHTML: quill.root.innerHTML,
+        Id: props.PostID,
+        Data:{
+            QuestionTitle: PostTitle.value,
+            QuestionDetails: JSON.parse(JSON.stringify(del)),
+            QuestionDetailsHTML: quill.root.innerHTML,
+        }
     }
     console.log (quill.root.innerHTML)
     wtv.value = quill.root.innerHTML
-    const res =await CreatePost(data);
-    console.log (res.data.QuestionId);
+    const res =await EditPost(data);
+    // console.log (res.data.QuestionId);
     router.push ({
-                        name: 'Post',
-                        params: {
-                            QuestionId: res.data.QuestionId,
-                        }
-                    })
-    
+        name: 'Post',
+        params: {
+            QuestionId: props.PostID,
+        }
+    })
     console.log (res);
 }
 
@@ -133,12 +142,13 @@ const PublishHandler=async ()=>{
         <div class="card-body items-start text-left w-10/12 self-center px-0 ">
             <div class="flex flex-row justify-between w-full">
                 <div class="max-w-[50%]">
-                    <h2 class="text-4xl font-bold font-Inter leading-10	text-black">Edit your post hashtags:</h2>
-                    <h3 class="text-base font-semibold text-Alert"><spam class="font-extrabold">Tip:</spam> Use accurate ones!</h3>
-                    <input type="text" placeholder="Hashtags" class="input w-full rounded-2 border border-2 border-black mb-5 self-center max-w-sm" v-model="HashtagValue" @keyup.enter="Hashtags_Handler"/>
+                    <h2 class="text-4xl font-bold font-Inter leading-10	text-black">Post hashtags:</h2>
+                    <!-- <h3 class="text-base font-semibold text-Alert"><spam class="font-extrabold">Tip:</spam> Use accurate ones!</h3> -->
+                    <br>
+                    <input type="text" disabled='true' placeholder="Hashtags" class="input w-full rounded-2 border border-2 border-black mb-5 self-center max-w-sm" v-model="HashtagValue" @keyup.enter="Hashtags_Handler"/>
                     <div class="card bg-white rounded-[0.5rem] border-2 border-black p-2 flex flex-row flex-wrap mb-4 max-w-sm" v-if="HashtagsArr.length !=0">
                         <template v-for="(item, index) in HashtagsArr" :key="index">
-                            <button class="btn btn-sm w-fit m-2 border-none font-light" :class="[index%2? 'bg-main3' : 'bg-main1']" @click="RemoveHashtag(index)">{{ item }}</button>
+                            <button class="btn btn-sm w-fit m-2 border-none font-light" :class="[index%2? 'bg-main3' : 'bg-main1']">{{ item }}</button>
                         </template>
                     </div>
                 </div>

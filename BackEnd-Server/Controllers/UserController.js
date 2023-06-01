@@ -1,3 +1,4 @@
+const { FindOneQuestionRecord } = require("../DatabaseMethods/QuestionMethods");
 const { EditUser, DeleteUser, FindOneUserRecord} = require("../DatabaseMethods/UserMethods");
 const bcrypt = require("bcryptjs");
 
@@ -94,6 +95,26 @@ class UserController {
         }
         catch(err){
             res.status(400).send(err)
+            console.log(err)
+        }
+    }
+    static async GetUserPosts(req , res){
+        try{
+            const UserId = req.params.Id;
+            let Posts = []
+            const User = await FindOneUserRecord({UserId}) ; 
+            if(User.length == 0){
+                return res.status(401).send('User not found');
+            }
+            const PostsIds = User[0].PostList ;
+            for(let i = 0 ; i<PostsIds.length ; i++){
+                const post = await FindOneQuestionRecord({QuestionId:PostsIds[i]});
+                Posts.push(post);
+            }
+            res.status(201).send(Posts); 
+        }
+        catch(err){
+            res.status(400).send(err) ; 
             console.log(err)
         }
     }
