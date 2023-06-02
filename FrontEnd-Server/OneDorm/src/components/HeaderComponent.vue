@@ -39,9 +39,6 @@ onBeforeMount(async()=>{
     // console.log (UserStore().NotificationList)
     for (let i=0;i<UserStore().NotificationList.length;i++){
         const res = await Notification(UserStore().NotificationList[i])
-        // console.log (res);
-        const timeAgo = useTimeAgo(new Date(res.data.CreatedAt))
-        // console.log (timeAgo.value);
         NotificationArr.value.push(res.data);
     }
     NotificationArr.value=NotificationArr.value.reverse();
@@ -54,6 +51,15 @@ const SearchClickHanlder = async ()=>{
     {name: 'Search',
     params: {
         SearchVal: SearchValue.value,
+    }}).then(() => { router.go() })
+}
+
+const ClickHashtagHandler=(e)=>{
+    console.log (e.substr(1, e.length - 1));
+    router.push(
+    {name: 'Hashtag',
+    params: {
+        HashVal: e.substr(1, e.length - 1)
     }}).then(() => { router.go() })
 }
 const CreatePost = ()=>{
@@ -93,11 +99,11 @@ for (let i=0;i<30;i++){
                         <div class="ContHash bg-white shadow-BoxBlackSm border-2 border-black p-4 m-1">
                             <h2 class="text-2xl font-extrabold mx-3 mt-2 border-b-2 pb-3 mb-3 border-black">My Hashtags</h2>
                             <div class=" text-base-content h-[44.3vw] overflow-y-auto text-center">
-                                <template v-for="(e,i) in arr" :key="i">
+                                <template v-for="(e,i) in UserStore().CategoriesList" :key="e">
                                     <div 
-                                    class="btn btn-wide my-1 w-11/12 btn-success bg-main3 text-white" 
-                                    :class="[i%2==0?'':'']">
-                                    {{e + ' ' +i}}
+                                    @click="ClickHashtagHandler(e)"
+                                    class="btn btn-wide my-1 w-11/12 btn-success bg-main3 text-white">
+                                    {{e}}
                                     </div>
                                 </template>
                             </div>
@@ -130,9 +136,9 @@ for (let i=0;i<30;i++){
                 <div class="grow">
                     <input v-model="SearchValue" class="h-full bg-transparent input grow placeholder:text-white placeholder:font-light text-white" type="text" placeholder="search..">
                 </div>
-                <a class="btn btn-circle btn-outline btn-sm" >
+                <!-- <a class="btn btn-circle btn-outline btn-sm" >
                     <FilterIcon/>
-                </a>
+                </a> -->
             </div>
 
         </div>
@@ -187,13 +193,13 @@ for (let i=0;i<30;i++){
                 </div>
                 <div class="flex flex-col h-fit self-center justify-center">
                     <HappyFace/>
-                    <p class="text-main2 text-center">29+</p>
+                    <p class="text-main2 text-center">{{UserStore().AnsList.length>99?'99+':UserStore().AnsList.length}}</p>
                 </div>
                 <div  tabindex="0" class="btn btn-cirle btn-ghost btn-sm self-center pr-1" @click="ClickHanlderShowList">
                     <Arrow_Bottom_White/>
                 </div>
                 <ul tabindex="0" class="mt-20 dropdown-content menu p-2 shadow bg-black w-52 dropdown-open" :class="[ShowList?'dropdown-open':'']">
-                    <li class="text-white" @click="router.push('/profile')"><a>profile</a></li>
+                    <li class="text-white" @click="router.push('/profile')"><a>Profile</a></li>
                     <li class="text-Alert" @click="Logout"><a>Log out</a></li>
                 </ul>
                 

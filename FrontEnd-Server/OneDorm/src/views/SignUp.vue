@@ -37,7 +37,7 @@ async function CreatAccHandler(){
   const data ={
     Fname:Fname.value,
     Lname:Lname.value,
-    Email:Email.value,
+    Email:(Email.value).toLowerCase(),
     Password:Password.value
   }
   const res = await userStore.SignUp(data);
