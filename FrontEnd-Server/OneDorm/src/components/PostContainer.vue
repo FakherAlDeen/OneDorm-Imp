@@ -80,12 +80,16 @@ import router from '../router';
         });
     }
     const OpenUserPorfileHandler=async()=>{
-        router.push({
-            name: 'UserProfile',
-            params: {
-                UserId: props.CreatedBy,
-            }
-        });
+        if (props.CreatedBy == UserStore().UserID){
+            router.push('/profile');
+        }else{
+            router.push({
+                name: 'UserProfile',
+                params: {
+                    UserId: props.CreatedBy,
+                }
+            });
+        }
     }
 </script>
 

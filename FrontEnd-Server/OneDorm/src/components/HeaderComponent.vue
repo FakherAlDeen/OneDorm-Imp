@@ -20,6 +20,7 @@ const SearchValue = ref();
 const showDrawer = ref (false);
 const ShowNotification=ref(false);
 const NotificationArr = ref([]);
+const loading = ref(true);
 UserStore().socket.on('Notifications',async(msg)=>{
     // console.log ('meow',msg);
     const res = await Notification(msg);
@@ -36,6 +37,7 @@ const ShowNotificationHandler=async()=>{
     }
 }
 onBeforeMount(async()=>{
+    loading.value= false;
     // console.log (UserStore().NotificationList)
     for (let i=0;i<UserStore().NotificationList.length;i++){
         const res = await Notification(UserStore().NotificationList[i])
@@ -99,12 +101,15 @@ for (let i=0;i<30;i++){
                         <div class="ContHash bg-white shadow-BoxBlackSm border-2 border-black p-4 m-1">
                             <h2 class="text-2xl font-extrabold mx-3 mt-2 border-b-2 pb-3 mb-3 border-black">My Hashtags</h2>
                             <div class=" text-base-content h-[44.3vw] overflow-y-auto text-center">
-                                <template v-for="(e,i) in UserStore().CategoriesList" :key="e">
-                                    <div 
-                                    @click="ClickHashtagHandler(e)"
-                                    class="btn btn-wide my-1 w-11/12 btn-success bg-main3 text-white">
-                                    {{e}}
-                                    </div>
+                                <template v-for="(e) in UserStore().CategoriesList" :key="e">
+                                    <template v-if="e">
+                                        <div 
+                                        @click="ClickHashtagHandler(e)"
+                                        class="btn btn-wide my-1 w-11/12 btn-success bg-main3 text-white">
+                                        {{e}}
+                                        </div>
+
+                                    </template>
                                 </template>
                             </div>
                         </div>
@@ -198,8 +203,9 @@ for (let i=0;i<30;i++){
                 <div  tabindex="0" class="btn btn-cirle btn-ghost btn-sm self-center pr-1" @click="ClickHanlderShowList">
                     <Arrow_Bottom_White/>
                 </div>
-                <ul tabindex="0" class="mt-20 dropdown-content menu p-2 shadow bg-black w-52 dropdown-open" :class="[ShowList?'dropdown-open':'']">
+                <ul v-if="ShowList" tabindex="0" class="mt-20 dropdown-content menu p-2 shadow bg-black w-52 dropdown-open" :class="[ShowList?'dropdown-open':'']">
                     <li class="text-white" @click="router.push('/profile')"><a>Profile</a></li>
+                    <li class="text-white" @click="router.push('/MyPosts')"><a>My Posts</a></li>
                     <li class="text-Alert" @click="Logout"><a>Log out</a></li>
                 </ul>
                 

@@ -3,12 +3,11 @@ import { ref, onBeforeMount } from 'vue'
 import HeaderComponent from '../components/HeaderComponent.vue';
 import PostContainer from '../components/PostContainer.vue';
 import { GetHashtagPosts } from '../Helpers/APIs/PostAPIs';
-import { AddHashtags } from '../Helpers/APIs/UserAPIs';
+import { AddHashtags,RemoveHashtag } from '../Helpers/APIs/UserAPIs';
 
 import {useRoute} from "vue-router";
 import router from '../router';
 import { UserStore } from '../stores/UserStore';
-
 const Hashtag= ref('');
 const PostsList = ref ([]);
 const Loading = ref(true);
@@ -40,7 +39,21 @@ const ClickHanlder = (e)=>{
     })
 };
 const SubscribeHandler = async()=>{
-    if (isSubscribed.value)return;
+    if (isSubscribed.value){
+        const res = await  RemoveHashtag({
+        UserId:UserStore().UserID,
+        Hashtag:'#'+Hashtag.value
+        })
+        console.log (res);
+        if (res.status==201){
+        isSubscribed.value=false;
+        const indx = UserStore().CategoriesList.indexOf('#'+Hashtag.value);
+        delete UserStore().CategoriesList[indx];
+        console.log (indx)
+        console.log (UserStore().CategoriesList)
+        }
+        return;
+    }
     const res = await AddHashtags({
         UserId:UserStore().UserID,
         Hashtags:['#'+Hashtag.value]
@@ -69,8 +82,8 @@ const SubscribeHandler = async()=>{
                 </div>
                 <button 
                 @click="SubscribeHandler" 
-                :class="[isSubscribed?'bg-Alert shadow-Alert cursor-default':'shadow-main2']"
-                class="mt-2 focus:none btn btn-warning bg-main1 shadow-main1 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">
+                :class="[isSubscribed?'bg-Alert shadow-Alert':'shadow-main2']"
+                class="mt-2 focus:none btn btn-warning shadow-main1 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">
                     {{isSubscribed?'Unsubscribe':'Subscribe to #'+Hashtag}}
                 </button>
             </div>

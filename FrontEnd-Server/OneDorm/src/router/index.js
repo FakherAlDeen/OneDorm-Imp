@@ -90,6 +90,12 @@ const router = createRouter({
       name: 'UserProfile',
       beforeEnter: isAuthenticated,
       component: () => import('../views/ProfilePage.vue')
+    },
+    {
+      path:'/MyPosts',
+      name: 'MyPosts',
+      beforeEnter: isAuthenticated,
+      component: () => import('../views/MyPostsPage.vue')
     }
   ]
 })
