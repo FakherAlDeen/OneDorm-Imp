@@ -59,9 +59,6 @@ const callback = (response) => {
 
 <template>
   <main class="w-full flex-1 flex-col my-8 box-border">
-    <!-- <label @click="callback" for="wtf">wtf
-
-    </label> -->
     <HeaderSignLog to_Btn="/Signup">
       <template #BtnName>SIGN UP</template>
     </HeaderSignLog>
