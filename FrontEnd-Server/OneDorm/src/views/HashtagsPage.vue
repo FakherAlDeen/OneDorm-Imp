@@ -88,11 +88,16 @@ const SubscribeHandler = async()=>{
                 </button>
             </div>
             <template v-if="PostsList.length > 0">
-                <TransitionGroup name="list" tag="PostContainer">
                     <template v-for="(e) in PostsList" :key="e.QuestionId">
-                            <PostContainer @click="ClickHanlder(e.QuestionId)" class="mx-auto w-9/12 cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
+                            <PostContainer 
+                            @click="ClickHanlder(e.QuestionId)" 
+                            class="post mx-auto w-9/12 cursor-pointer transition ease-in-out hover:scale-105" 
+                            :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" 
+                            :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" 
+                            :postFull="false" :mine="e.CreatedBy == UserStore().UserID" 
+                            :PostContent="turnfun(e.QuestionDetailsHTML)" 
+                            :Score="e.QuestionVotesCount"/>
                     </template>
-                </TransitionGroup>
             </template>
             <template v-else>
                 <div class="m-16 mt-10">
@@ -104,15 +109,12 @@ const SubscribeHandler = async()=>{
 </template>
 
 <style scoped>
-    .list-move, /* apply transition to moving elements */
-    .list-enter-active,
-    .list-leave-active {
-    transition: all 0.5s ease;
+    .post {
+        transition: all 0.5s ease;
+        animation: mymove 1s;
     }
-
-    .list-enter-from,
-    .list-leave-to {
-    opacity: 0;
-    transform: translateX(30px);
+    @keyframes mymove {
+        from {opacity: 0; transform: translateX(30px);}
+        to {opacity: 100; transform: translateX(0); }
     }
 </style>

@@ -48,7 +48,6 @@ const SetUsernameHandler = async () =>{
         Username:Username.value
     }
     const res = await SetUsername(data);
-    console.log (res);
     if (res.status == 201){
         ModalPage.value++;
         return;
@@ -59,16 +58,13 @@ const SetUsernameHandler = async () =>{
 }
 const HashtagClickHanlder = (e)=>{
     SelectedHash.value[e] = !SelectedHash.value[e];
-    console.log (SelectedHash.value);
 }
 const ShowContinueSetUpModal= ref (!Username.value? false : true);
 const ModalPage = ref (1);
-console.log (ShowContinueSetUpModal.value);
 onBeforeMount(async ()=>{
     Loading.value = false;
     const res = await NewsFeed(UserStore().UserID);
     PostsList.value = res.data;
-    console.log(res);
 })
 const ClickHanlder = (e)=>{
 router.push ({
@@ -102,7 +98,6 @@ const NextHandler = async() =>{
         error.value = "At Least Three!";
         return;
     }
-    console.log (UserStore().CategoriesList);
     // UserStore().CategoriesList = []
     for(const s in arr.value){
         UserStore().CategoriesList.push(arr.value[s]);
@@ -226,13 +221,12 @@ const NextHandler = async() =>{
             <h2 class="text-5xl font-[1000] text-center pb-2">POST OF THE DAY</h2>
             <div class="m-5">
             </div>
-            <TransitionGroup name="list" tag="PostContainer">
                 <template v-for="(e,i) in PostsList" :key="e.QuestionId">
                     <div class="">
                         <div v-if="i==0">
                             <PostContainer 
                             @click="ClickHanlder(e.QuestionId)"  
-                            class="mx-auto w-9/12 transition ease-in-out hover:scale-110 cursor-pointer mt-10 scale-105 hover:none" 
+                            class="post_first mx-auto w-9/12 transition ease-in-out hover:scale-110 cursor-pointer mt-10 scale-105 hover:none" 
                             :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" 
                             :AnswerCount="e.AnswersList.length" :postFull="false" 
                             :mine="e.CreatedBy == UserStore().UserID" 
@@ -245,7 +239,7 @@ const NextHandler = async() =>{
                         </div>
                         <PostContainer v-else 
                         @click="ClickHanlder(e.QuestionId)" 
-                        class="mx-auto w-9/12 cursor-pointer transition ease-in-out hover:scale-105"  
+                        class="post mx-auto w-9/12 cursor-pointer transition ease-in-out hover:scale-105"  
                         :CreatedBy="e.CreatedBy" 
                         :postTitle="e.QuestionTitle" 
                         :AnswerCount="e.AnswersList.length" 
@@ -257,8 +251,6 @@ const NextHandler = async() =>{
     
                     </div>
                 </template>
-            </TransitionGroup>
-
         </template>
         <!-- <button class="Button_Primary my-2" :class="transitionClass" @click="CreatePostClick">Share</button> -->
     </main>
@@ -275,6 +267,22 @@ const NextHandler = async() =>{
     .list-leave-to {
     opacity: 0;
     transform: translateX(30px);
+    }
+    .post {
+        transition: all 0.5s ease;
+        animation: mymove 1s;
+    }
+    .post_first {
+        transition: all 0.5s ease;
+        animation: mymove2 1s;
+    }
+    @keyframes mymove {
+        from {opacity: 0; transform: translateX(30px);}
+        to {opacity: 100; transform: translateX(0); }
+    }
+    @keyframes mymove2 {
+        from {opacity: 0; transform: translateX(30px);}
+        to {opacity: 100; transform: translateX(0); transform: scale(1.05); }
     }
 
     .face {

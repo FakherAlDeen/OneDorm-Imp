@@ -21,7 +21,7 @@ import router from '../router';
         CreatedBy:String,
     })
     const mine = ref (props.CreatedBy==UserStore().UserID)
-
+    console.log (props.postFull)
     const Creator = ref (props.CreatorName);
     const UserVotes= UserStore().UserVotes;
     const ModalDeleteShow = ref (false);
@@ -59,7 +59,6 @@ import router from '../router';
         }
     })
     const ClickHashtagHandler=(e)=>{
-    console.log (e.substr(1, e.length - 1));
     router.push(
     {name: 'Hashtag',
     params: {
@@ -98,6 +97,7 @@ import router from '../router';
     <div>
         <ModalComponent @emit-close="ModalDeleteShow=false" :class="[ModalDeleteShow? 'modal-open' : '']" @Func1="DeletePostHanlder" ModalContent="Are you sure you wanna delete your post ?" ModalContentHeader="Are you sure!" Btn1Cont="Delete!" :with-btn1="true"></ModalComponent>
         <div class="card bg-postBG w-full min-h-[20rem] rounded-none border border-2 border-black relative mx-auto my-16 p-0 m-0 z-0">
+            <div class="w-full h-full bg-transparent z-10 absolute" v-if="!postFull"></div>
             <div class="absolute left-0 top-0">
                 <div class="avatar h-16 absolute">
                     <div class="bg-white z-10 w-48 h-48 border-2 transition-all duration-150 ease-in-out border-black shadow-BoxBlackSm hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none hover:border-t-1 hover:border-l-1">

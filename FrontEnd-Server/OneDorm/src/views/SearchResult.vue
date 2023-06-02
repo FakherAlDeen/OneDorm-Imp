@@ -57,12 +57,12 @@ const ClickHanlder = (e)=>{
                     <template v-for="(e,i) in PostsList" :key="i">
                         <div class="">
                             <div v-if="i==0">
-                                <PostContainer @click="ClickHanlder(e.QuestionId)"  class="mx-auto w-9/12 transition ease-in-out hover:scale-110 cursor-pointer mt-10 scale-105 hover:none" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Hashtags="e.Hashtags" :Score="e.QuestionVotesCount"/>
+                                <PostContainer @click="ClickHanlder(e.QuestionId)"  class="post_first mx-auto w-9/12 transition ease-in-out hover:scale-110 cursor-pointer scale-105 mt-10 hover:none" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Hashtags="e.Hashtags" :Score="e.QuestionVotesCount"/>
                                 <div class="w-1/2 mx-auto border-b-4 border-Grey pb-3">
                                     <!-- <h2 class="text-2xl font-[1000] text-center text-Grey tracking-wide leading-8">MORE FOR YOU</h2> -->
                                 </div>
                             </div>
-                            <PostContainer @click="ClickHanlder(e.QuestionId)" class="mx-auto w-9/12 cursor-pointer transition ease-in-out hover:scale-105" v-else :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
+                            <PostContainer @click="ClickHanlder(e.QuestionId)" class="post mx-auto w-9/12 cursor-pointer transition ease-in-out hover:scale-105" v-else :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
                         </div>
                     </template>
                 </TransitionGroup>
@@ -87,5 +87,21 @@ const ClickHanlder = (e)=>{
     .list-leave-to {
     opacity: 0;
     transform: translateX(30px);
+    }
+    .post {
+        transition: all 0.5s ease;
+        animation: mymove 1s;
+    }
+    .post_first {
+        transition: all 0.5s ease;
+        animation: mymove2 1s;
+    }
+    @keyframes mymove {
+        from {opacity: 0; transform: translateX(30px);}
+        to {opacity: 100; transform: translateX(0); }
+    }
+    @keyframes mymove2 {
+        from {opacity: 0; transform: translateX(30px);}
+        to {opacity: 100; transform: translateX(0); transform: scale(1.05); }
     }
 </style>
