@@ -29,6 +29,16 @@ export async function AddHashtags (data){
                 return res.data;
         }
 }
+export async function RemoveHashtag (data){
+        console.log(data)
+        const res = await POST ('RemoveHashtag' , data);
+        if (res.status=='201'){
+                return res.data;
+        }else {
+                console.log(res)
+                return res.data;
+        }
+}
 export async function EditProfile (data){
         console.log(data)
         const res = await POST ('EditProfile' , data);

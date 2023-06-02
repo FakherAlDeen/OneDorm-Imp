@@ -40,6 +40,20 @@ class UserController {
             console.log(err)
         }
     }
+    static async RemoveHashtag(req , res){
+        try{
+            const {UserId , Hashtag} = req.body ; 
+            if (!UserId || Hashtag.length == 0) {
+                return res.status(400).send("Send all the fields");
+            }
+            await EditUser(UserId , {$pull : { CategoriesList  : Hashtag}});
+            res.status(201).send("done")
+        }
+        catch(err){
+            res.status(400).send(err)
+            console.log(err)
+        }
+    }
     static async EditProfile(req , res){
         try{
             
