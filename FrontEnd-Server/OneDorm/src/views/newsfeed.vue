@@ -96,23 +96,30 @@ const NextHandler = async() =>{
     error.value = "";
     for(const s in SelectedHash.value){
         if (SelectedHash.value[s])arr.value.push(s);
+
     }
     if (arr.value.length<3){
         error.value = "At Least Three!";
         return;
+    }
+    console.log (UserStore().CategoriesList);
+    // UserStore().CategoriesList = []
+    for(const s in arr.value){
+        UserStore().CategoriesList.push(arr.value[s]);
     }
     const data = {
         UserId:UserStore().UserID,
         Hashtags:arr.value
     }
     await AddHashtags(data);
+    
     ModalPage.value++;
 }
 
 </script>
 
 <template>
-    <main class="relative">
+    <main class="relative overflow-x-hidden">
         <ModalComponent class="" :withoutCancel="true" :class="[!ShowContinueSetUpModal && ModalPage <6? 'modal-open' : '']">
             <template #content>
                 <div  class="flex flex-col gap-1 my-3 overflow-x-hidden">
@@ -225,7 +232,7 @@ const NextHandler = async() =>{
                         <div v-if="i==0">
                             <PostContainer 
                             @click="ClickHanlder(e.QuestionId)"  
-                            class="transition ease-in-out hover:scale-110 cursor-pointer mt-10 scale-105 hover:none" 
+                            class="mx-auto w-9/12 transition ease-in-out hover:scale-110 cursor-pointer mt-10 scale-105 hover:none" 
                             :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" 
                             :AnswerCount="e.AnswersList.length" :postFull="false" 
                             :mine="e.CreatedBy == UserStore().UserID" 
@@ -238,7 +245,7 @@ const NextHandler = async() =>{
                         </div>
                         <PostContainer v-else 
                         @click="ClickHanlder(e.QuestionId)" 
-                        class="cursor-pointer transition ease-in-out hover:scale-105"  
+                        class="mx-auto w-9/12 cursor-pointer transition ease-in-out hover:scale-105"  
                         :CreatedBy="e.CreatedBy" 
                         :postTitle="e.QuestionTitle" 
                         :AnswerCount="e.AnswersList.length" 

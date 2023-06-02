@@ -69,7 +69,8 @@ const SendClickHanlder = async () =>{
         AnswerCreator: UserStore().UserID,
         CreatedAt:Date.now(),
     }
-    UserStore().socket.emit('NotificationSend',notification);
+    if (UserStore().UserID!=props.CreatedBy)
+      UserStore().socket.emit('NotificationSend',notification);
   }
 </script>
 <template>

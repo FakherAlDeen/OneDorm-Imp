@@ -37,14 +37,13 @@ const ClickHanlder = (e)=>{
 };
 </script>
 <template>
-    <main class="relative">
+    <main class="relative overflow-x-hidden">
         <HeaderComponent></HeaderComponent>
         <template v-if="Loading">
             <div class="flex">
                 <button class="m-auto btn btn-square loading"></button>
             </div>
         </template>
-        <!-- <button class="Button_Primary my-2" :class="transitionClass" @click="CreatePostClick">Share</button> -->
         <template v-else>
 
             <div class="mx-32 my-10">
@@ -58,12 +57,12 @@ const ClickHanlder = (e)=>{
                     <template v-for="(e,i) in PostsList" :key="i">
                         <div class="">
                             <div v-if="i==0">
-                                <PostContainer @click="ClickHanlder(e.QuestionId)"  class="transition ease-in-out hover:scale-110 cursor-pointer mt-10 scale-105 hover:none" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Hashtags="e.Hashtags" :Score="e.QuestionVotesCount"/>
+                                <PostContainer @click="ClickHanlder(e.QuestionId)"  class="mx-auto w-9/12 transition ease-in-out hover:scale-110 cursor-pointer mt-10 scale-105 hover:none" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Hashtags="e.Hashtags" :Score="e.QuestionVotesCount"/>
                                 <div class="w-1/2 mx-auto border-b-4 border-Grey pb-3">
                                     <!-- <h2 class="text-2xl font-[1000] text-center text-Grey tracking-wide leading-8">MORE FOR YOU</h2> -->
                                 </div>
                             </div>
-                            <PostContainer @click="ClickHanlder(e.QuestionId)" class="cursor-pointer transition ease-in-out hover:scale-105" v-else :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
+                            <PostContainer @click="ClickHanlder(e.QuestionId)" class="mx-auto w-9/12 cursor-pointer transition ease-in-out hover:scale-105" v-else :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
                         </div>
                     </template>
                 </TransitionGroup>

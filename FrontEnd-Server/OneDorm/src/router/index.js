@@ -78,6 +78,18 @@ const router = createRouter({
       name: 'Admin',
       beforeEnter: isAuthenticated,
       component: () => import('../views/AdminPanel.vue')
+    },
+    {
+      path:'/Hashtag/:HashVal',
+      name: 'Hashtag',
+      beforeEnter: isAuthenticated,
+      component: () => import('../views/HashtagsPage.vue')
+    },
+    {
+      path:'/UserProfile/:UserId',
+      name: 'UserProfile',
+      beforeEnter: isAuthenticated,
+      component: () => import('../views/ProfilePage.vue')
     }
   ]
 })
