@@ -27,6 +27,7 @@ export const UserStore = defineStore('User',{
                 City:'',
                 Address:''
             },
+            AnsList:[],
             UserVotes:{},
             AcademicStaff:'inactive',
             socket:null,
@@ -49,6 +50,7 @@ export const UserStore = defineStore('User',{
                 this.NotificationList = Data.NotificationList;
                 this.AcademicStaff = Data.VerificationState?Data.VerificationState:'inactive';
                 this.CategoriesList = Data.CategoriesList;
+                this.AnsList = Data.AnswersList
                 // this.UserVotes = Data.UserVotes;
                 this.UserToken = Data.token;
                 // this.Username = Data.Username;
@@ -76,6 +78,7 @@ export const UserStore = defineStore('User',{
                 this.NotificationList = Data.NotificationList;
                 this.CategoriesList=Data.CategoriesList
                 this.AcademicStaff = Data.VerificationState?Data.VerificationState:'inactive';
+                this.AnsList = Data.AnswersList
                 this.Username = Data.Username;
                 this.socket = io('ws://localhost:3001', { transports: ['websocket', 'polling', 'flashsocket'] });
                 this.socket.emit('join',this.UserID);
@@ -108,6 +111,7 @@ export const UserStore = defineStore('User',{
                 this.DateOfBirth = Data.DateOfBirth;
                 this.Phonenumber = Data.Phonenumber;
                 this.NotificationList = Data.NotificationList;
+                this.AnsList = Data.AnswersList
                 this.CategoriesList= Data.CategoriesList;
                 this.AcademicStaff = Data.VerificationState?Data.VerificationState:'inactive';
                 if (Data.Image){

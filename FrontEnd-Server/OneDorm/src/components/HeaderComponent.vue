@@ -39,9 +39,6 @@ onBeforeMount(async()=>{
     // console.log (UserStore().NotificationList)
     for (let i=0;i<UserStore().NotificationList.length;i++){
         const res = await Notification(UserStore().NotificationList[i])
-        // console.log (res);
-        const timeAgo = useTimeAgo(new Date(res.data.CreatedAt))
-        // console.log (timeAgo.value);
         NotificationArr.value.push(res.data);
     }
     NotificationArr.value=NotificationArr.value.reverse();
@@ -196,7 +193,7 @@ for (let i=0;i<30;i++){
                 </div>
                 <div class="flex flex-col h-fit self-center justify-center">
                     <HappyFace/>
-                    <p class="text-main2 text-center">29+</p>
+                    <p class="text-main2 text-center">{{UserStore().AnsList.length>99?'99+':UserStore().AnsList.length}}</p>
                 </div>
                 <div  tabindex="0" class="btn btn-cirle btn-ghost btn-sm self-center pr-1" @click="ClickHanlderShowList">
                     <Arrow_Bottom_White/>

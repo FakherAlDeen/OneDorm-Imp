@@ -69,9 +69,9 @@ const SubscribeHandler = async()=>{
                 </div>
                 <button 
                 @click="SubscribeHandler" 
-                :class="[isSubscribed?'bg-main3 shadow-main3 cursor-default':'shadow-main2']"
+                :class="[isSubscribed?'bg-Alert shadow-Alert cursor-default':'shadow-main2']"
                 class="mt-2 focus:none btn btn-warning bg-main1 shadow-main1 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">
-                    {{isSubscribed?'Already subscribed':'Subscribe to #'+Hashtag}}
+                    {{isSubscribed?'Unsubscribe':'Subscribe to #'+Hashtag}}
                 </button>
             </div>
             <template v-if="PostsList.length > 0">
