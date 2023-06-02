@@ -63,7 +63,8 @@ const CommentClickHandler = async () =>{
         AnswerCreator: UserStore().UserID,
         CreatedAt:Date.now(),
     }
-    UserStore().socket.emit('NotificationSend',notification);
+    if (props.PostCreator !=UserStore().UserID)
+        UserStore().socket.emit('NotificationSend',notification);
 };
 
 </script>

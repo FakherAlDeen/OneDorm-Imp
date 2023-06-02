@@ -58,6 +58,14 @@ import router from '../router';
             imageCreator.value = 'https://i.ibb.co/g39WZXc/User-1.png';
         }
     })
+    const ClickHashtagHandler=(e)=>{
+    console.log (e.substr(1, e.length - 1));
+    router.push(
+    {name: 'Hashtag',
+    params: {
+        HashVal: e.substr(1, e.length - 1)
+    }}).then(() => { router.go() })
+    }
     const DeletePostHanlder = async ()=>{
         await DeletePost({Id:props.PostID , Type:'Question'});
         router.push('/NewsFeed');
@@ -71,13 +79,21 @@ import router from '../router';
             }
         });
     }
+    const OpenUserPorfileHandler=async()=>{
+        router.push({
+            name: 'UserProfile',
+            params: {
+                UserId: props.CreatedBy,
+            }
+        });
+    }
 </script>
 
 
 <template>
     <div>
         <ModalComponent @emit-close="ModalDeleteShow=false" :class="[ModalDeleteShow? 'modal-open' : '']" @Func1="DeletePostHanlder" ModalContent="Are you sure you wanna delete your post ?" ModalContentHeader="Are you sure!" Btn1Cont="Delete!" :with-btn1="true"></ModalComponent>
-        <div class="card bg-postBG w-9/12 min-h-[20rem] rounded-none border border-2 border-black relative mx-auto my-16 p-0 m-0 z-0">
+        <div class="card bg-postBG w-full min-h-[20rem] rounded-none border border-2 border-black relative mx-auto my-16 p-0 m-0 z-0">
             <div class="absolute left-0 top-0">
                 <div class="avatar h-16 absolute">
                     <div class="bg-white z-10 w-48 h-48 border-2 transition-all duration-150 ease-in-out border-black shadow-BoxBlackSm hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none hover:border-t-1 hover:border-l-1">
@@ -103,7 +119,7 @@ import router from '../router';
                 <div class="grow">
                     <div class="mx-10 mt-10 h-fit min-h-[9rem] border-b-2 border-black flex flex-col">
                         <div class="flex justify-between">
-                            <h1 class="text-2xl text-left text-main1 font-bold capitalize">{{Creator}}</h1>
+                            <h1 class="text-2xl text-left text-main1 font-bold capitalize cursor-pointer hover:underline" @click="OpenUserPorfileHandler">{{Creator}}</h1>
                             <div class="dropdown dropdown-end" v-if="postFull && mine">
                                 <button tabindex="0"  class="btn btn-ghost btn-sm">
                                     <svg class="w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
@@ -121,7 +137,7 @@ import router from '../router';
                     </div>
                     <div class="mx-10 mt-4">
                         <template v-for="(e,i) in Hashtags" :key="i">
-                            <button class="btn btn-sm w-fit m-2 border-none font-light" :class="[i%2? 'bg-main3' : 'bg-main1']">{{ e }}</button>
+                            <button @click="ClickHashtagHandler(e)" class="btn btn-sm w-fit m-2 border-none font-light" :class="[i%2? 'bg-main3' : 'bg-main1']">{{ e }}</button>
                         </template>
                     </div>
                     <div id="PostCont" :class="[!postFull?'max-h-[6rem]':'']" v-html="PostContent" class="mx-10 mb-10 overflow-hidden">

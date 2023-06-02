@@ -9,8 +9,6 @@ const app = express();
 const server = createServer(app);
 const io = require('./Helpers/socket.js').init(server);
 const port = 3000
-
-const SearchController = require('./Controllers/SearchController')
 var cors = require('cors');
 const bodyParser = require('body-parser');
 app.use(express.json());
@@ -45,10 +43,12 @@ io.on('connection', (socket) => {
           },
           CreatedAt:msg.CreatedAt
         }
-        await CreateNotification(notification);
-        await EditUser(msg.PostCreator,{$push: { NotificationList: NotificationId }})
-        io.to(msg.PostCreator).emit('Notifications',NotificationId);
-        console.log(socket.rooms)
+        if (msg.PostCreator != msg.AnswerCreatorName){
+          await CreateNotification(notification);
+          await EditUser(msg.PostCreator,{$push: { NotificationList: NotificationId }})
+          io.to(msg.PostCreator).emit('Notifications',NotificationId);
+          console.log(socket.rooms)
+        }
       } catch (e){
         console.log (e);
       }
@@ -65,11 +65,11 @@ io.on('connection', (socket) => {
           },
           CreatedAt:msg.CreatedAt
         }
-        await CreateNotification(notification);
-        // await EditUser(msg.PostCreator,{$push: { NotificationList: NotificationId }})
-        await EditUser(msg.ParentId,{$push: { NotificationList: NotificationId }})
-        // io.to(msg.PostCreator).emit('Notifications',NotificationId);
-        io.to(msg.ParentId).emit('Notifications',NotificationId);
+        if (msg.ParentId != msg.AnswerCreatorName){
+          await CreateNotification(notification);
+          await EditUser(msg.ParentId,{$push: { NotificationList: NotificationId }})
+          io.to(msg.ParentId).emit('Notifications',NotificationId);
+        }
     }
     
   })
@@ -80,6 +80,7 @@ app.use((req, res, next) => {
   return next();
 });
 const mongoose = require('mongoose');
+const { CreateCategory } = require('./DatabaseMethods/CategoryMethods');
 const connectDB = async () => {
   try {
       const conn = await mongoose.connect('mongodb+srv://fakheralden1:CHBsfnMo4Rzc9qZT@onedorm.nmnmx8u.mongodb.net/');
@@ -94,7 +95,6 @@ connectDB();
 
 app.use(require('./Routers'));
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Example app listening on port ${port}`)
-  // SearchController.SearchPost('x','x');
 })

@@ -56,6 +56,15 @@ const SearchClickHanlder = async ()=>{
         SearchVal: SearchValue.value,
     }}).then(() => { router.go() })
 }
+
+const ClickHashtagHandler=(e)=>{
+    console.log (e.substr(1, e.length - 1));
+    router.push(
+    {name: 'Hashtag',
+    params: {
+        HashVal: e.substr(1, e.length - 1)
+    }}).then(() => { router.go() })
+}
 const CreatePost = ()=>{
     router.push('/CreatePost')
 }
@@ -95,8 +104,8 @@ for (let i=0;i<30;i++){
                             <div class=" text-base-content h-[44.3vw] overflow-y-auto text-center">
                                 <template v-for="(e,i) in UserStore().CategoriesList" :key="e">
                                     <div 
-                                    class="btn btn-wide my-1 w-11/12 btn-success bg-main3 text-white" 
-                                    :class="[i%2==0?'':'']">
+                                    @click="ClickHashtagHandler(e)"
+                                    class="btn btn-wide my-1 w-11/12 btn-success bg-main3 text-white">
                                     {{e}}
                                     </div>
                                 </template>

@@ -58,7 +58,7 @@ onMounted(async()=>{
         <template v-else>
             <Alert classProp="alert-warning"  v-if="Error!='nth'"><template #Error_Message>{{ Error }}</template></Alert>
             <template v-else>
-                <PostContainer :PostID="PostID" :postFull="true" :CreatorName="Cname" :postTitle="postTitle" :AnswerCount="AnsCount" :CreatedBy="CreatedBy" :Hashtags="Hashtags" :PostContent="postcont" :Score="score"/>
+                <PostContainer class="mx-auto w-10/12" :PostID="PostID" :postFull="true" :CreatorName="Cname" :postTitle="postTitle" :AnswerCount="AnsCount" :CreatedBy="CreatedBy" :Hashtags="Hashtags" :PostContent="postcont" :Score="score"/>
                 <CommentComponent @EmitAnsID="PushAnsId" :PostCreator="CreatedBy" :QuestionId="PostID" class="z-10"/>
                 <template v-if="AnswersId.length!=0">
                     <div class="card bg-Grey2 w-9/12 rounded-none border border-t-[3rem] mt-[-4rem] border-[0.2rem]  border-black relative mx-auto my-10 h-full p-5">

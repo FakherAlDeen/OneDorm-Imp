@@ -53,12 +53,14 @@ function diff_minutes(dt2, dt1)
  }
  const ActualDate = ref();
  const CreatedBy=ref();
+ const userdata=ref();
 onMounted (async ()=>{
     const res = await GetAnswer(props.AnswerId);
     const commentData= res.data.AnswerData;
     CreatedBy.value = commentData.CreatedBy;
     const UserData= res.data.UserData;
     const User = await GetUser(commentData.CreatedBy);
+    userdata.value= User.data;
     console.log (User.data);
     if (User.data.Image){
         imageCreator.value = `data:${User.data.Image.contentType};base64,${User.data.Image.image}`
@@ -126,7 +128,7 @@ const DeletePostHanlder = async ()=>{
                         </ul>
                     </div>
                 </div>
-                <h2 class="text-base text-Grey font-extrabold">PSUT - CS student - {{AnswerLists.length}} answers</h2>
+                <h2 class="text-base text-Grey font-extrabold">{{userdata?.UserDetails.University==''?'Unkown university':userdata?.UserDetails.University}} - {{userdata?.UserDetails.Major==''?'Unkown Major':userdata?.UserDetails.Major}} student - {{userdata?.AnswersList.length}} answers</h2>
             </div>
             <div v-html="v">
                 
