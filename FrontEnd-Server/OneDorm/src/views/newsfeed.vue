@@ -96,16 +96,23 @@ const NextHandler = async() =>{
     error.value = "";
     for(const s in SelectedHash.value){
         if (SelectedHash.value[s])arr.value.push(s);
+
     }
     if (arr.value.length<3){
         error.value = "At Least Three!";
         return;
+    }
+    console.log (UserStore().CategoriesList);
+    // UserStore().CategoriesList = []
+    for(const s in arr.value){
+        UserStore().CategoriesList.push(arr.value[s]);
     }
     const data = {
         UserId:UserStore().UserID,
         Hashtags:arr.value
     }
     await AddHashtags(data);
+    
     ModalPage.value++;
 }
 

@@ -63,7 +63,7 @@ onMounted (async ()=>{
     if (User.data.Image){
         imageCreator.value = `data:${User.data.Image.contentType};base64,${User.data.Image.image}`
     }else {
-        imageCreator.value = 'https://lh3.googleusercontent.com/Dq9gy_sLK2FmQ-vmMOQQGPfAMv5sSeyrwb1UcvR2urDFrPVTkbfCWtovJZjuI-yumftkgH_vgBXPIx06cmVIVNFlnbLLoy6cmip4B8X6t7Zf_RgNdtZXAD-VLguppLve70PDLHob3qHHf_kWme51kJ0-OiLO2Z7r74BHRXy87YNvHRXUCPMdcRXFbcJEQ__W74BYmqWn7sjHDS8MYt8k_LrZigHUc67yTsLXDAWndnkPb8kEwYc0586uW3_780brtk1hxkDD0pOhvAc1duE2qeuNvl7rIpub02yc0qcoa1PjN80Xo5bS3ryIrOuaT6GGsCUA7jneiC0xuaSqVnc63SHANR9feT_bZ2p6oMfhjIlVWGqqyxidq6p0Yph360b41Nl5wuMT2snmNrFDZdVYMFNstqfbnAbroT7Fk9xXY_Lp_H7qyL6YlhQo71WGfmInOtciH8ueg3pJJ06VjYySpnNjImH4zyL3X0E9VOVZ6R7yzs8OCLB99Kdqac1cr5Noa8cT1NzEawandu2BL9f0qXnGaZdhI5M_1PRGLasXrRFOEmet9lncKfDG5aZ3Eqo27eyViYetsT8jhs1yOyAI8X8yBgNg7xd-olVsaOk0573RzzvOYTXBAzNU65PdMWuhgfgAeu4wJ8eqT-QFUkREviSpr-3kn0LZEGKou6hJEUVuLLf3CVC3Vg-ZigOcWfNCNBpojMvAk19Ct5EgUe2MUDy0YSDCqbxXTadLp8drYqw_gYCi1Leoo-fibfk80zYcqDU8I_OwG6a8P0OBjBjfgaNaux-b2wUX3npiwXz4FRTKjQzt7wZSaIpgdlpyB3lDPS0kWurvQu4oX6KefKYvEAw-QM5D2VJ37Lq3RrcgtpgOuqCRIGIuI__Hm9SnG3HC8ysZRErpYZfhN3P6r1LjMYXixxHbLy-tUofB4wzx6m_2XhfmZTwe_6nkMml_qjp5aIN1t0xCteR5BDRK3xZkl_wVSfEsDc1tBs0svefPEdGaKDKLUtVCYyTOGEqC9UshrS-3LA2stGb38P7_GxRuSDhTwa0=w1080-h1080-s-no?authuser=0';
+        imageCreator.value = 'https://i.ibb.co/g39WZXc/User-1.png';
     }
     v.value =  commentData.AnswerDetailsHTML;
     v.value=v.value.replaceAll('<p>', "<p class='text-lg font-bold my-1'>")
@@ -144,7 +144,7 @@ const DeletePostHanlder = async ()=>{
                 <p class="text-lg font-bold text-Alert btn-ghost btn">Report</p>
             </div>
             <div v-if = "Reply" class="h-[6rem] my-4 mb-16">
-                <QuillComp :CreatedBy="CreatedBy" @emit-ans-i-d="EmitHanlder" :AnswerOfAnswerId="AnswerId"/>
+                <QuillComp :PostCreator="PostCreator" :PostId="PostId" :CreatedBy="CreatedBy" @emit-ans-i-d="EmitHanlder" :AnswerOfAnswerId="AnswerId"/>
             </div>
             <template v-for="(e,i) in AnswerLists" :key="i">
                 <AnswersSection :PostCreator="PostCreator" :PostId="PostId" :AnswerId="e"></AnswersSection>

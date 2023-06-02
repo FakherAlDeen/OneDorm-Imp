@@ -41,7 +41,7 @@ async function LoginClick(){
   ValidateEmpty(Password.value,'Password') && error.value.push(ValidateEmpty(Password.value,'Password'));
   if (error.value.length != 0) return;
   const data ={
-    Email:Email.value,
+    Email:(Email.value).toLowerCase(),
     Password:Password.value
   }
   const res =await userStore.Login(data)
@@ -59,9 +59,9 @@ const callback = (response) => {
 
 <template>
   <main class="w-full flex-1 flex-col my-8 box-border">
-    <label @click="callback" for="wtf">wtf
+    <!-- <label @click="callback" for="wtf">wtf
 
-    </label>
+    </label> -->
     <HeaderSignLog to_Btn="/Signup">
       <template #BtnName>SIGN UP</template>
     </HeaderSignLog>
@@ -83,10 +83,10 @@ const callback = (response) => {
         <Alert classProp="alert-warning"  v-if="userStore.error!=null"><template #Error_Message>{{ userStore.error }}</template></Alert>
         <button class="Button_Primary my-2" :class="transitionClass" @click="LoginClick">SIGN IN</button>
         <button class="Button_Primary_White my-2 focus:bg-[]" :class="transitionClass"  @click="login"><Google_Icon/>SIGN IN WITH GOOGLE</button>
-        <div :class="transitionClass" class="Button_Primary_White my-2">
+        <!-- <div :class="transitionClass" class="Button_Primary_White my-2">
           <GoogleLogin class="border-none" name="wtf" id="wtf" :callback="callback"/>
 
-        </div>
+        </div> -->
       </div>
       <h2 class="StringPage rotate-[-90deg] w-fit fixed top-[38rem] right-[17rem]">{{(StringPage+' - ').repeat(4) }} <span class="font-bold">{{ StringPage }}</span> {{ (' - ' + StringPage) }}</h2>
       <div class="ml-[20rem] mr-10 mt-4 h-[44.875rem] w-[26rem] bg-[url('./src/assets/Rectangle_5Login.png')] Box_Shadow">
