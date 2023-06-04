@@ -3,6 +3,7 @@ import {GET,POST} from '../../Helpers/APIs'
 import VueCookies from 'vue-cookies'
 import { io } from "socket.io-client";
 
+const socketAdr = 'ws://localhost:3001';
 
 export const UserStore = defineStore('User',{
     state: ()=>{
@@ -55,7 +56,7 @@ export const UserStore = defineStore('User',{
                 this.UserToken = Data.token;
                 // this.Username = Data.Username;
                 // this.UserDetails= Data.UserDetails
-                this.socket = io('ws://localhost:3001', { transports: ['websocket', 'polling', 'flashsocket'] });
+                this.socket = io(socketAdr, { transports: ['websocket', 'polling', 'flashsocket'] });
                 this.socket.emit('join',this.UserID);
                 window.$cookies.set('Token',this.UserToken);
                 return res;
@@ -80,7 +81,7 @@ export const UserStore = defineStore('User',{
                 this.AcademicStaff = Data.VerificationState?Data.VerificationState:'inactive';
                 this.AnsList = Data.AnswersList
                 this.Username = Data.Username;
-                this.socket = io('ws://localhost:3001', { transports: ['websocket', 'polling', 'flashsocket'] });
+                this.socket = io(socketAdr, { transports: ['websocket', 'polling', 'flashsocket'] });
                 this.socket.emit('join',this.UserID);
                 if (Data.Image){
                     console.log (Data.Image);
@@ -98,7 +99,7 @@ export const UserStore = defineStore('User',{
         },
         async GetUser(Id){
             const res = await GET('GetUser/'+Id);
-            this.socket = io('ws://localhost:3001', { transports: ['websocket', 'polling', 'flashsocket'] });
+            this.socket = io(socketAdr, { transports: ['websocket', 'polling', 'flashsocket'] });
             this.socket.emit('join',Id);
             if(res.status=='201'){
                 const Data = res.data;

@@ -49,8 +49,10 @@ import router from '../router';
         }
         await Vote(data)
     }
+    const userdata = ref ('');
     onBeforeMount(async () =>{
         const res = await GetUser(props.CreatedBy);
+        userdata.value = res.data;
         Creator.value = res.data.Fname?res.data.Fname + " " + res.data.Lname:'UNKOWN';
         if (res.data.Image){
             imageCreator.value = `data:${res.data.Image.contentType};base64,${res.data.Image.image}`
@@ -123,7 +125,11 @@ import router from '../router';
                 <div class="grow">
                     <div class="mx-10 mt-10 h-fit min-h-[9rem] border-b-2 border-black flex flex-col">
                         <div class="flex justify-between">
-                            <h1 class="text-2xl text-left text-main1 font-bold capitalize cursor-pointer hover:underline" @click="OpenUserPorfileHandler">{{Creator}}</h1>
+                            <!-- <h1 class="text-2xl text-left text-main1 font-bold capitalize cursor-pointer hover:underline" @click="OpenUserPorfileHandler">{{Creator}}</h1> -->
+                            <div class=" mr-2 ml-1 flex items-center gap-2" >
+                                <h1 class="text-2xl text-left text-main1 font-bold capitalize cursor-pointer hover:underline" @click="OpenUserPorfileHandler">{{Creator}}</h1>
+                                <svg class="mt-1" v-if="userdata?.VerificationState == 'active'" fill="#39B97E" xmlns="http://www.w3.org/2000/svg" height="1.6em" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+                            </div>
                             <div class="dropdown dropdown-end" v-if="postFull && mine">
                                 <button tabindex="0"  class="btn btn-ghost btn-sm">
                                     <svg class="w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>

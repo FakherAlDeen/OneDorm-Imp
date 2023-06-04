@@ -14,7 +14,7 @@ import {SearchPost} from '../Helpers/APIs/SearchAPIs'
 import VueCookies from 'vue-cookies'
 import {ref, onBeforeMount} from 'vue'
 import {Notification,OpenNotification} from '../Helpers/APIs/NotificationAPIs'
-import { useTimeAgo } from '@vueuse/core'
+import { useTimeAgo,formatTimeAgo } from '@vueuse/core'
 
 const SearchValue = ref();
 const showDrawer = ref (false);
@@ -64,8 +64,13 @@ const ClickHashtagHandler=(e)=>{
         HashVal: e.substr(1, e.length - 1)
     }}).then(() => { router.go() })
 }
+const ShowCreateList = ref (false);
 const CreatePost = ()=>{
-    router.push('/CreatePost')
+    if (UserStore().AcademicStaff=='active'){
+        ShowCreateList.value = !ShowCreateList.value;
+    }else {
+        router.push('/CreatePost')
+    }
 }
 const ShowList = ref(false);
 const ClickHanlderShowList = ()=>{
@@ -119,8 +124,9 @@ for (let i=0;i<30;i++){
             </div>
         </Transition>
         <div class="navbar-start">
-            <div class="mr-9">
+            <div class="mr-9 relative">
                 <a class="w-fit h-fit btn btn-ghost p-0" @click="router.push('/NewsFeed')"><OneDorm class="border-black border-2 w-20 h-20"></OneDorm></a>
+                <p class="AcadmicText absolute academic text-lg font-extrabold right-[-0.4rem]" v-if="UserStore().AcademicStaff=='active'">ACADEMIC</p>
             </div>
             <div class="dropdown dropdown-center">
                 <label tabindex="0" class="btn btn-ghost rounded-none" @click = "showDrawer=!showDrawer">
@@ -147,9 +153,15 @@ for (let i=0;i<30;i++){
             </div>
 
         </div>
-        <div class="navbar-end flex gap-3 dropdown dropdown-end">
-            <div class="btn btn-sm bg-black p-1 px-3 min-h-fit" @click="CreatePost">
-                <PlusIcon/>
+        <div class="navbar-end flex gap-3 relative">
+            <div class="dropdown dropdown-end">
+                <div class="btn btn-sm bg-black p-1 px-3 min-h-fit" @click="CreatePost">
+                    <PlusIcon/>
+                </div>
+                <div v-if="ShowCreateList" class="absolute right-0 top-[2.3rem] border-2 border-black menu p-1 shadow bg-base-100 rounded-none w-20">
+                    <li class="text-sm font-extrabold text-center btn btn-ghost btn-sm self-center w-full" @click="router.push('/CreatePost')">Post</li>
+                    <li class="text-sm font-extrabold text-center btn btn-ghost btn-sm self-center w-full" @click="ModalDeleteShow=true">Blog</li>
+                </div>
             </div>
             <div class="btn btn-ghost px-1 indicator">
                 <span class="indicator-item badge badge-secondary top-2 right-2 text-sm bg-Alert border-Alert">99</span>
@@ -171,20 +183,20 @@ for (let i=0;i<30;i++){
                                 <h2 class="card-title font-light text-black text-gray-800">
                                 
                                 <template v-if = "e.NotificationDetails.ReplytoAns">
-                                    replied on your 
-                                    Answer!
+                                    Replied to your 
+                                    answer!
                                 </template>
                                 <template v-else>
-                                    answered on your 
+                                    Answered your 
                                     question!
                                 </template>
                                 </h2>
-                                <p class="font-light text-white text-xs self-end">{{ useTimeAgo(new Date(e.CreatedAt)) }}</p>
+                                <p class="font-light text-white text-xs self-end">{{ formatTimeAgo(new Date(e.CreatedAt)) }}</p>
                             </div>
                         </template>
                         <div v-if="NotificationArr.length==0" class="my-7 flex flex-col gap-5 items-center justify-center">
                             <p class=" text-lg">no notifications yet!</p>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="7em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M352 493.4c-29.6 12-62.1 18.6-96 18.6s-66.4-6.6-96-18.6V288c0-8.8-7.2-16-16-16s-16 7.2-16 16V477.8C51.5 433.5 0 350.8 0 256C0 114.6 114.6 0 256 0S512 114.6 512 256c0 94.8-51.5 177.5-128 221.8V288c0-8.8-7.2-16-16-16s-16 7.2-16 16V493.4zM195.2 233.6c5.3 7.1 15.3 8.5 22.4 3.2s8.5-15.3 3.2-22.4c-30.4-40.5-91.2-40.5-121.6 0c-5.3 7.1-3.9 17.1 3.2 22.4s17.1 3.9 22.4-3.2c17.6-23.5 52.8-23.5 70.4 0zm121.6 0c17.6-23.5 52.8-23.5 70.4 0c5.3 7.1 15.3 8.5 22.4 3.2s8.5-15.3 3.2-22.4c-30.4-40.5-91.2-40.5-121.6 0c-5.3 7.1-3.9 17.1 3.2 22.4s17.1 3.9 22.4-3.2zM208 336v32c0 26.5 21.5 48 48 48s48-21.5 48-48V336c0-26.5-21.5-48-48-48s-48 21.5-48 48z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="7em" viewBox="0 0 512 512"><path d="M352 493.4c-29.6 12-62.1 18.6-96 18.6s-66.4-6.6-96-18.6V288c0-8.8-7.2-16-16-16s-16 7.2-16 16V477.8C51.5 433.5 0 350.8 0 256C0 114.6 114.6 0 256 0S512 114.6 512 256c0 94.8-51.5 177.5-128 221.8V288c0-8.8-7.2-16-16-16s-16 7.2-16 16V493.4zM195.2 233.6c5.3 7.1 15.3 8.5 22.4 3.2s8.5-15.3 3.2-22.4c-30.4-40.5-91.2-40.5-121.6 0c-5.3 7.1-3.9 17.1 3.2 22.4s17.1 3.9 22.4-3.2c17.6-23.5 52.8-23.5 70.4 0zm121.6 0c17.6-23.5 52.8-23.5 70.4 0c5.3 7.1 15.3 8.5 22.4 3.2s8.5-15.3 3.2-22.4c-30.4-40.5-91.2-40.5-121.6 0c-5.3 7.1-3.9 17.1 3.2 22.4s17.1 3.9 22.4-3.2zM208 336v32c0 26.5 21.5 48 48 48s48-21.5 48-48V336c0-26.5-21.5-48-48-48s-48 21.5-48 48z"/></svg>
                         </div>
                     </div>
                 </div>
@@ -203,11 +215,11 @@ for (let i=0;i<30;i++){
                 <div  tabindex="0" class="btn btn-cirle btn-ghost btn-sm self-center pr-1" @click="ClickHanlderShowList">
                     <Arrow_Bottom_White/>
                 </div>
-                <ul v-if="ShowList" tabindex="0" class="mt-20 dropdown-content menu p-2 shadow bg-black w-52 dropdown-open" :class="[ShowList?'dropdown-open':'']">
+                <div v-if="ShowList" tabindex="0" class="mt-20 menu p-2 absolute shadow bg-black w-52 right-0" :class="[ShowList?'dropdown-open':'']">
                     <li class="text-white" @click="router.push('/profile')"><a>Profile</a></li>
                     <li class="text-white" @click="router.push('/MyPosts')"><a>My Posts</a></li>
                     <li class="text-Alert" @click="Logout"><a>Log out</a></li>
-                </ul>
+                </div>
                 
             </div>
 
@@ -236,5 +248,14 @@ for (let i=0;i<30;i++){
 @keyframes mymove {
     from {box-shadow: none;}
     to {box-shadow:0.5rem 0.5rem #000000;}
+}
+.AcadmicText{
+    transition: all 0.3s ease-in-out;
+    animation: anim 1s;
+}
+
+@keyframes anim {
+    from {opacity: 0; transform: translateX(-20px);}
+    to {opacity: 100;}
 }
 </style>

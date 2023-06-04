@@ -33,6 +33,7 @@ router.push ({
         QuestionId: e,
     }
 })}
+const selected=ref ('Posts');
 </script>
 <template>
     <main>
@@ -64,7 +65,7 @@ router.push ({
                         </div>
 
                     </div>
-                    <div class="grow flex flex-col gap-10 mx-10">
+                    <div class="w-3/4 grow flex flex-col gap-10 mx-10">
                         <div 
                         class=" grow p-5 bg-postBG shadow-BoxBlackSm shadow-Grey border-2 border-black hover:translate-x-[0.45rem] transition-all duration-150 ease-in-out hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">
                                 <div class="mx-2">
@@ -83,7 +84,7 @@ router.push ({
                                         </span>
                                     </h2>
                                     <h2 class=" text-xl font-light text-Grey flex gap-2 items-center">
-                                        <svg class= "mb-1" fill="#7E7E7E" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M448 384c-28.02 0-31.26-32-74.5-32-43.43 0-46.825 32-74.75 32-27.695 0-31.454-32-74.75-32-42.842 0-47.218 32-74.5 32-28.148 0-31.202-32-74.75-32-43.547 0-46.653 32-74.75 32v-80c0-26.5 21.5-48 48-48h16V112h64v144h64V112h64v144h64V112h64v144h16c26.5 0 48 21.5 48 48v80zm0 128H0v-96c43.356 0 46.767-32 74.75-32 27.951 0 31.253 32 74.75 32 42.843 0 47.217-32 74.5-32 28.148 0 31.201 32 74.75 32 43.357 0 46.767-32 74.75-32 27.488 0 31.252 32 74.5 32v96zM96 96c-17.75 0-32-14.25-32-32 0-31 32-23 32-64 12 0 32 29.5 32 56s-14.25 40-32 40zm128 0c-17.75 0-32-14.25-32-32 0-31 32-23 32-64 12 0 32 29.5 32 56s-14.25 40-32 40zm128 0c-17.75 0-32-14.25-32-32 0-31 32-23 32-64 12 0 32 29.5 32 56s-14.25 40-32 40z"/></svg>
+                                        <svg class= "mb-1" fill="#7E7E7E" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M448 384c-28.02 0-31.26-32-74.5-32-43.43 0-46.825 32-74.75 32-27.695 0-31.454-32-74.75-32-42.842 0-47.218 32-74.5 32-28.148 0-31.202-32-74.75-32-43.547 0-46.653 32-74.75 32v-80c0-26.5 21.5-48 48-48h16V112h64v144h64V112h64v144h64V112h64v144h16c26.5 0 48 21.5 48 48v80zm0 128H0v-96c43.356 0 46.767-32 74.75-32 27.951 0 31.253 32 74.75 32 42.843 0 47.217-32 74.5-32 28.148 0 31.201 32 74.75 32 43.357 0 46.767-32 74.75-32 27.488 0 31.252 32 74.5 32v96zM96 96c-17.75 0-32-14.25-32-32 0-31 32-23 32-64 12 0 32 29.5 32 56s-14.25 40-32 40zm128 0c-17.75 0-32-14.25-32-32 0-31 32-23 32-64 12 0 32 29.5 32 56s-14.25 40-32 40zm128 0c-17.75 0-32-14.25-32-32 0-31 32-23 32-64 12 0 32 29.5 32 56s-14.25 40-32 40z"/></svg>
                                         {{userdata.DateOfBirth?formatDate(new Date(userdata.DateOfBirth), 'YYYY-MM-DD'):"we don't know :c"}}
                                     </h2>
                                     <div class="flex gap-10">
@@ -110,27 +111,51 @@ router.push ({
                                                 </span>
                                         </h2>
                                     </div>
-                                    <div class="flex justify-between">
+                                    <div class="flex justify-between mt-4">
                                         <h2 class="mt-4 text-2xl font-light text-Grey">Posts created: 
                                             <span class="font-extrabold text-main3">
                                             {{PostsList.length}}
                                             </span>
                                         </h2>
+                                        <h2 v-if="userdata.VerificationState=='active'" class="mt-4 text-2xl font-light text-Grey">Blogs created: 
+                                            <span class="font-extrabold text-main3">
+                                            {{userdata?.BlogList?.length?userdata?.BlogList?.length:0}}
+                                            </span>
+                                        </h2>
                                         <h2 class="mt-4 text-2xl font-light text-Grey">Answers created: 
                                             <span class="font-extrabold text-main3">
-                                            {{PostsList.length}}
+                                            {{userdata.AnswersList.length}}
                                             </span>
                                         </h2>
                                     </div>
                                 </div>
                         </div>
                         <div class="">
-                            <div class="w-1/2 mx-auto border-b-4 border-Grey pb-3">
-                                <h2 class="text-2xl font-[1000] text-center text-Grey tracking-wide leading-8">THEIR POSTS</h2>
+                            <div class="w-1/2 mx-auto pb-3 border-b-4 border-Grey flex justify-center gap-5">
+                                <h2 class=" text-2xl font-[1000] text-center text-Grey tracking-wide leading-8 cursor-pointer" @click="selected='Posts'" :class="[selected=='Posts'?'border-b-4 border-Grey2':'']">
+                                    THEIR POSTS
+                                </h2>
+                                <h2 class="text-2xl font-[1000] text-center text-Grey tracking-wide leading-8 cursor-pointer" v-if="userdata.VerificationState=='active'"  @click="selected='Blogs'" :class="[selected=='Blogs'?'border-b-4 border-Grey2':'']">
+                                    THEIR BLOGS
+                                </h2>
                             </div>
-                            <template v-for="(e) in PostsList" :key="e.QuestionId">
-                                    <PostContainer @click="ClickHanlder(e.QuestionId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
+                            <template v-if="selected=='Posts'">
+                                <template v-if="PostsList.length>0">
 
+                                    <template v-for="(e) in PostsList" :key="e.QuestionId">
+                                            <PostContainer @click="ClickHanlder(e.QuestionId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
+                                    </template>
+                                </template>
+                                <div v-else>
+                                    <div class="flex justify-center my-10">
+                                        <p class="text-3xl font-extrabold text-main1">No Blogs written.</p>
+                                    </div>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <div class="flex justify-center my-10">
+                                    <p class="text-3xl font-extrabold text-main1">No Blogs written.</p>
+                                </div>
                             </template>
                         </div>
                     </div>

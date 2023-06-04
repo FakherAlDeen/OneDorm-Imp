@@ -1,11 +1,10 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-
+import { RouterView } from 'vue-router'
+import { useRoute } from 'vue-router';
 </script>
 
 <template>
-  <RouterView />
+  <RouterView :key="useRoute().path"/>
 </template>
 
 <style scoped>
