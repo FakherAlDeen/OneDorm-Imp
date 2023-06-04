@@ -16,6 +16,8 @@ import {ref, onBeforeMount} from 'vue'
 import {Notification,OpenNotification} from '../Helpers/APIs/NotificationAPIs'
 import { useTimeAgo,formatTimeAgo } from '@vueuse/core'
 
+
+const arrChats = ref (['Ahmad','Moh','wtv','Moh','wtv','Moh','wtv','Moh','wtv','Moh','wtv','Moh','wtv','Moh','wtv','Moh','wtv'])
 const SearchValue = ref();
 const showDrawer = ref (false);
 const ShowNotification=ref(false);
@@ -91,9 +93,23 @@ const PushRoute = (e)=>{
         }
     })
 }
+const showChatList =ref (false);
+const OpenChatHandler = ()=>{
+    showChatList.value = true;
+}
 const arr = ref ([]);
 for (let i=0;i<30;i++){
     arr.value.push('#psut');
+}
+const theOneImChattingWith =ref();
+const showChatBubbleList = ref(false);
+const chatSelected = ref ();
+const ShowChatPoop = (e,i)=>{
+    if (chatSelected .value ==i){
+        showChatBubbleList.value= !showChatBubbleList.value;
+    }else showChatBubbleList.value = true;
+    chatSelected.value = i
+    theOneImChattingWith.value=e;
 }
 </script>
 
@@ -123,6 +139,95 @@ for (let i=0;i<30;i++){
                 <div class="grow bg-black bg-opacity-20 h-screen" @click="showDrawer=false"></div>
             </div>
         </Transition>
+
+        <Transition name="slide-fade-right">
+            <div class="drawer-side fixed z-10 left-0 top-0 border-r-2 border-black w-screen" v-if="showChatList">
+                <div class="grow bg-black bg-opacity-20 h-screen" @click="showChatList=false"></div>
+                <div class="flex flex-col h-screen justify-between bg-black bg-opacity-20">
+                    <div @click="showChatBubbleList=false" class="grow bg-black bg-transparent"></div>
+                    <Transition name="slide-fade-right">
+                        <div class=" w-[30rem] h-[30rem] bg-white z-20 bg-white shadow-BoxBlackSm border-2 border-black m-5 mr-1 flex flex-col" v-if="showChatBubbleList">
+                            <div class="flex border-b-2 border-black justify-between items-center">
+                                <div class="flex items-end h-full">
+                                    <div class="w-16 h-full bg-black border-r-2 border-black flex items-center justify-center">
+                                        <svg fill="white" xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M160 368c26.5 0 48 21.5 48 48v16l72.5-54.4c8.3-6.2 18.4-9.6 28.8-9.6H448c8.8 0 16-7.2 16-16V64c0-8.8-7.2-16-16-16H64c-8.8 0-16 7.2-16 16V352c0 8.8 7.2 16 16 16h96zm48 124l-.2 .2-5.1 3.8-17.1 12.8c-4.8 3.6-11.3 4.2-16.8 1.5s-8.8-8.2-8.8-14.3V474.7v-6.4V468v-4V416H112 64c-35.3 0-64-28.7-64-64V64C0 28.7 28.7 0 64 0H448c35.3 0 64 28.7 64 64V352c0 35.3-28.7 64-64 64H309.3L208 492z"/></svg>
+                                    </div>
+                                    <div class="mb-1 relative flex flex-col">
+                                        <h3 class="text-black text-[1.4rem] font-extrabold ml-4">
+                                            {{ theOneImChattingWith }}
+                                        </h3>
+                                        <p class=" badge badge-sm ml-4 font-light text-Grey bg-main3 border-main3 text-white">ACTIVE</p>
+                                    </div>
+                                </div>
+                                <div class="btn btn-ghost btn-circle mr-2" @click="showChatBubbleList=false">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+                                </div>
+                            </div>
+                            <div class="grow my-2 overflow-y-auto mx-3">
+                                <template v-for="(e) in 10" :key="e">
+                                    <div class="chat chat-start">
+                                        <div class="chat-image avatar">
+                                            <div class="w-12 rounded-full">
+                                            <img :src="UserStore().image" />
+                                            </div>
+                                        </div>
+                                        <div class="chat-header">
+                                            <time class="text-xs opacity-50">12:45</time>
+                                        </div>
+                                        <div class="chat-bubble chat-bubble-warning bg-main2">It's over Anakin, <br/>I have the high ground.</div>
+                                    </div>
+                                    <div class="chat chat-end">
+                                        <div class="chat-header">
+                                            <time class="text-xs opacity-50">12:45</time>
+                                        </div>
+                                        <div class="chat-bubble chat-bubble-warning bg-main3">You underestimate my power!</div>
+                                    </div>
+                                    <div class="chat chat-end">
+                                        <div class="chat-header">
+                                            <time class="text-xs opacity-50">12:45</time>
+                                        </div>
+                                        <div class="chat-bubble chat-bubble-warning bg-main3">You underestimate my power!</div>
+                                    </div>
+                                </template>
+                            </div>
+                            <div class="flex border-t-2 border-black items-center gap-3">
+                                <textarea class="textarea textarea-bordered w-full h-1/2 ml-3 border-2 border-black" placeholder="Type something..."></textarea>
+                                <button class="btn btn-sm btn-success bg-main3 text-white mr-3">send!</button>
+                            </div>
+                        </div>
+                    </Transition>
+                </div>
+                <div class="flex mr-3">
+                    <div class="h-screen p-4 w-80 bg-black bg-opacity-20 flex flex-col">
+                        <div class="ContHash bg-white shadow-BoxBlackSm border-2 border-black p-4 m-1 h-full flex flex-col">
+                            <h2 class="text-2xl font-extrabold mx-3 mt-2 border-b-2 pb-3 mb-3 border-black">My Chats</h2>
+                            <div class=" text-base-content h-full overflow-y-auto text-center">
+                                <template v-for="(e,i) in arrChats" :key="e">
+                                    <template v-if="e">
+                                        <div class="relative">
+                                            <div 
+                                            @click="ShowChatPoop(e,i)"
+                                            class="normal-case gap-3 btn btn-wide my-1 w-11/12  border-2 border-black text-black hover:bg-black hover:text-white"
+                                            :class="[chatSelected==i? 'bg-black text-white':'bg-white']"
+                                            >
+                                            <div class="avatar">
+                                                <div class="w-7 rounded">
+                                                    <img :src="UserStore().image" />
+                                                </div>
+                                            </div>
+                                            Chat with
+                                            {{e}}
+                                        </div>
+                                    </div>
+                                </template>
+                            </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </Transition>
+
         <div class="navbar-start">
             <div class="mr-9 relative">
                 <a class="w-fit h-fit btn btn-ghost p-0" @click="router.push('/NewsFeed')"><OneDorm class="border-black border-2 w-20 h-20"></OneDorm></a>
@@ -163,7 +268,7 @@ for (let i=0;i<30;i++){
                     <li class="text-sm font-extrabold text-center btn btn-ghost btn-sm self-center w-full" @click="ModalDeleteShow=true">Blog</li>
                 </div>
             </div>
-            <div class="btn btn-ghost px-1 indicator">
+            <div class="btn btn-ghost px-1 indicator" @click="OpenChatHandler">
                 <span class="indicator-item badge badge-secondary top-2 right-2 text-sm bg-Alert border-Alert">99</span>
                 <ChatIcon/>
             </div>
@@ -239,6 +344,20 @@ for (let i=0;i<30;i++){
   transform: translateX(-20px);
   opacity: 0;
 }
+
+
+.slide-fade-right-enter-active,
+.slide-fade-right-leave-active {
+    transition: all 0.3s ease-in-out;
+
+}
+
+.slide-fade-right-enter-from,
+.slide-fade-right-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+
 
 .ContHash{
     animation-delay: 10s;

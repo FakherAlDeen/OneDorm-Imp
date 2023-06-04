@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-// mongoose.connect('mongodb://127.0.0.1:27017/OneDormDB').
-// catch(error => handleError(error));
 const Chat = require('../Schemas/ChatSchema');
 module.exports = {
     CreateChat: async function (Data){
@@ -9,9 +7,9 @@ module.exports = {
             console.log(err);
         });
     },
-    EditChat: async function (Id,Data){
+    EditChat: async function (ChatId,Data){
         await Chat.findOneAndUpdate(
-            {Id},
+            {ChatId},
             Data
         ).catch((err) => {
             console.log(err);
