@@ -26,6 +26,7 @@ const arrChats = ref (['Ahmad','Moh','wtv','Moh','wtv','Moh','wtv','Moh','wtv','
 //       return acc;
 //     }, {})
 //   );
+
 const SearchValue = ref();
 const showDrawer = ref (false);
 const ShowNotification=ref(false);
@@ -40,6 +41,25 @@ const OpenedChat = ref();
 const showChatBubbleList = ref(false);
 const chatSelected = ref ();
 const loading = ref(true);
+const NewMsgs = ref(0);
+const NewMsgsChat = ref({});
+onBeforeMount(async()=>{
+    loading.value= false;
+    // console.log (UserStore().NotificationList)
+    for (let i=0;i<UserStore().NotificationList.length;i++){
+        const res = await Notification(UserStore().NotificationList[i])
+        NotificationArr.value.push(res.data);
+    }
+    NotificationArr.value=NotificationArr.value.reverse();
+
+    for (let i=0;i<UserStore().ChatList.length;i++){
+        // const res = await GetChat(UserStore().ChatList[i])
+        // ChatsList.value[UserStore().ChatList[i]]=res.data;
+        GetUserData(UserStore().ChatList[i]);
+    }
+    console.log (ChatsList.value);
+})
+
 
 UserStore().socket.on('Notifications',async(msg)=>{
     // console.log ('meow',msg);
@@ -55,7 +75,20 @@ watch (()=>props.open, (nnew,old)=>{
     showChatList.value = nnew;
 })
 UserStore().socket.on('NewChat',(msg)=>{
+    NewMsgs.value++;
+    NewMsgsChat.value[msg.ChatId] = true;
+    console.log (NewMsgsChat.value)
     ChatsList.value[msg.ChatId].ChatArr.push(msg);
+})
+
+UserStore().socket.on('GetChats',async (msg)=>{
+    console.log (msg);
+    const isThere = UserStore().ChatList.filter(e=>e==msg);
+    if (isThere.length ==0){
+        UserStore().ChatList.push(msg);
+    }
+    await GetUserData(msg);
+    console.log (ChatsList.value)
 })
 const SendChatHandler = ()=>{
     if (ChatText.value=='') return;
@@ -73,6 +106,7 @@ const SendChatHandler = ()=>{
     ChatsList.value[theChatImIn.value].ChatArr.push(data);
     ChatText.value='';
 }
+
 const ShowNotificationHandler=async()=>{
     ShowNotification.value=!ShowNotification.value;
     for (let i=0;i<NotificationArr.value.length;i++){
@@ -81,20 +115,6 @@ const ShowNotificationHandler=async()=>{
         }
     }
 }
-onBeforeMount(async()=>{
-    loading.value= false;
-    // console.log (UserStore().NotificationList)
-    for (let i=0;i<UserStore().NotificationList.length;i++){
-        const res = await Notification(UserStore().NotificationList[i])
-        NotificationArr.value.push(res.data);
-    }
-    NotificationArr.value=NotificationArr.value.reverse();
-
-    for (let i=0;i<UserStore().ChatList.length;i++){
-        const res = await GetChat(UserStore().ChatList[i])
-        ChatsList.value[UserStore().ChatList[i]]=res.data;
-    }
-})
 const SearchClickHanlder = async ()=>{
     // console.log (SearchValue.value);
     // router.push(`/SearchResult/${SearchValue.value}`);
@@ -151,15 +171,22 @@ for (let i=0;i<30;i++){
 }
 const theChatImIn= ref ();
 const ShowChatPoop = (e,i)=>{
+    delete NewMsgsChat.value[e];
     if (chatSelected .value ==i){
         showChatBubbleList.value= !showChatBubbleList.value;
-    }else showChatBubbleList.value = true;
+    }else {
+        showChatBubbleList.value = true;
+    }
     chatSelected.value = i
     theOneImChattingWith.value=arrChatNames.value[e];
     theChatImIn.value = e;
     console.log (theChatImIn.value);
 }
 const GetUserData = async (e)=>{
+    if (ChatsList.value[e]) {
+        console.log (e);
+        return;
+    }
     const res = await GetChat(e);
     if (res.status==201){
         // console.log(res.data);
@@ -171,31 +198,37 @@ const GetUserData = async (e)=>{
         else 
             user = await GetUser(data.FirstUserId);
         arrChatNames.value[e]=( user.data.Fname + " " + user.data.Lname);
-        imgChatArr.value[e]=(`data:${user.data.Image.contentType};base64,${user.data.Image.image}`)
+        if (user.data.Image){
+            imgChatArr.value[e]=(`data:${user.data.Image.contentType};base64,${user.data.Image.image}`)
+        }else {
+            imgChatArr.value[e]='https://i.ibb.co/g39WZXc/User-1.png'
+        }
         loadingChatList.value= false;
     }
 }
 </script>
 
 <template>
-    <div class="navbar bg-base-100 p-10 z-10">
+    <div class="navbar bg-base-100 p-10 z-30">
         <Transition name="slide-fade">
-            <div class="drawer-side fixed z-10 left-0 top-0 border-r-2 border-black w-screen" v-if="showDrawer">
-                <div class="flex">
+            <div class="drawer-side fixed z-30 left-0 top-0 border-r-2 border-black w-screen" v-if="showDrawer">
+                <div class="flex flex-col">
                     <div class="h-screen p-4 w-80 bg-black bg-opacity-20">
-                        <div class="ContHash bg-white shadow-BoxBlackSm border-2 border-black p-4 m-1">
+                        <div class="ContHash bg-white shadow-BoxBlackSm border-2 border-black p-4 m-1 h-full flex flex-col">
                             <h2 class="text-2xl font-extrabold mx-3 mt-2 border-b-2 pb-3 mb-3 border-black">My Hashtags</h2>
-                            <div class=" text-base-content h-[44.3vw] overflow-y-auto text-center">
-                                <template v-for="(e) in UserStore().CategoriesList" :key="e">
-                                    <template v-if="e">
-                                        <div 
-                                        @click="ClickHashtagHandler(e)"
-                                        class="btn btn-wide my-1 w-11/12 btn-success bg-main3 text-white">
-                                        {{e}}
-                                        </div>
-
+                            <div class="h-full overflow-y-auto flex flex-col">
+                                <div class=" text-base-content overflow-y-auto text-center">
+                                    <template v-for="(e) in UserStore().CategoriesList" :key="e">
+                                        <template v-if="e">
+                                            <div 
+                                            @click="ClickHashtagHandler(e)"
+                                            class="btn btn-wide my-1 w-11/12 btn-success bg-main3 text-white">
+                                            {{e}}
+                                            </div>
+    
+                                        </template>
                                     </template>
-                                </template>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -269,7 +302,7 @@ const GetUserData = async (e)=>{
                                             <div 
                                             @click="ShowChatPoop(e,i)"
                                             class="normal-case gap-3 btn my-1 w-full border-2 border-black text-black hover:bg-black hover:text-white"
-                                            :class="[chatSelected==i? 'bg-black text-white':'bg-white']"
+                                            :class="[chatSelected==i? 'bg-black text-white':'bg-white',NewMsgsChat[e]?'bg-main2 blk':'']"
                                             >
                                             <div class="avatar gap-2 items-center">
                                                 <div class="w-7 rounded">
@@ -330,7 +363,7 @@ const GetUserData = async (e)=>{
                 </div>
             </div>
             <div class="btn btn-ghost px-1 indicator" @click="OpenChatHandler">
-                <span class="indicator-item badge badge-secondary top-2 right-2 text-sm bg-Alert border-Alert">99</span>
+                <span class="indicator-item badge badge-secondary top-2 right-2 text-sm bg-Alert border-Alert" v-if="Object.keys(NewMsgsChat).length>0">{{ Object.keys(NewMsgsChat).length }}</span>
                 <ChatIcon/>
             </div>
             <div class="relative" >
@@ -437,5 +470,12 @@ const GetUserData = async (e)=>{
 @keyframes anim {
     from {opacity: 0; transform: translateX(-20px);}
     to {opacity: 100;}
+}
+
+.blk {
+    color:black !important;
+}
+.blk:hover{
+    color:white !important;
 }
 </style>

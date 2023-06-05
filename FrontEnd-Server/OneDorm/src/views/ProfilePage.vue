@@ -48,6 +48,10 @@ const CrtChat= async ()=>{
             console.log (res);
             userdata.value.ChatList.push(res.data.ChatId)
             UserStore().ChatList.push(res.data.ChatId)
+            UserStore().socket.emit('CreateChat',{
+                ChatId:res.data.ChatId,
+                to:userdata.value.UserId
+            })
         }
     }
     OpenChatListHandler.value = true;

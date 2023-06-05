@@ -60,6 +60,7 @@ export const UserStore = defineStore('User',{
                 this.socket = io(socketAdr, { transports: ['websocket', 'polling', 'flashsocket'] });
                 this.socket.emit('join',this.UserID);
                 window.$cookies.set('Token',this.UserToken);
+                this.GetUser(Data.UserId)
                 return res;
             }else if (res.status == '409'){
                 this.error = res.data;

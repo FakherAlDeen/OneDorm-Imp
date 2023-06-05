@@ -29,6 +29,10 @@ io.on('connection', (socket) => {
     console.log (msg)
     console.log(socket.rooms)
   });
+  socket.on ('CreateChat', async (msg)=>{
+    console.log (msg);
+    io.to(msg.to).emit('GetChats',msg.ChatId);
+  })
   socket.on ('Chat',async (msg) =>{
     console.log (msg);
     await EditChat (msg.ChatId, {$push:{ChatArr:msg}});

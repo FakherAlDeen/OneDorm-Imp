@@ -43,7 +43,6 @@ async function CreatAccHandler(){
   const res = await userStore.SignUp(data);
   if (res.status == '201')
     router.push('/NewsFeed');
-  console.log(userStore.GetUserData)
 }
 
 </script>

@@ -122,7 +122,7 @@ import router from '../router';
                         </div>
                     </div>
                 </div>
-                <div class="w-5/6">
+                <div class="w-5/6 ml-4">
                     <div class="mx-10 mt-10 h-fit min-h-[9rem] border-b-2 border-black flex flex-col">
                         <div class="flex justify-between">
                             <!-- <h1 class="text-2xl text-left text-main1 font-bold capitalize cursor-pointer hover:underline" @click="OpenUserPorfileHandler">{{Creator}}</h1> -->
