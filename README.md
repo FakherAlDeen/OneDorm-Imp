@@ -12,7 +12,6 @@ npm run dev
 ```
 # Run the FrontEnd
 ```
-cd the front end path
 cd .\FrontEnd-Server\OneDorm\
 npm install
 npm run dev
