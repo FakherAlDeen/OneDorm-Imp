@@ -1,7 +1,7 @@
 # OneDorm-Imp
 How to run the code!
 ```
-git pull the repo
+git clone the repo
 ```
 # Run the backend
 How to run the back end code!
