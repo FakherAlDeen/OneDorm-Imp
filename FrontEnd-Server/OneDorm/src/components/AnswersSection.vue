@@ -9,6 +9,15 @@ import {DeletePost,GetAnswer , Vote} from '../Helpers/APIs/PostAPIs'
 import router from '../router';
 import { GetUser } from '../Helpers/APIs/UserAPIs';
 import { formatTimeAgo } from '@vueuse/core'
+import { useShare } from '@vueuse/core'
+const { share, isSupported } = useShare()
+function startShare() {
+  share({
+    title: 'Hello',
+    text: 'Hello my friend!',
+    url: location.href,
+  })
+}
 
 const imageCreator = ref ('Loading');
 const props = defineProps({
@@ -142,7 +151,7 @@ const DeletePostHanlder = async ()=>{
                     <Comment class="w-7 h-7"/>
                 </div>
                 <p class="text-lg font-bold mx-2 ml-2 btn-ghost btn" @click="ReplyHandler">Reply</p>
-                <p class="text-lg font-bold btn-ghost btn" >Share</p>
+                <p class="text-lg font-bold btn-ghost btn" @click="startShare">Share</p>
                 <p class="text-lg font-bold text-Alert btn-ghost btn">Report</p>
             </div>
             <div v-if = "Reply" class="h-[6rem] my-4 mb-16">

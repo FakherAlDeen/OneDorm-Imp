@@ -8,8 +8,17 @@ import {DeletePost, Vote} from '../Helpers/APIs/PostAPIs'
 import { ref ,onBeforeMount} from 'vue'
 import ModalComponent from './ModalComponent.vue';
 import router from '../router';
+import { useShare } from '@vueuse/core'
 import { formatTimeAgo } from '@vueuse/core'
-    const props = defineProps({
+    const { share, isSupported } = useShare()
+    function startShare() {
+    share({
+        title: 'Hello',
+        text: 'Hello my friend!',
+        url: location.href,
+    })
+    }
+const props = defineProps({
         PostID:String,
         postTitle:String,
         Hashtags:Array,
@@ -159,7 +168,7 @@ import { formatTimeAgo } from '@vueuse/core'
                     <div class="flex justify-end m-10 shadow-none">
                         <div id="FlagBtn" class="btn bg-white text-Alert post capitalize border-Alert border-2 hover:bg-Alert hover:border-Alert hover:text-white self-end flex justify-between align-center hover:fill-white shadow-none">
                             <flag04 class="mt-1 mr-1 shadow-none"></flag04>
-                            <button >Report post</button>
+                            <button @click="startShare">Share Post!</button>
                         </div>
                     </div>
                 </div>

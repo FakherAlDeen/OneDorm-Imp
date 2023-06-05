@@ -9,6 +9,15 @@ import { ref ,onBeforeMount} from 'vue'
 import ModalComponent from './ModalComponent.vue';
 import router from '../router';
 import { formatTimeAgo } from '@vueuse/core'
+import { useShare } from '@vueuse/core'
+    const { share, isSupported } = useShare()
+    function startShare() {
+    share({
+        title: 'Hello',
+        text: 'Hello my friend!',
+        url: location.href,
+    })
+    }
 
     const props = defineProps({
         BlogID:String,
@@ -147,7 +156,7 @@ import { formatTimeAgo } from '@vueuse/core'
                         <div class="grow"></div>
                         <p class="text-Grey justify-self-end font-light text-lg text-left">{{ AnswerCount + " ANSWERS - "}}   {{ sScore +" SCORE" }}</p>
                     </div>
-                    <div id="PostCont" :class="[!BlogFull?'max-h-[6rem]':'']" v-html="BlogContent" class="mx-10 mb-10 overflow-hidden">
+                    <div id="PostCont" :class="[!BlogFull?'max-h-[6rem] ':'']" v-html="BlogContent" class="mx-10 mb-10 overflow-hidden">
                         
                     </div>
                     <div class="grow flex-col flex">
@@ -155,7 +164,7 @@ import { formatTimeAgo } from '@vueuse/core'
                         <div class="flex justify-end m-10 shadow-none self-end grow">
                             <div id="FlagBtn" class="btn bg-white text-Alert post capitalize border-Alert border-2 hover:bg-Alert hover:border-Alert hover:text-white self-end flex justify-between align-center hover:fill-white shadow-none">
                                 <flag04 class="mt-1 mr-1 shadow-none"></flag04>
-                                <button >Report blog</button>
+                                <button @click="startShare">Share Blog!</button>
                             </div>
                         </div>
                     </div>
