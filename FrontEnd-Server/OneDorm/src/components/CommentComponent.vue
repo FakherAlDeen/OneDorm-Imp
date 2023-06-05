@@ -7,6 +7,7 @@ import {CreateAnswer} from '../Helpers/APIs/PostAPIs'
 const props = defineProps({
     QuestionId:String,
     PostCreator:String,
+    Type:String
 })
 
 const emit =defineEmits({
@@ -48,7 +49,7 @@ const CommentClickHandler = async () =>{
         AnswerDetails:JSON.parse(JSON.stringify(quill.getContents())),
         AnswerDetailsHTML: quill.root.innerHTML,
         Id:props.QuestionId ,
-        Type:'Question',
+        Type:props.Type,
         CreatedAt: Date.now()
     }
     const res = await CreateAnswer(data);

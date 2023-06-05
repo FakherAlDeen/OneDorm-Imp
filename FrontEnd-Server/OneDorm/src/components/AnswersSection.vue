@@ -33,7 +33,7 @@ const VoteHandler = async (e)=>{
     }
     score.value+=e;
     MyVotes.value =e;
-    UserVotes[props.PostID] = MyVotes.value
+    UserVotes[props.AnswerId] = MyVotes.value
     console.log (score.value);
     const data = {
         UserId: UserStore().UserID,

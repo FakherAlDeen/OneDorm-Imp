@@ -29,7 +29,7 @@ class AnswerController {
                 EditQuestion(Id , {$push: { AnswersList: AnswerId } , $inc : {AnswerCount : 0.1} })
             }
             else if(Type == 'Blog'){
-              EditBlog(Id , {$push: { AnswersList: AnswerId } , $inc : {AnswerCount : 0.1} })
+              EditBlog(Id , {$push: { AnswersList: AnswerId }})
             } 
             EditUser(CreatedBy , {$push: {AnswersList : AnswerId }} )
             res.status(201).send(answer)
