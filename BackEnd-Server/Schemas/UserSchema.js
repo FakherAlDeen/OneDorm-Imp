@@ -25,9 +25,7 @@ const UserSchema = new mongoose.Schema({
     PostList:[],
     AnswersList:[],
     BlogList:[],
-    ChatList:[{
-        Id: {type:String, default: null}
-    }],
+    ChatList:[],
     CategoriesList:[],
     CreatedAt:{
         type: Date,

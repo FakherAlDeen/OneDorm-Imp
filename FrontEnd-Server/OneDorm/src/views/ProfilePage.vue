@@ -8,6 +8,7 @@ import PostContainer from '../components/PostContainer.vue';
 import { formatDate } from '@vueuse/core'
 import { useRoute } from 'vue-router';
 import BlogContainer from '../components/BlogContainer.vue';
+import {CreatChat} from '../Helpers/APIs/ChatAPIs'
 const UserId = useRoute().params.UserId;
 const userdata = ref ();
 const Loading = ref (true);
@@ -25,6 +26,31 @@ onBeforeMount(async ()=>{
     console.log(PostsList.value);
     Loading.value = false;
 })
+const OpenChatListHandler= ref (false);
+const CrtChat= async ()=>{
+    const setA = new Set(userdata.value.ChatList);
+    const setB = new Set(UserStore().ChatList);
+    let id = 0;
+    for (let i of setB){
+        if (setA.has(i)){
+            id =i;
+        }
+    }
+    if (id ==0){
+        const data = {
+            from:UserStore().UserID,
+            to:userdata.value.UserId,
+            CreatedAt:new Date()
+        }
+        const res = await CreatChat(data);
+        if (res.status == 201){
+            console.log (res);
+            userdata.value.ChatList.push(res.data.ChatId)
+            UserStore().ChatList.push(res.data.ChatId)
+        }
+    }
+    OpenChatListHandler.value = true;
+}
 const turnfun= (e)=>{
     e=e.replaceAll('<p>', "<p class='text-lg my-1 font-extrabold'>");
     e=e.replaceAll('<br>', "");
@@ -50,7 +76,7 @@ const selected=ref ('Posts');
 </script>
 <template>
     <main>
-        <HeaderComponent></HeaderComponent>
+        <HeaderComponent :open="OpenChatListHandler" @emit-close="OpenChatListHandler=false"></HeaderComponent>
         <template v-if="Loading">
             <div class="flex">
                 <button class="m-auto btn btn-square loading"></button>
@@ -71,6 +97,7 @@ const selected=ref ('Posts');
                             </div>
                             <div>
                                 <button 
+                                @click="CrtChat"
                                 class="focus:none btn btn-success bg-main3 shadow-main2 border-black border-2 shadow-BoxBlackSm text-white rounded-none hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">
                                     Chat with {{ userdata.Fname + " " + userdata.Lname }}
                                 </button>

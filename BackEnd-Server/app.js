@@ -1,5 +1,6 @@
 const express = require('express');
 const { createServer } = require("http"); 
+const { EditChat } = require('./DatabaseMethods/ChatMethods')
 const { CreateNotification } = require('./DatabaseMethods/NotificationMethods')
 const { EditUser,FindOneUserRecord } = require ('./DatabaseMethods/UserMethods')
 const { v4: uuidv4 } = require('uuid');
@@ -28,6 +29,11 @@ io.on('connection', (socket) => {
     console.log (msg)
     console.log(socket.rooms)
   });
+  socket.on ('Chat',async (msg) =>{
+    console.log (msg);
+    await EditChat (msg.ChatId, {$push:{ChatArr:msg}});
+    io.to(msg.to).emit('NewChat',msg);
+  })
   socket.on ('NotificationSend',async (msg)=>{
     console.log ('msg',msg);
     if (msg.Type=='Question'){
