@@ -88,7 +88,7 @@ const EditUser = async () =>{
 const NextHandler = async() =>{
     error.value = "";
     for(const s in SelectedHash.value){
-        if (SelectedHash.value[s])arr.value.push(s);
+        if (SelectedHash.value[s])arr.value.push(s.toUpperCase());
 
     }
     if (arr.value.length<3){
@@ -101,7 +101,7 @@ const NextHandler = async() =>{
     }
     const data = {
         UserId:UserStore().UserID,
-        Hashtags:arr.value.toUpperCase()
+        Hashtags:arr.value
     }
     await AddHashtags(data);
     
