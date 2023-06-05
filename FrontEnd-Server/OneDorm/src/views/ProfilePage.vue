@@ -114,7 +114,7 @@ const selected=ref ('Posts');
                                         <h2 class="text-lg font-extralight text-Grey">
                                             Academic status: 
                                             <span class="font-extrabold" :class="[userdata.VerificationState == 'pending'?'text-main2':'text-main3']">
-                                            {{userdata.VerificationState == 'inactive'?'Student':userdata.VerificationState}}
+                                            {{userdata.VerificationState != 'active'?'Student':userdata.VerificationState}}
                                             </span>
                                         </h2>
                                     </div>

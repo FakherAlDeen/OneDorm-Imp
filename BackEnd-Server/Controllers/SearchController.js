@@ -95,7 +95,8 @@ class SearchController{
             if(User.length == 0){
                 return res.status(400).send("User Id was not found");
             }
-            let Hashtags = User.CategoriesList?User.CategoriesList:[];
+            console.log (User[0].CategoriesList)
+            let Hashtags = User[0].CategoriesList?User[0].CategoriesList:[];
             let result = await collection.aggregate([
                 {
                     "$search": {
@@ -103,15 +104,24 @@ class SearchController{
                         "text": {
                             "query": `${Hashtags.length==0 ? 'p': Hashtags}`,
                             "path": ["QuestionDetailsHTML", "QuestionTitle","Hashtags"],
+                            "score": { "boost": { "value": 1 } },
                             "score": { 
-                                // "boost": { 
-                                //     "value": 1 
-                                // },
                                 "function": {
                                     "multiply": [
                                         {
                                             "path":{
                                                 "value" : 'AnswerCount' ,
+                                                "undefined" : 1
+                                            }
+                                        },
+                                        {
+                                            "score": "relevance"
+                                        }
+                                    ],
+                                    "multiply": [
+                                        {
+                                            "path":{
+                                                "value" : 'QuestionVotesCount' ,
                                                 "undefined" : 1
                                             }
                                         },
@@ -147,8 +157,10 @@ class SearchController{
                   }
                 }
             ]).sort({score:-1}).toArray();
+            console.log (result);
             res.status(201).send(result);
         } catch (e) {
+            console.log (e)
             res.status(400).send(e);
         }
     }

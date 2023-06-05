@@ -29,7 +29,9 @@ const SelectedHash = ref ({
     '#Discrete_1':false,
     '#Discrete_2':false,
     '#Algebra':false,
-    '#Scoial':false,
+    '#Social':false,
+    '#Graphics':false,
+    '#Motion':false,
     '#Friends':false,
     '#BlueFig':false,
     '#Gaming':false,
@@ -99,7 +101,7 @@ const NextHandler = async() =>{
     }
     const data = {
         UserId:UserStore().UserID,
-        Hashtags:arr.value
+        Hashtags:arr.value.toUpperCase()
     }
     await AddHashtags(data);
     
