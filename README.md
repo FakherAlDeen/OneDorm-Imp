@@ -6,14 +6,14 @@ git pull the repo
 then
 # Run the backend
 ```
-cd ./BackEnd
+cd the back end path
 npm install
 npm run dev
 ```
-# Run the backend
+# Run the FrontEnd
 ```
-cd ..
-cd /FrontEnd
+cd the front end path
+cd ./OneDorm
 npm install
 npm run dev
 ```
