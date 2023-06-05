@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import {GET,POST} from '../../Helpers/APIs'
+import {GET,POST} from '../Helpers/APIsAll'
 import VueCookies from 'vue-cookies'
 import { io } from "socket.io-client";
 

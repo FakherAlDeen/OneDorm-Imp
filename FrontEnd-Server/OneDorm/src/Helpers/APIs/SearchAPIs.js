@@ -1,4 +1,5 @@
-import {GET} from '../../../Helpers/APIs'
+import {GET } from '../APIsAll'
+
 
 export async function SearchPost (SearchVal){
     const res = await GET (`SearchPost?query=${SearchVal}`);

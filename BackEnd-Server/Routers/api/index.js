@@ -2,13 +2,13 @@ const router = require('express').Router();
 const auth = require('../../MiddleWare/auth');
 
 router.use('/', require('./AuthRouter'));
-router.use('/', require('./QuestionRouter'));
-router.use('/', require('./AnswerRouter'));
-router.use('/', require('./UserRouter'));
-router.use('/', require('./SearchRouter'));
-router.use('/', require('./UploadRouter'));
-router.use('/', require('./RequestRouter'));
-router.use('/', require('./NotificationsRouter'));
-router.use('/', require('./BlogRouter'))
-router.use('/', require('./ChatRouter'));
+router.use('/',auth, require('./QuestionRouter'));
+router.use('/',auth, require('./AnswerRouter'));
+router.use('/',auth, require('./UserRouter'));
+router.use('/',auth, require('./SearchRouter'));
+router.use('/',auth, require('./UploadRouter'));
+router.use('/',auth, require('./RequestRouter'));
+router.use('/',auth, require('./NotificationsRouter'));
+router.use('/',auth, require('./BlogRouter'))
+router.use('/',auth, require('./ChatRouter'));
 module.exports = router;

@@ -9,7 +9,7 @@ const isAuthenticated = async (to, from,next)=>{
     next('Login');
   }else {
     const TokenData = JSON.parse(atob(VueCookies.get('Token').split('.')[1]));
-    UserStore().Token = VueCookies.get('Token');
+    UserStore().UserToken = VueCookies.get('Token');
     UserStore().UserID = TokenData.UserId;
     await UserStore().GetUser(TokenData.UserId);
     next ();

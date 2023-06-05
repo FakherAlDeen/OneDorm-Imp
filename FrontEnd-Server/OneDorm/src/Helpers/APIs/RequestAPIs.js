@@ -1,4 +1,5 @@
-import {GET,POST} from '../../../Helpers/APIs'
+import {GET,POST } from '../APIsAll'
+
 
 export async function CreateRequest (data){ // UserId , RequestMessage
         const res = await POST ('CreateRequest',data);

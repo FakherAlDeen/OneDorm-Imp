@@ -151,15 +151,27 @@ const userStore = UserStore();
 // console.log (userStore.image)
 const Logout = ()=>{
     VueCookies.remove('Token')
-    router.push('/Login')
+    router.push('/Login').then (router.go());
 }
-const PushRoute = (e)=>{
-    router.push ({
-        name: 'Post',
-        params: {
-            QuestionId: e,
-        }
-    })
+const PushRoute = (i,e)=>{
+    if (i=='Blog'){
+        router.push ({
+             name: i,
+             params: {
+                 BlogId: e,
+             }
+         }).then(router.go())
+    }
+     else {
+         router.push ({
+             name: i,
+             params: {
+                 QuestionId: e,
+             }
+         }).then(router.go())
+
+     }
+     
 }
 const showChatList =ref (props.open);
 const OpenChatHandler = ()=>{
@@ -375,19 +387,23 @@ const GetUserData = async (e)=>{
                     <h2 class="text-2xl font-extrabold mx-3 mt-2 border-b-2 pb-3 mb-3 border-black capitalize text-left mt-3">Notifications</h2>
                     <div class="grow m-3 overflow-y-auto">
                         <template v-for="e in NotificationArr" :key="e.NotificationId">
-                            <div class="card w-full mb-3 p-4 cursor-pointer" :class="[e.status=='Inactive'?'bg-main1':'bg-Grey2']" @click="PushRoute(e.NotificationDetails.redirectLink)">
+                            <div class="card w-full mb-3 p-4 cursor-pointer" :class="[e.status=='Inactive'?'bg-main1':'bg-Grey2']" @click="e.NotificationDetails.ReplyTo=='Blog'?PushRoute('Blog',e.NotificationDetails.redirectLink):PushRoute('Post',e.NotificationDetails.redirectLink)">
                                 <h2 class="card-title text-2xl capitalize text-black">
                                     {{ e.NotificationTitle +"!" }}
                                 </h2>
                                 <h2 class="card-title font-light text-black text-gray-800">
-                                
-                                <template v-if = "e.NotificationDetails.ReplytoAns">
+                                {{  }}
+                                <template v-if = "e.NotificationDetails?.ReplyTo == 'Answer'">
                                     Replied to your 
                                     answer!
                                 </template>
-                                <template v-else>
+                                <template v-else-if = "e.NotificationDetails?.ReplyTo == 'Question'">
                                     Answered your 
                                     question!
+                                </template>
+                                <template v-else-if = "e.NotificationDetails?.ReplyTo == 'Blog'">
+                                    Commented on your 
+                                    blog!
                                 </template>
                                 </h2>
                                 <p class="font-light text-white text-xs self-end">{{ formatTimeAgo(new Date(e.CreatedAt)) }}</p>

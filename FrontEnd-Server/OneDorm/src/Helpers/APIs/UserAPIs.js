@@ -1,8 +1,9 @@
-import {GET,POST,PUTIMAGE } from '../../../Helpers/APIs'
-
+import {GET,POST,PUTIMAGE } from '../APIsAll'
+import { UserStore } from '../../stores/UserStore';
 
 export async function GetUser (Id){
         const res = await GET (`GetUser/${Id}`);
+        
         if (res.status=='201'){
             return res;
         }else {

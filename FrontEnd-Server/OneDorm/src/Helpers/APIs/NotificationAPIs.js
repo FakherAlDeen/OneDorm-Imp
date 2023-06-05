@@ -1,4 +1,5 @@
-import {GET} from '../../../Helpers/APIs'
+import {GET } from '../APIsAll'
+
 
 export async function Notification (id){
     const res = await GET (`GetNotification/${id}`);

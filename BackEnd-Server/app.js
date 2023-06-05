@@ -13,11 +13,11 @@ const port = 3000
 var cors = require('cors');
 const bodyParser = require('body-parser');
 app.use(express.json());
-app.use(cors(corsOptions));
 var corsOptions = {
   origin: '*',
   optionsSuccessStatus: 200
 }
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -40,7 +40,7 @@ io.on('connection', (socket) => {
   })
   socket.on ('NotificationSend',async (msg)=>{
     console.log ('msg',msg);
-    if (msg.Type=='Question'){
+    if (msg.Type=='Question' || msg.Type=='Blog'){
       try{
         let NotificationId = uuidv4();
         const notification = {
@@ -49,10 +49,11 @@ io.on('connection', (socket) => {
           NotificationTitle: msg.AnswerCreatorName,
           NotificationDetails:{
             redirectLink: msg.QuestionId,
-            ReplytoAns: false,
+            ReplyTo: 'Question',
           },
           CreatedAt:msg.CreatedAt
         }
+        if (msg.Type=='Blog')notification.NotificationDetails.ReplyTo='Blog'
         if (msg.PostCreator != msg.AnswerCreatorName){
           await CreateNotification(notification);
           await EditUser(msg.PostCreator,{$push: { NotificationList: NotificationId }})
@@ -71,7 +72,7 @@ io.on('connection', (socket) => {
           NotificationTitle: msg.AnswerCreatorName,
           NotificationDetails:{
             redirectLink: msg.QuestionId,
-            ReplytoAns: true,
+            ReplyTo: 'Answer',
           },
           CreatedAt:msg.CreatedAt
         }

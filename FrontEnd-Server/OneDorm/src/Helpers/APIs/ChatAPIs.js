@@ -1,4 +1,4 @@
-import {POST ,GET} from '../../../Helpers/APIs'
+import {POST ,GET} from '../APIsAll'
 
 export async function CreatChat (data){
     const res = await POST ('CreatChat',data);

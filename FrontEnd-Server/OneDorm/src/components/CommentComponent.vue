@@ -59,7 +59,7 @@ const CommentClickHandler = async () =>{
     const notification = {
         QuestionId: props.QuestionId,
         PostCreator:props.PostCreator,
-        Type:'Question',
+        Type:props.Type,
         AnswerCreatorName : UserStore().Fname + " " + UserStore().Lname,
         AnswerCreator: UserStore().UserID,
         CreatedAt:Date.now(),

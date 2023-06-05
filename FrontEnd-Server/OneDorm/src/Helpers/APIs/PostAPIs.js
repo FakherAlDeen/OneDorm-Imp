@@ -1,4 +1,5 @@
-import {GET,POST} from '../../../Helpers/APIs'
+import {GET,POST } from '../APIsAll'
+
 
 export async function CreatePost (data){
         const res = await POST ('CreatePost',data);

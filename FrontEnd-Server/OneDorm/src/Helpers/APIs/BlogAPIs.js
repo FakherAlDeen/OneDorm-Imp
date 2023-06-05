@@ -1,7 +1,9 @@
-import {GET,POST} from '../../../Helpers/APIs'
-
+import {GET,POST} from '../APIsAll'
+import { UserStore } from '../../stores/UserStore';
 export async function CreateBlog (data){
     const res = await POST ('CreateBlog',data);
+    data['Token']= UserStore().UserID;
+    console.log (data);
     if (res.status=='201'){
             return res;
     }else {

@@ -45,7 +45,7 @@ async function LoginClick(){
     Password:Password.value
   }
   const res =await userStore.Login(data)
-  console.log(userStore.GetUserData)
+  console.log(res)
   if (res.status == '200')
     router.push('/NewsFeed');
 }
