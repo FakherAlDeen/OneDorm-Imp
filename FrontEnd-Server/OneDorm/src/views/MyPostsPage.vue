@@ -62,7 +62,7 @@ const BlogClickHanlder = (e)=>{
                     <template v-if="selected=='Posts'">
                         <template v-if="PostsList.length>0">
                             <template v-for="(e) in PostsList" :key="e.QuestionId">
-                                <PostContainer @click="PostClickHanlder(e.QuestionId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
+                                <PostContainer :CreatedAt="e.CreatedAt" @click="PostClickHanlder(e.QuestionId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
                             </template>
                         </template>
                         <div v-else>
@@ -74,7 +74,7 @@ const BlogClickHanlder = (e)=>{
                     <template v-else>
                         <template v-if="BlogsList.length>0">
                             <template v-for="(e) in BlogsList" :key="e.BlogId">
-                                <BlogContainer @click="BlogClickHanlder(e.BlogId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :BlogTitle="e.BlogTitle" :AnswerCount="e.AnswersList.length" :BlogFull="false" :BlogContent="turnfun(e.BlogDetailsHTML)" :Score="e.BlogVotesCount"/>
+                                <BlogContainer :CreatedAt="e.CreatedAt" @click="BlogClickHanlder(e.BlogId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :BlogTitle="e.BlogTitle" :AnswerCount="e.AnswersList.length" :BlogFull="false" :BlogContent="turnfun(e.BlogDetailsHTML)" :Score="e.BlogVotesCount"/>
                             </template>
                         </template>
                         <div v-else>

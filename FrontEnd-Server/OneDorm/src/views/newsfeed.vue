@@ -222,6 +222,7 @@ const NextHandler = async() =>{
                             <PostContainer 
                             @click="ClickHanlder(e.QuestionId)"  
                             class="post_first mx-auto w-9/12 transition ease-in-out hover:scale-110 cursor-pointer mt-10 scale-105 hover:none" 
+                            :CreatedAt="e.CreatedAt"
                             :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" 
                             :AnswerCount="e.AnswersList.length" :postFull="false" 
                             :mine="e.CreatedBy == UserStore().UserID" 
@@ -235,6 +236,7 @@ const NextHandler = async() =>{
                         <PostContainer v-else 
                         @click="ClickHanlder(e.QuestionId)" 
                         class="post mx-auto w-9/12 cursor-pointer transition ease-in-out hover:scale-105"  
+                        :CreatedAt = "e.CreatedAt"
                         :CreatedBy="e.CreatedBy" 
                         :postTitle="e.QuestionTitle" 
                         :AnswerCount="e.AnswersList.length" 

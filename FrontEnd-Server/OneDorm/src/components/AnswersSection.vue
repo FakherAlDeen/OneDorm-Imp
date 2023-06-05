@@ -8,6 +8,7 @@ import QuillComp from './QuilllComp.vue'
 import {DeletePost,GetAnswer , Vote} from '../Helpers/APIs/PostAPIs'
 import router from '../router';
 import { GetUser } from '../Helpers/APIs/UserAPIs';
+import { formatTimeAgo } from '@vueuse/core'
 
 const imageCreator = ref ('Loading');
 const props = defineProps({
@@ -73,17 +74,7 @@ onMounted (async ()=>{
     v.value=v.value.replaceAll('<br>', "")
     name.value = UserData.Fname + " "+ UserData.Lname
     score.value = parseInt(commentData.AnswerVotesCount)
-    const date = new Date((commentData.CreatedAt));
-    const date2= new Date ();
-    // console.log('date', date.getTime(), date2,diff_minutes(date,date2))
-    const dateDiff= diff_minutes(date,date2);
-    let hours = parseInt(dateDiff/60);
-    const days = parseInt(hours/24);
-    hours %=24;
-    const min = dateDiff%60;
-    const hoursMinStr= hours >0? hours + " hours " + min + " min ago": "" + min + " Min ago";
-    ActualDate.value = days>0 ? days + " days " + hoursMinStr: hoursMinStr;
-    console.log (hours,min, ActualDate.value)
+    ActualDate.value = commentData.CreatedAt;
     mine.value = (UserStore().UserID == commentData.CreatedBy);
     AnswerLists.value = commentData.AnswersList;
 })
@@ -123,7 +114,7 @@ const DeletePostHanlder = async ()=>{
                             <svg fill="#39B97E" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
                         </div>
                     <span class="text-base text-Grey font-extrabold ml-2">
-                    {{ActualDate}}</span></h2>
+                    {{formatTimeAgo(new Date(ActualDate))}}</span></h2>
                     <div class="dropdown dropdown-end mt-1" v-if="mine">
                         <button tabindex="0"  class="btn btn-ghost btn-sm">
                             <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>

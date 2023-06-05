@@ -23,7 +23,7 @@ const PushAnsId = (e)=>{
     AnsCount.value=AnswersId.value.length;
 }
 let BlogData = 0;
-
+const CreatedAt = ref ();
 console.log('BlogData',BlogData)
 onMounted(async()=>{
     BlogData = await GetBlog(BlogID);
@@ -44,6 +44,7 @@ onMounted(async()=>{
     blogcont.value=blogcont.value.replaceAll('</pre>',
     '</code></pre> </div>')
     CreatedBy.value = BlogData.BlogData.CreatedBy
+    CreatedAt.value = BlogData.BlogData.CreatedAt
     score.value=parseInt(BlogData.BlogData.BlogVotesCount);
     AnswersId.value =BlogData.BlogData.AnswersList;
     console.log (BlogData.BlogData.BlogVotesCount)
@@ -62,7 +63,7 @@ onMounted(async()=>{
         <template v-else>
             <Alert classProp="alert-warning"  v-if="Error!='nth'"><template #Error_Message>{{ Error }}</template></Alert>
             <template v-else>
-                <BlogContainer class="mx-auto w-10/12" :BlogID="BlogID" :BlogFull="true" :CreatorName="Cname" :BlogTitle="blogTitle" :AnswerCount="AnsCount" :CreatedBy="CreatedBy" :BlogContent="blogcont" :Score="score"/>
+                <BlogContainer class="mx-auto w-10/12" :CreatedAt="CreatedAt" :BlogID="BlogID" :BlogFull="true" :CreatorName="Cname" :BlogTitle="blogTitle" :AnswerCount="AnsCount" :CreatedBy="CreatedBy" :BlogContent="blogcont" :Score="score"/>
                 <CommentComponent @EmitAnsID="PushAnsId" :PostCreator="CreatedBy" :QuestionId="BlogID" Type="Blog" class="z-10"/>
                 <template v-if="AnswersId.length!=0">
                     <div class="card bg-Grey2 w-9/12 rounded-none border border-t-[3rem] mt-[-4rem] border-[0.2rem]  border-black relative mx-auto my-10 h-full p-5">

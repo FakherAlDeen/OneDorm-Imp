@@ -8,6 +8,7 @@ import {DeleteBlog, BlogVote} from '../Helpers/APIs/BlogAPIs'
 import { ref ,onBeforeMount} from 'vue'
 import ModalComponent from './ModalComponent.vue';
 import router from '../router';
+import { formatTimeAgo } from '@vueuse/core'
 
     const props = defineProps({
         BlogID:String,
@@ -18,6 +19,7 @@ import router from '../router';
         AnswerCount:Number,
         CreatorName:String,
         CreatedBy:String,
+        CreatedAt:String,
     })
     const mine = ref (props.CreatedBy==UserStore().UserID)
     console.log (props.BlogFull)
@@ -122,14 +124,17 @@ import router from '../router';
                                 <h2 class="w-fit text-black text-left text-2xl font-bold normal-case mt-2 p-2 bg-main2 border-black border-2 hover:shadow-BoxBlackSm transition-all duration-150 ease-in-out">Academic Blog</h2>
                                 <h2 class="text-black text-left text-5xl font-bold normal-case mt-2 mb-2">{{ BlogTitle }}</h2>
                             </div>
-                            <div class="dropdown dropdown-end" v-if="BlogFull && mine">
-                                <button tabindex="0"  class="btn btn-ghost btn-sm">
-                                    <svg class="w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
-                                </button>
-                                <ul tabindex="0" class="dropdown-content border-2 border-black menu p-1 shadow bg-base-100 rounded-none w-20">
-                                    <li class="text-sm font-extrabold text-center btn btn-ghost btn-sm self-center w-full" @click="BlogEdit">Edit</li>
-                                    <li class="text-xs text-Alert font-extrabold btn btn-ghost btn-sm self-center w-full" @click="ModalDeleteShow=true">Delete</li>
-                                </ul>
+                            <div class="flex">
+                                <p class=" text-base-700 font-extrabold ml-2">{{formatTimeAgo(new Date(CreatedAt))}}</p>
+                                <div class="dropdown dropdown-end" v-if="BlogFull && mine">
+                                    <button tabindex="0"  class="btn btn-ghost btn-sm">
+                                        <svg class="w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/></svg>
+                                    </button>
+                                    <ul tabindex="0" class="dropdown-content border-2 border-black menu p-1 shadow bg-base-100 rounded-none w-20">
+                                        <li class="text-sm font-extrabold text-center btn btn-ghost btn-sm self-center w-full" @click="BlogEdit">Edit</li>
+                                        <li class="text-xs text-Alert font-extrabold btn btn-ghost btn-sm self-center w-full" @click="ModalDeleteShow=true">Delete</li>
+                                    </ul>
+                                </div>
                             </div>
                             
                         </div>

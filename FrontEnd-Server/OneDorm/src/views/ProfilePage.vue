@@ -90,7 +90,7 @@ const selected=ref ('Posts');
                             <div>
                                 <div class="avatar mb-7">
                                     <div class="w-full h-auto border-2 transition-all duration-150 ease-in-out border-black shadow-main3 shadow-BoxBlackSm hover:translate-x-[0.45rem] hover:translate-y-[0.45rem] top-[-0.5rem] left-[-0.5rem] hover:shadow-none">
-                                        <img :src='`data:${userdata.Image.contentType};base64,${userdata.Image.image}`' />
+                                        <img :src='userdata.Image?`data:${userdata.Image.contentType};base64,${userdata.Image.image}`:"https://i.ibb.co/g39WZXc/User-1.png"' />
                                     </div>
             
                                 </div>
@@ -182,7 +182,7 @@ const selected=ref ('Posts');
                             <template v-if="selected=='Posts'">
                                 <template v-if="PostsList.length>0">
                                     <template v-for="(e) in PostsList" :key="e.QuestionId">
-                                        <PostContainer @click="PostClickHanlder(e.QuestionId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
+                                        <PostContainer :CreatedAt = "e.CreatedAt" @click="PostClickHanlder(e.QuestionId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
                                     </template>
                                 </template>
                                 <div v-else>
@@ -194,7 +194,7 @@ const selected=ref ('Posts');
                             <template v-else>
                                 <template v-if="BlogsList.length>0">
                                     <template v-for="(e) in BlogsList" :key="e.BlogId">
-                                        <BlogContainer @click="BlogClickHanlder(e.BlogId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :BlogTitle="e.BlogTitle" :AnswerCount="e.AnswersList.length" :BlogFull="false" :BlogContent="turnfun(e.BlogDetailsHTML)" :Score="e.BlogVotesCount"/>
+                                        <BlogContainer :CreatedAt ="e.CreatedAt" @click="BlogClickHanlder(e.BlogId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :BlogTitle="e.BlogTitle" :AnswerCount="e.AnswersList.length" :BlogFull="false" :BlogContent="turnfun(e.BlogDetailsHTML)" :Score="e.BlogVotesCount"/>
                                     </template>
                                 </template>
                                 <div v-else>
