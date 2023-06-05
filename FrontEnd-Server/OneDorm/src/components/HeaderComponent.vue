@@ -12,29 +12,72 @@ import { UserStore } from '../stores/UserStore'
 import router from '../router/index'
 import {SearchPost} from '../Helpers/APIs/SearchAPIs'
 import VueCookies from 'vue-cookies'
-import {ref, onBeforeMount} from 'vue'
+import {ref, onBeforeMount, watch} from 'vue'
 import {Notification,OpenNotification} from '../Helpers/APIs/NotificationAPIs'
 import { useTimeAgo,formatTimeAgo } from '@vueuse/core'
-
+import { GetUser } from '../Helpers/APIs/UserAPIs';
+import { GetChat } from '../Helpers/APIs/ChatAPIs'
 
 const arrChats = ref (['Ahmad','Moh','wtv','Moh','wtv','Moh','wtv','Moh','wtv','Moh','wtv','Moh','wtv','Moh','wtv','Moh','wtv'])
+// const reducedFilter = (data, keys, fn) =>
+//   data.filter(fn).map(el =>
+//     keys.reduce((acc, key) => {
+//       acc[key] = el[key];
+//       return acc;
+//     }, {})
+//   );
 const SearchValue = ref();
 const showDrawer = ref (false);
 const ShowNotification=ref(false);
 const NotificationArr = ref([]);
+const arrChatNames = ref ({});
+const imgChatArr = ref ({});
+const loadingChatList = ref(true);
+const ChatsList = ref({});
+const ChatText = ref('');
+const theOneImChattingWith =ref();
+const OpenedChat = ref();
+const showChatBubbleList = ref(false);
+const chatSelected = ref ();
 const loading = ref(true);
+
 UserStore().socket.on('Notifications',async(msg)=>{
     // console.log ('meow',msg);
     const res = await Notification(msg);
     NotificationArr.value.unshift(res.data);
 })
-
+const props = defineProps({
+    open:{type:Boolean, defualt:false},
+    PostCreator:String,
+})
+const emit =defineEmits(['emitClose'])
+watch (()=>props.open, (nnew,old)=>{
+    showChatList.value = nnew;
+})
+UserStore().socket.on('NewChat',(msg)=>{
+    ChatsList.value[msg.ChatId].ChatArr.push(msg);
+})
+const SendChatHandler = ()=>{
+    if (ChatText.value=='') return;
+    const chat = ChatsList.value[theChatImIn.value]
+    const data = {
+        to:chat.FirstUserId==UserStore().UserID? chat.SecondUserId: chat.FirstUserId,
+        from:UserStore().UserID,
+        text:ChatText.value,
+        CreatedAt:new Date(),
+        ChatId:theChatImIn.value,
+    }
+    console.log (data)
+    console.log (ChatsList.value[theChatImIn.value]);
+    UserStore().socket.emit('Chat',data)
+    ChatsList.value[theChatImIn.value].ChatArr.push(data);
+    ChatText.value='';
+}
 const ShowNotificationHandler=async()=>{
     ShowNotification.value=!ShowNotification.value;
     for (let i=0;i<NotificationArr.value.length;i++){
         if (NotificationArr.value[i].status == 'Inactive'){
             const res = await OpenNotification(NotificationArr.value[i].NotificationId);
-            // console.log (res);
         }
     }
 }
@@ -46,6 +89,11 @@ onBeforeMount(async()=>{
         NotificationArr.value.push(res.data);
     }
     NotificationArr.value=NotificationArr.value.reverse();
+
+    for (let i=0;i<UserStore().ChatList.length;i++){
+        const res = await GetChat(UserStore().ChatList[i])
+        ChatsList.value[UserStore().ChatList[i]]=res.data;
+    }
 })
 const SearchClickHanlder = async ()=>{
     // console.log (SearchValue.value);
@@ -59,7 +107,7 @@ const SearchClickHanlder = async ()=>{
 }
 
 const ClickHashtagHandler=(e)=>{
-    console.log (e.substr(1, e.length - 1));
+    // console.log (e.substr(1, e.length - 1));
     router.push(
     {name: 'Hashtag',
     params: {
@@ -93,7 +141,7 @@ const PushRoute = (e)=>{
         }
     })
 }
-const showChatList =ref (false);
+const showChatList =ref (props.open);
 const OpenChatHandler = ()=>{
     showChatList.value = true;
 }
@@ -101,15 +149,31 @@ const arr = ref ([]);
 for (let i=0;i<30;i++){
     arr.value.push('#psut');
 }
-const theOneImChattingWith =ref();
-const showChatBubbleList = ref(false);
-const chatSelected = ref ();
+const theChatImIn= ref ();
 const ShowChatPoop = (e,i)=>{
     if (chatSelected .value ==i){
         showChatBubbleList.value= !showChatBubbleList.value;
     }else showChatBubbleList.value = true;
     chatSelected.value = i
-    theOneImChattingWith.value=e;
+    theOneImChattingWith.value=arrChatNames.value[e];
+    theChatImIn.value = e;
+    console.log (theChatImIn.value);
+}
+const GetUserData = async (e)=>{
+    const res = await GetChat(e);
+    if (res.status==201){
+        // console.log(res.data);
+        const data = res.data;
+        ChatsList.value[e]=data;
+        let user;
+        if (data.FirstUserId == UserStore().UserID)
+            user = await GetUser(data.SecondUserId);
+        else 
+            user = await GetUser(data.FirstUserId);
+        arrChatNames.value[e]=( user.data.Fname + " " + user.data.Lname);
+        imgChatArr.value[e]=(`data:${user.data.Image.contentType};base64,${user.data.Image.image}`)
+        loadingChatList.value= false;
+    }
 }
 </script>
 
@@ -142,7 +206,7 @@ const ShowChatPoop = (e,i)=>{
 
         <Transition name="slide-fade-right">
             <div class="drawer-side fixed z-10 left-0 top-0 border-r-2 border-black w-screen" v-if="showChatList">
-                <div class="grow bg-black bg-opacity-20 h-screen" @click="showChatList=false"></div>
+                <div class="grow bg-black bg-opacity-20 h-screen" @click="showChatList=false; emit('emitClose')"></div>
                 <div class="flex flex-col h-screen justify-between bg-black bg-opacity-20">
                     <div @click="showChatBubbleList=false" class="grow bg-black bg-transparent"></div>
                     <Transition name="slide-fade-right">
@@ -156,43 +220,37 @@ const ShowChatPoop = (e,i)=>{
                                         <h3 class="text-black text-[1.4rem] font-extrabold ml-4">
                                             {{ theOneImChattingWith }}
                                         </h3>
-                                        <p class=" badge badge-sm ml-4 font-light text-Grey bg-main3 border-main3 text-white">ACTIVE</p>
+                                        <!-- <p class=" badge badge-sm ml-4 font-light text-Grey bg-main3 border-main3 text-white">ACTIVE</p> -->
                                     </div>
                                 </div>
                                 <div class="btn btn-ghost btn-circle mr-2" @click="showChatBubbleList=false">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
                                 </div>
                             </div>
-                            <div class="grow my-2 overflow-y-auto mx-3">
-                                <template v-for="(e) in 10" :key="e">
-                                    <div class="chat chat-start">
+                            <div class="grow my-2 overflow-y-auto mx-3 scroll-smooth overflow-x-hidden">
+                                <template v-for="(e) in ChatsList[theChatImIn].ChatArr" :key="e.Id">
+                                    <div class="chat chat-start" v-if="e.from != UserStore().UserID">
                                         <div class="chat-image avatar">
                                             <div class="w-12 rounded-full">
-                                            <img :src="UserStore().image" />
+                                            <img :src="imgChatArr[theChatImIn]" />
                                             </div>
                                         </div>
                                         <div class="chat-header">
-                                            <time class="text-xs opacity-50">12:45</time>
+                                            <time class="text-xs opacity-50">{{formatTimeAgo(new Date(e.CreatedAt))}}</time>
                                         </div>
-                                        <div class="chat-bubble chat-bubble-warning bg-main2">It's over Anakin, <br/>I have the high ground.</div>
+                                        <div class="chat-bubble chat-bubble-warning bg-main2">{{e.text}}</div>
                                     </div>
-                                    <div class="chat chat-end">
+                                    <div class="chat chat-end" v-else>
                                         <div class="chat-header">
-                                            <time class="text-xs opacity-50">12:45</time>
+                                            <time class="text-xs opacity-50">{{formatTimeAgo(new Date(e.CreatedAt))}}</time>
                                         </div>
-                                        <div class="chat-bubble chat-bubble-warning bg-main3">You underestimate my power!</div>
-                                    </div>
-                                    <div class="chat chat-end">
-                                        <div class="chat-header">
-                                            <time class="text-xs opacity-50">12:45</time>
-                                        </div>
-                                        <div class="chat-bubble chat-bubble-warning bg-main3">You underestimate my power!</div>
+                                        <div class="chat-bubble chat-bubble-warning bg-main3">{{e.text}}</div>
                                     </div>
                                 </template>
                             </div>
                             <div class="flex border-t-2 border-black items-center gap-3">
-                                <textarea class="textarea textarea-bordered w-full h-1/2 ml-3 border-2 border-black" placeholder="Type something..."></textarea>
-                                <button class="btn btn-sm btn-success bg-main3 text-white mr-3">send!</button>
+                                <textarea class="textarea textarea-bordered w-full h-1/2 ml-3 border-2 border-black" placeholder="Type something..." v-model="ChatText"></textarea>
+                                <button class="btn btn-sm btn-success bg-main3 text-white mr-3" @click="SendChatHandler">send!</button>
                             </div>
                         </div>
                     </Transition>
@@ -201,22 +259,25 @@ const ShowChatPoop = (e,i)=>{
                     <div class="h-screen p-4 w-80 bg-black bg-opacity-20 flex flex-col">
                         <div class="ContHash bg-white shadow-BoxBlackSm border-2 border-black p-4 m-1 h-full flex flex-col">
                             <h2 class="text-2xl font-extrabold mx-3 mt-2 border-b-2 pb-3 mb-3 border-black">My Chats</h2>
-                            <div class=" text-base-content h-full overflow-y-auto text-center">
-                                <template v-for="(e,i) in arrChats" :key="e">
+                            <div class=" text-base-content h-full overflow-y-auto text-center overflow-x-hidden">
+                                <template v-for="(e,i) in UserStore().ChatList" :key="e">
                                     <template v-if="e">
-                                        <div class="relative">
+                                        {{GetUserData(e)?'':'' }}
+                                        <template v-if="loadingChatList">
+                                        </template>
+                                        <div v-else class="relative">
                                             <div 
                                             @click="ShowChatPoop(e,i)"
-                                            class="normal-case gap-3 btn btn-wide my-1 w-11/12  border-2 border-black text-black hover:bg-black hover:text-white"
+                                            class="normal-case gap-3 btn my-1 w-full border-2 border-black text-black hover:bg-black hover:text-white"
                                             :class="[chatSelected==i? 'bg-black text-white':'bg-white']"
                                             >
-                                            <div class="avatar">
+                                            <div class="avatar gap-2 items-center">
                                                 <div class="w-7 rounded">
-                                                    <img :src="UserStore().image" />
+                                                    <img :src="imgChatArr[e]" />
                                                 </div>
+                                                Chat with
+                                                {{ arrChatNames[e] }}
                                             </div>
-                                            Chat with
-                                            {{e}}
                                         </div>
                                     </div>
                                 </template>

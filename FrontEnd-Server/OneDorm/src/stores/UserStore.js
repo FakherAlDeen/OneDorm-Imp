@@ -16,7 +16,7 @@ export const UserStore = defineStore('User',{
             Phonenumber:null,
             NotificationList:[],
             PostList:null,
-            ChatList:null,
+            ChatList:[],
             CategoriesList:[],
             UserToken:null,
             error:null,
@@ -52,6 +52,7 @@ export const UserStore = defineStore('User',{
                 this.AcademicStaff = Data.VerificationState?Data.VerificationState:'inactive';
                 this.CategoriesList = Data.CategoriesList;
                 this.AnsList = Data.AnswersList
+                this.ChatList = Data.ChatList
                 // this.UserVotes = Data.UserVotes;
                 this.UserToken = Data.token;
                 // this.Username = Data.Username;
@@ -78,6 +79,7 @@ export const UserStore = defineStore('User',{
                 this.UserDetails= Data.UserDetails;
                 this.NotificationList = Data.NotificationList;
                 this.CategoriesList=Data.CategoriesList
+                this.ChatList = Data.ChatList;
                 this.AcademicStaff = Data.VerificationState?Data.VerificationState:'inactive';
                 this.AnsList = Data.AnswersList
                 this.Username = Data.Username;
@@ -111,6 +113,7 @@ export const UserStore = defineStore('User',{
                 this.UserVotes = Data.UserVotes;
                 this.DateOfBirth = Data.DateOfBirth;
                 this.Phonenumber = Data.Phonenumber;
+                this.ChatList = Data.ChatList;
                 this.NotificationList = Data.NotificationList;
                 this.AnsList = Data.AnswersList
                 this.CategoriesList= Data.CategoriesList;
