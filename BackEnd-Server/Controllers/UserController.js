@@ -1,3 +1,4 @@
+const { FindOneBlogRecord } = require("../DatabaseMethods/BlogMethods");
 const { FindOneQuestionRecord } = require("../DatabaseMethods/QuestionMethods");
 const { EditUser, DeleteUser, FindOneUserRecord} = require("../DatabaseMethods/UserMethods");
 const bcrypt = require("bcryptjs");
@@ -126,6 +127,27 @@ class UserController {
                 Posts.push(post[0]);
             }
             res.status(201).send(Posts); 
+        }
+        catch(err){
+            res.status(400).send(err) ; 
+            console.log(err)
+        }
+    }
+    static async GetUserBlogs(req , res){
+        try{
+            const UserId = req.params.Id;
+            let Blogs = []
+            const User = await FindOneUserRecord({UserId}) ; 
+            if(User.length == 0){
+                return res.status(401).send('User not found');
+            }
+            const BlogsIds = User[0].BlogList ;
+            for(let i = 0 ; i<BlogsIds.length ; i++){
+                const blog = await FindOneBlogRecord({BlogId:BlogsIds[i]});
+                Blogs.push(blog[0]);
+            }
+            console.log(Blogs)
+            res.status(201).send(Blogs); 
         }
         catch(err){
             res.status(400).send(err) ; 

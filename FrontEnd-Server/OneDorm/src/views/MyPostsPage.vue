@@ -3,13 +3,22 @@ import { ref,onBeforeMount } from 'vue'
 import HeaderComponent from '../components/HeaderComponent.vue';
 import { UserStore } from '../stores/UserStore';
 import router from '../router';
-import { GetUserPosts } from '../Helpers/APIs/UserAPIs';
+import { GetUserPosts , GetUserBlogs , GetUser } from '../Helpers/APIs/UserAPIs';
 import PostContainer from '../components/PostContainer.vue';
+import BlogContainer from '../components/BlogContainer.vue';
 const Loading = ref (true);
 const PostsList = ref ([]);
+const BlogsList = ref([]);
+const selected = ref ('Posts');
+const userdata = ref ();
 onBeforeMount(async ()=>{
+    const res = await GetUser(UserStore().UserID);
+    userdata.value = res.data;
     const posts = await GetUserPosts(UserStore().UserID);
+    const blogs = await GetUserBlogs(UserStore().UserID);
     PostsList.value = posts.data;
+    BlogsList.value = blogs.data;
+    console.log(BlogsList)
     Loading.value = false;
 })
 const turnfun= (e)=>{
@@ -17,13 +26,22 @@ const turnfun= (e)=>{
     e=e.replaceAll('<br>', "");
     return e;
 };
-const ClickHanlder = (e)=>{
-router.push ({
-    name: 'Post',
-    params: {
-        QuestionId: e,
-    }
-})}
+const PostClickHanlder = (e)=>{
+    router.push ({
+        name: 'Post',
+        params: {
+            QuestionId: e,
+        }
+    })
+}
+const BlogClickHanlder = (e)=>{
+    router.push ({
+        name: 'Blog',
+        params: {
+            BlogId: e,
+        }
+    })
+}
 </script>
 <template>
     <main>
@@ -36,10 +54,39 @@ router.push ({
         <template v-else>
             <div class="w-5/6 h-full mx-auto mt-10">
                 <div class="">
-                    <div class="w-1/2 mx-auto border-b-4 border-Grey pb-3">
-                        <h2 class="text-2xl font-[1000] text-center text-Grey tracking-wide leading-8">YOUR POSTS</h2>
+                    <div class="w-1/2 mx-auto pb-3 border-b-4 border-Grey flex justify-center gap-5">
+                        <h2 class=" text-2xl font-[1000] text-center text-Grey tracking-wide leading-8 cursor-pointer" @click="selected='Posts'" :class="[selected=='Posts'?'border-b-4 border-Grey2':'']">
+                            MY POSTS
+                       </h2>
+                       <h2 class="text-2xl font-[1000] text-center text-Grey tracking-wide leading-8 cursor-pointer" v-if="userdata.VerificationState=='active'"  @click="selected='Blogs'" :class="[selected=='Blogs'?'border-b-4 border-Grey2':'']">
+                            MY BLOGS
+                        </h2>
                     </div>
-                    <template v-for="(e) in PostsList" :key="e.QuestionId">
+                    <template v-if="selected=='Posts'">
+                        <template v-if="PostsList.length>0">
+                            <template v-for="(e) in PostsList" :key="e.QuestionId">
+                                <PostContainer @click="PostClickHanlder(e.QuestionId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
+                            </template>
+                        </template>
+                        <div v-else>
+                            <div class="flex justify-center my-10">
+                                <p class="text-3xl font-extrabold text-main1">No Posts written.</p>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <template v-if="BlogsList.length>0">
+                            <template v-for="(e) in BlogsList" :key="e.BlogId">
+                                <BlogContainer @click="BlogClickHanlder(e.BlogId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :BlogTitle="e.BlogTitle" :AnswerCount="e.AnswersList.length" :BlogFull="false" :BlogContent="turnfun(e.BlogDetailsHTML)" :Score="e.BlogVotesCount"/>
+                            </template>
+                        </template>
+                        <div v-else>
+                            <div class="flex justify-center my-10">
+                                <p class="text-3xl font-extrabold text-main1">No Blogs written.</p>
+                            </div>
+                        </div>
+                    </template>
+                    <!-- <template v-for="(e) in PostsList" :key="e.QuestionId">
                             <PostContainer @click="ClickHanlder(e.QuestionId)" 
                             class="post w-full cursor-pointer transition ease-in-out hover:scale-105" 
                             :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" 
@@ -47,8 +94,7 @@ router.push ({
                             :postFull="false" :mine="e.CreatedBy == UserStore().UserID" 
                             :PostContent="turnfun(e.QuestionDetailsHTML)" 
                             :Score="e.QuestionVotesCount"/>
-
-                    </template>
+                    </template> -->
                 </div>
             </div>
         </template>

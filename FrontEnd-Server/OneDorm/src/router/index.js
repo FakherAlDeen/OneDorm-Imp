@@ -42,16 +42,34 @@ const router = createRouter({
       component: () => import('../views/CreatePost.vue')
     },
     {
+      path:'/CreateBlog',
+      name: 'CreateBlog',
+      beforeEnter: isAuthenticated,
+      component: () => import('../views/CreateBlog.vue')
+    },
+    {
       path:'/EditPost/:QuestionId',
       name: 'EditPost',
       beforeEnter: isAuthenticated,
       component: () => import('../views/EditPost.vue')
     },
     {
+      path:'/EditBlog/:BlogId',
+      name: 'EditBlog',
+      beforeEnter: isAuthenticated,
+      component: () => import('../views/EditBlog.vue')
+    },
+    {
       path:'/Post/:QuestionId',
       name: 'Post',
       beforeEnter: isAuthenticated,
       component: () => import('../views/PostPage.vue')
+    },
+    {
+      path:'/Blog/:BlogId',
+      name: 'Blog',
+      beforeEnter: isAuthenticated,
+      component: () => import('../views/BlogPage.vue')
     },
     {
       path:'/NewsFeed',

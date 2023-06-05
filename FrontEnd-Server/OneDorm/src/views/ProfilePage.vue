@@ -3,21 +3,25 @@ import { ref,onBeforeMount } from 'vue'
 import HeaderComponent from '../components/HeaderComponent.vue';
 import { UserStore } from '../stores/UserStore';
 import router from '../router';
-import { GetUser, GetUserPosts } from '../Helpers/APIs/UserAPIs';
+import { GetUser, GetUserBlogs, GetUserPosts } from '../Helpers/APIs/UserAPIs';
 import PostContainer from '../components/PostContainer.vue';
 import { formatDate } from '@vueuse/core'
 import { useRoute } from 'vue-router';
+import BlogContainer from '../components/BlogContainer.vue';
 const UserId = useRoute().params.UserId;
 const userdata = ref ();
 const Loading = ref (true);
 const PostsList = ref ([]);
+const BlogsList = ref ([]);
 onBeforeMount(async ()=>{
     const res = await GetUser(UserId);
     console.log (res.data);
     userdata.value = res.data;
     const posts = await GetUserPosts(UserId);
+    const blogs = await GetUserBlogs(UserId);
     console.log (posts.data);
     PostsList.value = posts.data;
+    BlogsList.value = blogs.data;
     console.log(PostsList.value);
     Loading.value = false;
 })
@@ -26,13 +30,22 @@ const turnfun= (e)=>{
     e=e.replaceAll('<br>', "");
     return e;
 };
-const ClickHanlder = (e)=>{
-router.push ({
-    name: 'Post',
-    params: {
-        QuestionId: e,
-    }
-})}
+const PostClickHanlder = (e)=>{
+    router.push ({
+        name: 'Post',
+        params: {
+            QuestionId: e,
+        }
+    })
+}
+const BlogClickHanlder = (e)=>{
+    router.push ({
+        name: 'Blog',
+        params: {
+            BlogId: e,
+        }
+    })
+}
 const selected=ref ('Posts');
 </script>
 <template>
@@ -141,20 +154,26 @@ const selected=ref ('Posts');
                             </div>
                             <template v-if="selected=='Posts'">
                                 <template v-if="PostsList.length>0">
-
                                     <template v-for="(e) in PostsList" :key="e.QuestionId">
-                                            <PostContainer @click="ClickHanlder(e.QuestionId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
+                                        <PostContainer @click="PostClickHanlder(e.QuestionId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
+                                    </template>
+                                </template>
+                                <div v-else>
+                                    <div class="flex justify-center my-10">
+                                        <p class="text-3xl font-extrabold text-main1">No Posts written.</p>
+                                    </div>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <template v-if="BlogsList.length>0">
+                                    <template v-for="(e) in BlogsList" :key="e.BlogId">
+                                        <BlogContainer @click="BlogClickHanlder(e.BlogId)" class="w-full cursor-pointer transition ease-in-out hover:scale-105" :CreatedBy="e.CreatedBy" :BlogTitle="e.BlogTitle" :AnswerCount="e.AnswersList.length" :BlogFull="false" :BlogContent="turnfun(e.BlogDetailsHTML)" :Score="e.BlogVotesCount"/>
                                     </template>
                                 </template>
                                 <div v-else>
                                     <div class="flex justify-center my-10">
                                         <p class="text-3xl font-extrabold text-main1">No Blogs written.</p>
                                     </div>
-                                </div>
-                            </template>
-                            <template v-else>
-                                <div class="flex justify-center my-10">
-                                    <p class="text-3xl font-extrabold text-main1">No Blogs written.</p>
                                 </div>
                             </template>
                         </div>

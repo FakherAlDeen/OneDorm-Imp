@@ -85,3 +85,11 @@ export async function GetUserPosts (Id){
             return res.data;
         }
 }
+export async function GetUserBlogs (Id){
+        const res = await GET (`GetUserBlogs/${Id}`);
+        if (res.status=='201'){
+            return res;
+        }else {
+            return res.data;
+        }
+}

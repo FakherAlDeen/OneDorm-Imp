@@ -9,17 +9,17 @@ module.exports = {
             console.log(err);
         });
     },
-    EditBlog: async function (Id,Data){
+    EditBlog: async function (BlogId,Data){
         await Blog.findOneAndUpdate(
-            {Id},
+            {BlogId},
             Data
         ).catch((err) => {
             console.log(err);
         });
     },
-    DeleteBlog: async function (Id){
+    DeleteBlog: async function (BlogId){
         await Blog.deleteOne(
-            {Id}
+            {BlogId}
         ).catch((err) => {
             console.log(err);
         });

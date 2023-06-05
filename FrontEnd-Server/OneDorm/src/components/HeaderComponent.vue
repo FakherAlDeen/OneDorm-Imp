@@ -160,7 +160,7 @@ for (let i=0;i<30;i++){
                 </div>
                 <div v-if="ShowCreateList" class="absolute right-0 top-[2.3rem] border-2 border-black menu p-1 shadow bg-base-100 rounded-none w-20">
                     <li class="text-sm font-extrabold text-center btn btn-ghost btn-sm self-center w-full" @click="router.push('/CreatePost')">Post</li>
-                    <li class="text-sm font-extrabold text-center btn btn-ghost btn-sm self-center w-full" @click="ModalDeleteShow=true">Blog</li>
+                    <li class="text-sm font-extrabold text-center btn btn-ghost btn-sm self-center w-full" @click="router.push('/CreatePost')">Blog</li>
                 </div>
             </div>
             <div class="btn btn-ghost px-1 indicator">

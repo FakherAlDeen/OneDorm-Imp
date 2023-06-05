@@ -9,4 +9,5 @@ router.use('/', require('./SearchRouter'));
 router.use('/', require('./UploadRouter'));
 router.use('/', require('./RequestRouter'));
 router.use('/', require('./NotificationsRouter'));
+router.use('/', require('./BlogRouter'))
 module.exports = router;

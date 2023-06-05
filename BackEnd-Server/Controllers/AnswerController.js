@@ -3,6 +3,7 @@ const { EditQuestion } = require("../DatabaseMethods/QuestionMethods");
 const { CreateAnswer, EditAnswer, FindOneAnswerRecord } = require("../DatabaseMethods/AnswerMethods");
 const { EditUser } = require("../DatabaseMethods/UserMethods");
 const {FindOneUserRecord} = require("../DatabaseMethods/UserMethods");
+const { EditBlog } = require("../DatabaseMethods/BlogMethods");
 
 class AnswerController {
     static async CreateAnswer(req, res){
@@ -27,6 +28,9 @@ class AnswerController {
             else if(Type == 'Question'){
                 EditQuestion(Id , {$push: { AnswersList: AnswerId } , $inc : {AnswerCount : 0.1} })
             }
+            else if(Type == 'Blog'){
+              EditBlog(Id , {$push: { AnswersList: AnswerId } , $inc : {AnswerCount : 0.1} })
+            } 
             EditUser(CreatedBy , {$push: {AnswersList : AnswerId }} )
             res.status(201).send(answer)
         } catch (err) {
