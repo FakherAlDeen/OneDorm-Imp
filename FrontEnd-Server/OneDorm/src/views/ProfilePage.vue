@@ -9,6 +9,7 @@ import { formatDate } from '@vueuse/core'
 import { useRoute } from 'vue-router';
 import BlogContainer from '../components/BlogContainer.vue';
 import {CreatChat} from '../Helpers/APIs/ChatAPIs'
+import {turnfun} from '../Helpers/TurnPar'
 const UserId = useRoute().params.UserId;
 const userdata = ref ();
 const Loading = ref (true);
@@ -51,11 +52,6 @@ const CrtChat= async ()=>{
     }
     OpenChatListHandler.value = true;
 }
-const turnfun= (e)=>{
-    e=e.replaceAll('<p>', "<p class='text-lg my-1 font-extrabold'>");
-    e=e.replaceAll('<br>', "");
-    return e;
-};
 const PostClickHanlder = (e)=>{
     router.push ({
         name: 'Post',

@@ -111,7 +111,7 @@ import router from '../router';
                 </div>
             </div>
             <div class="flex w-full h-full">
-                <div class="w-48 mt-48 justify-center flex">
+                <div class="w-1/6 mt-48 justify-center flex">
                     <div class="flex flex-col my-16 ml-3 gap-5">
                         <div class="flex gap-2">
                             <Arrowup :class="[MyVotes == 1?'fill-main3':'']" class="hover:fill-main3" @click="VoteHandler(1)"></Arrowup>
@@ -122,7 +122,7 @@ import router from '../router';
                         </div>
                     </div>
                 </div>
-                <div class="grow">
+                <div class="w-5/6">
                     <div class="mx-10 mt-10 h-fit min-h-[9rem] border-b-2 border-black flex flex-col">
                         <div class="flex justify-between">
                             <!-- <h1 class="text-2xl text-left text-main1 font-bold capitalize cursor-pointer hover:underline" @click="OpenUserPorfileHandler">{{Creator}}</h1> -->
@@ -141,8 +141,7 @@ import router from '../router';
                             </div>
         
                         </div>
-                        <h2 class="text-black text-left text-4xl font-bold normal-case mt-2">{{ postTitle +'?' }}</h2>
-                        <div class="grow"></div>
+                        <h2 class="text-black text-left text-4xl font-bold normal-case mt-2 whitespace-normal h-20 w-full" v-html="postTitle"></h2>
                         <p class="text-Grey justify-self-end font-light text-lg text-left">{{ AnswerCount + " ANSWERS - "}}   {{ sScore +" SCORE" }}</p>
                     </div>
                     <div class="mx-10 mt-4">

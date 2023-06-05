@@ -37,6 +37,12 @@ onMounted(async()=>{
     blogcont.value = BlogData.BlogData.BlogDetailsHTML;
     blogcont.value=blogcont.value.replaceAll('<p>', "<p class='text-lg my-1'>")
     blogcont.value=blogcont.value.replaceAll('<br>', "")
+    blogcont.value=blogcont.value.replaceAll('<h2>', "<h2 class='text-2xl my-2 mt-10 font-extrabold'>")
+    blogcont.value=blogcont.value.replaceAll('<h3>', "<h3 class='text-xl my-2 mt-3 font-extrabold'>")
+    blogcont.value=blogcont.value.replaceAll('<pre class="ql-syntax" spellcheck="false">',
+         '<div class="mockup-code"> <pre data-prefix=">" class="text-warning"><code>')
+    blogcont.value=blogcont.value.replaceAll('</pre>',
+    '</code></pre> </div>')
     CreatedBy.value = BlogData.BlogData.CreatedBy
     score.value=parseInt(BlogData.BlogData.BlogVotesCount);
     AnswersId.value =BlogData.BlogData.AnswersList;

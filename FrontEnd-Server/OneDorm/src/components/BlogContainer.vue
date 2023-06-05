@@ -103,7 +103,7 @@ import router from '../router';
                 </div>
             </div>
             <div class="flex w-full h-full">
-                <div class="w-48 mt-48 justify-center flex">
+                <div class="w-1/6 mt-48 justify-center flex">
                     <div class="flex flex-col my-16 ml-3 gap-5">
                         <div class="flex gap-2">
                             <Arrowup :class="[MyVotes == 1?'fill-main3':'']" class="hover:fill-main3" @click="VoteHandler(1)"></Arrowup>
@@ -114,13 +114,13 @@ import router from '../router';
                         </div>
                     </div>
                 </div>
-                <div class="grow">
+                <div class="w-5/6">
                     <div class="mx-10 mt-10 h-fit min-h-[9rem] border-b-2 border-black flex flex-col">
                         <div class="flex justify-between">
                             <!-- <h1 class="text-2xl text-left text-main1 font-bold capitalize cursor-pointer hover:underline" @click="OpenUserPorfileHandler">{{Creator}}</h1> -->
-                            <div class=" mr-2 ml-1 flex items-center gap-2" >
-                                <h1 class="text-2xl text-left text-main1 font-bold capitalize cursor-pointer hover:underline" @click="OpenUserPorfileHandler">{{Creator}}</h1>
-                                <svg class="mt-1" v-if="userdata?.VerificationState == 'active'" fill="#39B97E" xmlns="http://www.w3.org/2000/svg" height="1.6em" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+                            <div class="flex flex-col">
+                                <h2 class="w-fit text-black text-left text-2xl font-bold normal-case mt-2 p-2 bg-main2 border-black border-2 hover:shadow-BoxBlackSm transition-all duration-150 ease-in-out">Academic Blog</h2>
+                                <h2 class="text-black text-left text-5xl font-bold normal-case mt-2 mb-2">{{ BlogTitle }}</h2>
                             </div>
                             <div class="dropdown dropdown-end" v-if="BlogFull && mine">
                                 <button tabindex="0"  class="btn btn-ghost btn-sm">
@@ -131,19 +131,27 @@ import router from '../router';
                                     <li class="text-xs text-Alert font-extrabold btn btn-ghost btn-sm self-center w-full" @click="ModalDeleteShow=true">Delete</li>
                                 </ul>
                             </div>
-        
+                            
                         </div>
-                        <h2 class="text-black text-left text-4xl font-bold normal-case mt-2">{{ BlogTitle }}</h2>
+                        <div class=" mr-2 flex items-center gap-2" >
+                            <h1 class="text-2xl text-left text-main1 font-bold capitalize cursor-pointer hover:underline" @click="OpenUserPorfileHandler"><span>
+                                Blog By:
+                            </span> {{Creator}}</h1>
+                            <svg class="mt-1" v-if="userdata?.VerificationState == 'active'" fill="#39B97E" xmlns="http://www.w3.org/2000/svg" height="1.6em" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+                        </div>
                         <div class="grow"></div>
                         <p class="text-Grey justify-self-end font-light text-lg text-left">{{ AnswerCount + " ANSWERS - "}}   {{ sScore +" SCORE" }}</p>
                     </div>
                     <div id="PostCont" :class="[!BlogFull?'max-h-[6rem]':'']" v-html="BlogContent" class="mx-10 mb-10 overflow-hidden">
                         
                     </div>
-                    <div class="flex justify-end m-10 shadow-none">
-                        <div id="FlagBtn" class="btn bg-white text-Alert post capitalize border-Alert border-2 hover:bg-Alert hover:border-Alert hover:text-white self-end flex justify-between align-center hover:fill-white shadow-none">
-                            <flag04 class="mt-1 mr-1 shadow-none"></flag04>
-                            <button >Report blog</button>
+                    <div class="grow flex-col flex">
+
+                        <div class="flex justify-end m-10 shadow-none self-end grow">
+                            <div id="FlagBtn" class="btn bg-white text-Alert post capitalize border-Alert border-2 hover:bg-Alert hover:border-Alert hover:text-white self-end flex justify-between align-center hover:fill-white shadow-none">
+                                <flag04 class="mt-1 mr-1 shadow-none"></flag04>
+                                <button >Report blog</button>
+                            </div>
                         </div>
                     </div>
                 </div>

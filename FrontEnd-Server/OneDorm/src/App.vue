@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router';
 </script>
 
 <template>
-  <RouterView :key="useRoute().path"/>
+  <RouterView :key="useRoute().params[useRoute().meta.watchParam]"/>
 </template>
 
 <style scoped>

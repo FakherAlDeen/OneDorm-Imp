@@ -4,7 +4,7 @@ import HeaderComponent from '../components/HeaderComponent.vue';
 import PostContainer from '../components/PostContainer.vue';
 import { GetHashtagPosts } from '../Helpers/APIs/PostAPIs';
 import { AddHashtags,RemoveHashtag } from '../Helpers/APIs/UserAPIs';
-
+import {turnfun} from '../Helpers/TurnPar'
 import {useRoute} from "vue-router";
 import router from '../router';
 import { UserStore } from '../stores/UserStore';
@@ -24,12 +24,6 @@ onBeforeMount(async ()=>{
 
 
 });
-const turnfun= (e)=>{
-    e=e.replaceAll('<p>', "<p class='text-lg my-1 font-extrabold'>");
-    e=e.replaceAll('<br>', "");
-    // console.log (e);
-    return e;
-};
 const ClickHanlder = (e)=>{
     router.push ({
         name: 'Post',

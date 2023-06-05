@@ -9,7 +9,7 @@ import router from '../router';
 import ModalComponent from '../components/ModalComponent.vue';
 import { SetUsername, EditProfile, AddHashtags } from '../Helpers/APIs/UserAPIs';
 import Alert from '../components/Alert.vue';
-
+import {turnfun} from '../Helpers/TurnPar'
 
 const University = ref ();
 const Major = ref ();
@@ -36,11 +36,6 @@ const SelectedHash = ref ({
     '#Math':false,
     '#Chess':false
 });
-const turnfun= (e)=>{
-    e=e.replaceAll('<p>', "<p class='text-lg my-1 font-extrabold'>");
-    e=e.replaceAll('<br>', "");
-    return e;
-}
 const SetUsernameHandler = async () =>{
     error.value = "";
     const data = {

@@ -6,6 +6,8 @@ import router from '../router';
 import { GetUserPosts , GetUserBlogs , GetUser } from '../Helpers/APIs/UserAPIs';
 import PostContainer from '../components/PostContainer.vue';
 import BlogContainer from '../components/BlogContainer.vue';
+import {turnfun} from '../Helpers/TurnPar'
+
 const Loading = ref (true);
 const PostsList = ref ([]);
 const BlogsList = ref([]);
@@ -21,11 +23,6 @@ onBeforeMount(async ()=>{
     console.log(BlogsList)
     Loading.value = false;
 })
-const turnfun= (e)=>{
-    e=e.replaceAll('<p>', "<p class='text-lg my-1 font-extrabold'>");
-    e=e.replaceAll('<br>', "");
-    return e;
-};
 const PostClickHanlder = (e)=>{
     router.push ({
         name: 'Post',

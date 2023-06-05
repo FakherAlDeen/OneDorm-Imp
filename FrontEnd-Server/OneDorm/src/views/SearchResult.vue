@@ -6,7 +6,7 @@ import { SearchPost } from '../Helpers/APIs/SearchAPIs';
 import {useRoute} from "vue-router";
 import router from '../router';
 import { UserStore } from '../stores/UserStore';
-
+import {turnfun} from '../Helpers/TurnPar'
 const SearchVal= ref('');
 const PostsList = ref ([]);
 const Loading = ref(true);
@@ -21,12 +21,7 @@ onBeforeMount(async ()=>{
 
 
 });
-const turnfun= (e)=>{
-    e=e.replaceAll('<p>', "<p class='text-lg my-1 font-extrabold'>");
-    e=e.replaceAll('<br>', "");
-    // console.log (e);
-    return e;
-};
+
 const ClickHanlder = (e)=>{
     router.push ({
         name: 'Post',
@@ -53,7 +48,6 @@ const ClickHanlder = (e)=>{
                 <div class="m-16 mt-10">
                     <h2 class="text-5xl font-[1000] text-center pb-2">Perfect Match for: {{ SearchVal }}</h2>
                 </div>
-                <TransitionGroup name="list" tag="PostContainer">
                     <template v-for="(e,i) in PostsList" :key="i">
                         <div class="">
                             <div v-if="i==0">
@@ -65,7 +59,6 @@ const ClickHanlder = (e)=>{
                             <PostContainer @click="ClickHanlder(e.QuestionId)" class="post mx-auto w-9/12 cursor-pointer transition ease-in-out hover:scale-105" v-else :CreatedBy="e.CreatedBy" :postTitle="e.QuestionTitle" :AnswerCount="e.AnswersList.length" :Hashtags="e.Hashtags" :postFull="false" :mine="e.CreatedBy == UserStore().UserID" :PostContent="turnfun(e.QuestionDetailsHTML)" :Score="e.QuestionVotesCount"/>
                         </div>
                     </template>
-                </TransitionGroup>
             </template>
             <template v-else>
                 <div class="m-16 mt-10">
@@ -77,17 +70,6 @@ const ClickHanlder = (e)=>{
 </template>
 
 <style scoped>
-    .list-move, /* apply transition to moving elements */
-    .list-enter-active,
-    .list-leave-active {
-    transition: all 0.5s ease;
-    }
-
-    .list-enter-from,
-    .list-leave-to {
-    opacity: 0;
-    transform: translateX(30px);
-    }
     .post {
         transition: all 0.5s ease;
         animation: mymove 1s;

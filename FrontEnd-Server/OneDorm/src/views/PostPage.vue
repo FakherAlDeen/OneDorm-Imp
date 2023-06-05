@@ -38,6 +38,12 @@ onMounted(async()=>{
     postcont.value = PostData.PostData.QuestionDetailsHTML;
     postcont.value=postcont.value.replaceAll('<p>', "<p class='text-lg my-1'>")
     postcont.value=postcont.value.replaceAll('<br>', "")
+    postcont.value=postcont.value.replaceAll('<h2>', "<h2 class='text-2xl my-2 mt-10 font-extrabold'>")
+    postcont.value=postcont.value.replaceAll('<h3>', "<h3 class='text-xl my-2 mt-3 font-extrabold'>")
+    postcont.value=postcont.value.replaceAll('<pre class="ql-syntax" spellcheck="false">',
+         '<div class="mockup-code"> <pre data-prefix=">" class="text-warning"><code>')
+    postcont.value=postcont.value.replaceAll('</pre>',
+    '</code></pre> </div>')
     Hashtags.value = PostData.PostData.Hashtags;
     CreatedBy.value = PostData.PostData.CreatedBy
     score.value=parseInt(PostData.PostData.QuestionVotesCount);
@@ -52,7 +58,7 @@ onMounted(async()=>{
         <!-- <button class="Button_Primary my-2" :class="transitionClass" @click="CreatePostClick">Share</button> -->
         <template v-if="Error=='smth'">
             <div class="flex">
-                <button class="m-auto btn btn-square loading"></button>
+                <button class="m-auto btn btn-square loading" @click = "StartChatHandler"></button>
             </div>
         </template>
         <template v-else>

@@ -52,18 +52,29 @@ const router = createRouter({
       name: 'EditPost',
       beforeEnter: isAuthenticated,
       component: () => import('../views/EditPost.vue')
+      ,
+      meta: {
+        watchParam: 'QuestionId' //
+      }
     },
     {
       path:'/EditBlog/:BlogId',
       name: 'EditBlog',
       beforeEnter: isAuthenticated,
       component: () => import('../views/EditBlog.vue')
+      ,
+      meta: {
+        watchParam: 'BlogId' //
+      }
     },
     {
       path:'/Post/:QuestionId',
       name: 'Post',
       beforeEnter: isAuthenticated,
-      component: () => import('../views/PostPage.vue')
+      component: () => import('../views/PostPage.vue'),
+      meta: {
+        watchParam: 'QuestionId' //
+      }
     },
     {
       path:'/Blog/:BlogId',
@@ -82,6 +93,10 @@ const router = createRouter({
       name: 'Search',
       beforeEnter: isAuthenticated,
       component: () => import('../views/SearchResult.vue')
+      ,
+      meta: {
+        watchParam: 'SearchVal' //
+      }
     }
     ,
     {
@@ -102,12 +117,20 @@ const router = createRouter({
       name: 'Hashtag',
       beforeEnter: isAuthenticated,
       component: () => import('../views/HashtagsPage.vue')
+      ,
+      meta: {
+        watchParam: 'HashVal' //
+      }
     },
     {
       path:'/UserProfile/:UserId',
       name: 'UserProfile',
       beforeEnter: isAuthenticated,
       component: () => import('../views/ProfilePage.vue')
+      ,
+      meta: {
+        watchParam: 'UserId' //
+      }
     },
     {
       path:'/MyPosts',
