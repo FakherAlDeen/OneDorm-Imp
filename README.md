@@ -3,7 +3,6 @@ how to run the code!
 ```
 git pull the repo
 ```
-then
 # Run the backend
 ```
 cd .\BackEnd-Server\
