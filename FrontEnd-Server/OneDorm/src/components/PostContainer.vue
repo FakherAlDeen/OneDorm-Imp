@@ -165,10 +165,10 @@ const props = defineProps({
                     <div id="PostCont" :class="[!postFull?'max-h-[6rem]':'']" v-html="PostContent" class="mx-10 mb-10 overflow-hidden">
                         
                     </div>
-                    <div class="flex justify-end m-10 shadow-none">
+                    <div @click="startShare" class="flex justify-end m-10 shadow-none">
                         <div id="FlagBtn" class="btn bg-white text-Alert post capitalize border-Alert border-2 hover:bg-Alert hover:border-Alert hover:text-white self-end flex justify-between align-center hover:fill-white shadow-none">
                             <flag04 class="mt-1 mr-1 shadow-none"></flag04>
-                            <button @click="startShare">Share Post!</button>
+                            <button >Share Post!</button>
                         </div>
                     </div>
                 </div>

@@ -161,10 +161,10 @@ import { useShare } from '@vueuse/core'
                     </div>
                     <div class="grow flex-col flex">
 
-                        <div class="flex justify-end m-10 shadow-none self-end grow">
+                        <div @click="startShare" class="flex justify-end m-10 shadow-none self-end grow">
                             <div id="FlagBtn" class="btn bg-white text-Alert post capitalize border-Alert border-2 hover:bg-Alert hover:border-Alert hover:text-white self-end flex justify-between align-center hover:fill-white shadow-none">
                                 <flag04 class="mt-1 mr-1 shadow-none"></flag04>
-                                <button @click="startShare">Share Blog!</button>
+                                <button>Share Blog!</button>
                             </div>
                         </div>
                     </div>
