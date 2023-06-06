@@ -151,24 +151,25 @@ const userStore = UserStore();
 // console.log (userStore.image)
 const Logout = ()=>{
     VueCookies.remove('Token')
-    router.push('/Login').then (router.go());
+    router.push('/Login').then (() => { router.go() });
 }
 const PushRoute = (i,e)=>{
+    console.log (e);
     if (i=='Blog'){
         router.push ({
              name: i,
              params: {
                  BlogId: e,
              }
-         }).then(router.go())
+         }).then(() => { router.go() })
     }
      else {
          router.push ({
              name: i,
              params: {
-                 QuestionId: e,
+                QuestionId: e,
              }
-         }).then(router.go())
+         }).then(() => { router.go() })
 
      }
      
