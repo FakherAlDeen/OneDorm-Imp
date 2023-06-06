@@ -21,6 +21,8 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const {EditCategory, FindOneCategoryRecord} = require('./DatabaseMethods/CategoryMethods')
+const {FindOneQuestionRecord} = require('./DatabaseMethods/QuestionMethods')
 
 io.on('connection', (socket) => {
   console.log('a user connected');
@@ -108,4 +110,15 @@ app.use(require('./Routers'));
 
 app.listen(port, async () => {
   console.log(`Example app listening on port ${port}`)
+  // let categories = await FindOneCategoryRecord();
+  // for(let i in categories){
+  //   // console.log(categories[i].CategoryTitle);
+  //   for(let j in categories[i].PostIds){
+  //     let post = await FindOneQuestionRecord({QuestionId:categories[i].PostIds[j]});
+  //     if(post.length == 0){
+  //       await EditCategory(categories[i].CategoryTitle, {$pull : {PostIds : categories[i].PostIds[j]}} )
+  //     }
+  //   }
+  // }
+  
 })

@@ -82,5 +82,6 @@ onBeforeMount(async ()=>{
                 </table>
             </div>
         </div>
+        <!-- <b>OneDormCTF{AH_DAMN_WE_SCREWED_UP}</b> -->
     </main>
 </template>
